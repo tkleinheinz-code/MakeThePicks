@@ -89,7 +89,31 @@ body {
   background: #caa343;
   color: #000;
 }
+/* Countdown Timer */
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 32px 0 40px;
+}
 
+.countdown div {
+  text-align: center;
+}
+
+.countdown span {
+  display: block;
+  font-size: 42px;
+  font-weight: 800;
+  color: #ffd77a;
+  text-shadow: 0 0 12px rgba(255,215,122,0.35);
+}
+
+.countdown small {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: #ddd;
+}
 /* Footer */
 .footer {
   padding: 24px;

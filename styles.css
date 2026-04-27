@@ -96,6 +96,8 @@ body {
 .card button:hover {
   background: #caa343;
   color: #000;
+}
+
 .card h2 {
   margin-bottom: 12px;
 }
@@ -103,6 +105,8 @@ body {
 .card p {
   line-height: 1.5;
 }
+``
+
 /* Countdown Timer */
 .countdown {
   display: flex;
@@ -124,6 +128,8 @@ body {
 }
 
 .countdown small {
+  display: block;
+  margin-top: 6px;
   font-size: 12px;
   letter-spacing: 1.5px;
   color: #ddd;

@@ -139,7 +139,7 @@ body {
     rgba(255,255,255,0.25) 52%,
     transparent 60%
   );
-  animation: sweep 6s linear infinite;
+  animation: sweep 14s linear infinite;
   pointer-events: none;
   z-index: 1;
 }

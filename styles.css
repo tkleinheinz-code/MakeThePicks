@@ -110,17 +110,20 @@ body {
 /* Countdown Timer */
 .countdown {
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  gap: 24px;
+  align-items: center;
+  gap: 32px;
   margin: 32px 0 40px;
 }
 
-.countdown div {
-  text-align: center;
+.countdown > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .countdown span {
-  display: block;
   font-size: 42px;
   font-weight: 800;
   color: #ffd77a;
@@ -128,12 +131,12 @@ body {
 }
 
 .countdown small {
-  display: block;
   margin-top: 6px;
   font-size: 12px;
   letter-spacing: 1.5px;
   color: #ddd;
 }
+
 /* Footer */
 .footer {
   padding: 24px;

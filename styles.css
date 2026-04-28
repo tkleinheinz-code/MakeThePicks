@@ -231,9 +231,7 @@ body {
 }
 
 /* Actions */
-.actions,
-.group-buttons {
-  justify-content: center;
+.actions {
   display: flex;
   gap: 16px;
   margin-top: 40px;

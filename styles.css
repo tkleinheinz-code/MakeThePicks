@@ -142,6 +142,16 @@ body {
   text-align: center;
   background: #000;
 }
+/* Main page content container */
+.content {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
 /* Light Sweep Effect */
 .hero-bg::before {
   content: "";
@@ -169,6 +179,7 @@ body {
   to {
     transform: translateX(50%);
   }
+}
   /* ==================================================
    MOCK DRAFT PAGE STYLES (Mock Draft page only)
    ================================================== */

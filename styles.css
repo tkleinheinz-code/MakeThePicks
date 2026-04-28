@@ -149,8 +149,8 @@ body {
   margin-right: auto;
   padding-left: 32px;
   padding-right: 32px;
-  padding-top: 48px;
-  padding-bottom: 48px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 /* Light Sweep Effect */
 .hero-bg::before {

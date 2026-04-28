@@ -176,13 +176,15 @@ body {
 .description {
   font-size: 18px;
   line-height: 1.6;
-  margin-bottom: 40px;
+  margin-bottom: 64px;
 }
 
 /* Scoring */
-.scoring h2 {
-  font-size: 24px;
-  margin-bottom: 16px;
+.scoring h2,
+.example h3 {
+  font-size: 26px;   /* same size */
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
 .scoring ul {
@@ -197,16 +199,12 @@ body {
 .scoring-note {
   font-style: italic;
   color: #ccc;
+  margin-bottom: 56px; /* more space before Example */
 }
 
 /* Examples */
 .example {
   margin-top: 40px;
-}
-
-.example h3 {
-  font-size: 22px;
-  margin-bottom: 12px;
 }
 
 .example-box {
@@ -227,18 +225,25 @@ body {
 }
 
 .primary {
-  background: #caa343;
-  color: #000;
+  background: #0057ff;   /* strong blue */
+  color: #fff;
   border: none;
-  padding: 14px 20px;
-  font-weight: bold;
+  padding: 20px 36px;    /* larger button */
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .secondary {
   background: transparent;
-  border: 1px solid #caa343;
+  border: 2px solid #0057ff;
   color: #fff;
-  padding: 14px 20px;
+  padding: 20px 36px;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* Groups */
@@ -258,3 +263,10 @@ body {
   border: 1px solid #444;
   color: #fff;
 }
+  .primary:hover {
+  background: #0043cc;
+}
+
+.secondary:hover {
+  background: #0057ff;
+

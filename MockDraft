@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mock Draft | Make The Picks</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">MAKE THE PICKS</div>
+    <nav class="nav">
+      <a href="#">Sign In</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero hero-bg">
+    <div class="hero-overlay">
+      <h1>MOCK DRAFT</h1>
+      <p class="hero-sub">
+        Test your mock draft skills against industry experts —
+        Mel Kiper Jr., Daniel Jeremiah, Dane Brugler, and more.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="content">
+
+    <section class="description">
+      <p>
+        Make the picks — and project the trades — for the full first round.
+        Start your own group and compete against friends or go head‑to‑head
+        with the experts.
+      </p>
+    </section>
+
+    <!-- Scoring -->
+    <section class="scoring">
+      <h2>Scoring System</h2>
+      <ul>
+        <li>1 point — Player is selected in the first round</li>
+        <li>3 points — Player drafted by the correct NFL team</li>
+        <li>3 points — Correct position drafted by the team</li>
+        <li>3 points — Player mocked to the correct draft slot</li>
+      </ul>
+      <p class="scoring-note">
+        More accuracy = more points.
+      </p>
+    </section>
+
+    <!-- Example -->
+    <section class="example">
+      <h3>Example</h3>
+      <p>
+        In a draft where the Raiders hold the #1 pick:
+      </p>
+
+      <div class="example-box">
+        <p><strong>Raiders select Fernando Mendoza, QB</strong> — 10 points</p>
+        <p><strong>Raiders select Ty Simpson, QB</strong> — 4 points</p>
+        <p><strong>Jets trade to #1 and select Mendoza, QB</strong> — points awarded for player, slot, and position accuracy</p>
+        <p><strong>Raiders select an EDGE rusher</strong> — 1 point</p>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="actions">
+      <button class="primary">Start Mock Draft</button>
+      <button class="secondary">View Experts</button>
+    </section>
+
+    <!-- Groups -->
+    <section class="groups">
+      <h2>Groups</h2>
+      <div class="group-buttons">
+        <button>Create Group</button>
+        <button>Join Group</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © Make The Picks
+  </footer>
+
+</body>
+</html>

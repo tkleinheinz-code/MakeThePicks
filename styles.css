@@ -190,7 +190,7 @@ body {
   margin-bottom: 64px;
 }
 .scoring {
-  padding-top: 48px; /* pushes Scoring System down */
+  padding-top: 24px; /* pushes Scoring System down */
 }
 /* Scoring */
 .scoring h2,
@@ -217,7 +217,7 @@ body {
 
 /* Examples */
 .example {
-  padding-top: 48px; /* space above Example section */
+  padding-top: 24px; /* space above Example section */
 }
 
 .example-box {

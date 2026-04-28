@@ -183,7 +183,7 @@ body {
   /* ==================================================
    MOCK DRAFT PAGE STYLES (Mock Draft page only)
    ================================================== */
-{
+
 .description {
   font-size: 18px;
   line-height: 1.6;
@@ -280,4 +280,38 @@ body {
 
 .secondary:hover {
   background: #0057ff;
+}
+/* ==================================================
+   FIXED ACTION BUTTON STYLES (Mock Draft page)
+   ================================================== */
 
+.actions .primary {
+  background: #0057ff;
+  color: #fff;
+  border: none;
+  padding: 20px 36px;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actions .secondary {
+  background: transparent;
+  border: 2px solid #0057ff;
+  color: #fff;
+  padding: 20px 36px;
+  font-size: 17px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actions .primary:hover {
+  background: #0043cc;
+}
+
+.actions .secondary:hover {
+  background: #0057ff;
+  color: #fff;
+}

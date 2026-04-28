@@ -231,32 +231,12 @@ body {
 }
 
 /* Actions */
-.actions {
+.actions,
+.group-buttons {
+  justify-content: center;
   display: flex;
   gap: 16px;
   margin-top: 40px;
-}
-
-.primary {
-  background: #0057ff;   /* strong blue */
-  color: #fff;
-  border: none;
-  padding: 20px 36px;    /* larger button */
-  font-size: 17px;
-  font-weight: 700;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.secondary {
-  background: transparent;
-  border: 2px solid #0057ff;
-  color: #fff;
-  padding: 20px 36px;
-  font-size: 17px;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 /* Groups */
@@ -270,12 +250,6 @@ body {
   margin-top: 12px;
 }
 
-.group-buttons button {
-  padding: 12px 18px;
-  background: #000;
-  border: 1px solid #444;
-  color: #fff;
-}
   .primary:hover {
   background: #0043cc;
 }
@@ -287,28 +261,6 @@ body {
    FIXED ACTION BUTTON STYLES (Mock Draft page)
    ================================================== */
 
-.actions .primary {
-  background: #0057ff;
-  color: #fff;
-  border: none;
-  padding: 20px 36px;
-  font-size: 17px;
-  font-weight: 700;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.actions .secondary {
-  background: transparent;
-  border: 2px solid #0057ff;
-  color: #fff;
-  padding: 20px 36px;
-  font-size: 17px;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .actions .primary:hover {
   background: #0043cc;
 }
@@ -316,4 +268,35 @@ body {
 .actions .secondary:hover {
   background: #0057ff;
   color: #fff;
+}
+/* ==================================================
+   UNIFIED CTA BUTTON STYLES (Mock Draft page)
+   ================================================== */
+
+/* Button rows */
+.actions,
+.group-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;        /* wraps nicely on small screens */
+}
+
+/* All CTA buttons */
+.actions button,
+.group-buttons button {
+  background: #0057ff;    /* blue */
+  color: #fff;
+  border: none;
+  padding: 20px 36px;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Hover state */
+.actions button:hover,
+.group-buttons button:hover {
+  background: #0043cc;
 }

@@ -189,7 +189,9 @@ body {
   line-height: 1.6;
   margin-bottom: 64px;
 }
-
+.scoring {
+  padding-top: 48px; /* pushes Scoring System down */
+}
 /* Scoring */
 .scoring h2,
 .example h3 {
@@ -215,7 +217,7 @@ body {
 
 /* Examples */
 .example {
-  margin-top: 40px;
+  padding-top: 48px; /* space above Example section */
 }
 
 .example-box {

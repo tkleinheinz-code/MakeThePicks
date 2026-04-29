@@ -256,3 +256,7 @@ button.cta-button:hover {
   gap: 24px;              /* ⬅ increase spacing here */
   margin-top: 24px;       /* space above button row */
 }
+/* Mock Draft – spacing above example box */
+.example-box {
+  margin-top: 24px;   /* space between text/line and the box */
+}

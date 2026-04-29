@@ -254,5 +254,5 @@ button.cta-button:hover {
   display: flex;
   flex-wrap: wrap;        /* keeps it responsive */
   gap: 24px;              /* ⬅ increase spacing here */
-  margin-top: 48px;       /* space above button row */
+  margin-top: 24px;       /* space above button row */
 }

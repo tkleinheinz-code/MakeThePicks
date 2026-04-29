@@ -10,9 +10,9 @@ body {
   color: #fff;
 }
 /* ==================================================
-   SHARED PRIMARY BUTTON (Index + Mock Draft)
+   SHARED PRIMARY CTA BUTTON (Index + Mock Draft)
    ================================================== */
-.cta-button {
+button.cta-button {
   background: #0057ff;
   color: #fff;
   border: none;
@@ -25,9 +25,10 @@ body {
   white-space: nowrap;
 }
 
-.cta-button:hover {
+button.cta-button:hover {
   background: #0043cc;
 }
+
 /* Header */
 .header {
   display: flex;

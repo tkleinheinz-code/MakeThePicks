@@ -9,7 +9,25 @@ body {
   background: #000;
   color: #fff;
 }
+/* ==================================================
+   SHARED PRIMARY BUTTON (Index + Mock Draft)
+   ================================================== */
+.cta-button {
+  background: #0057ff;
+  color: #fff;
+  border: none;
+  padding: 20px 36px;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
 
+.cta-button:hover {
+  background: #0043cc;
+}
 /* Header */
 .header {
   display: flex;

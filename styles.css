@@ -283,3 +283,13 @@ button.cta-button:hover {
   font-size: 14px;
   vertical-align: middle;
 }
+
+/* =========================================
+   Submit button row
+   ========================================= */
+
+.submit-row {
+  margin-top: 48px;
+  display: flex;
+  justify-content: center;
+}

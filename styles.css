@@ -323,3 +323,30 @@ button.cta-button:hover {
   margin: 16px auto 0;
   background: linear-gradient(to right, #caa343, #ffd77a, #caa343);
 }
+
+/* =========================================
+   Gold underline under "MOCK DRAFT"
+   (matches index.html style)
+   ========================================= */
+
+.content h1 {
+  text-align: center;
+  margin-bottom: 48px;
+  font-size: 46px;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.content h1::after {
+  content: "";
+  display: block;
+  width: 140px;
+  height: 3px;
+  margin: 16px auto 0;
+  background: linear-gradient(
+    to right,
+    #caa343,
+    #ffd77a,
+    #caa343
+  );
+}

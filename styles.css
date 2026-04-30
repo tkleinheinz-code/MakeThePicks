@@ -293,3 +293,12 @@ button.cta-button:hover {
   display: flex;
   justify-content: center;
 }
+
+/* =========================================
+   Mock Draft page title
+   ========================================= */
+
+.content h1 {
+  text-align: center;
+  margin-bottom: 48px;   /* space below title */
+}

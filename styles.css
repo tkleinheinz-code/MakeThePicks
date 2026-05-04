@@ -458,9 +458,11 @@ button.cta-button:hover {
   margin: 24px 0 40px;
 }
 
-/* Force headline graphic size */
-.headline-graphic img {
-  width: 550px !important;
-  max-width: 200% !important;
-  height: auto !important;
+/* FINAL override for draft headline image */
+img.draft-graphic {
+  width: 620px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }

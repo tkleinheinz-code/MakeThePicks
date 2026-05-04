@@ -435,3 +435,12 @@ button.cta-button:hover {
   letter-spacing: 1px;
   color: #ffd77a;
 }
+/* =========================================
+   Draft section header highlights
+   ========================================= */
+
+.draft-main h2,
+.draft-main h3 {
+  color: #ffd77a;   /* gold accent */
+  letter-spacing: 1px;
+}

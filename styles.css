@@ -444,3 +444,7 @@ button.cta-button:hover {
   color: #ffd77a;   /* gold accent */
   letter-spacing: 1px;
 }
+/* Space after draft-order list, before Last 5 Picks */
+.draft-order {
+  margin-bottom: 48px;
+}

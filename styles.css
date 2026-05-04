@@ -448,3 +448,19 @@ button.cta-button:hover {
 .draft-order {
   margin-bottom: 60px;
 }
+/* =========================================
+   Headline graphic styling
+   ========================================= */
+
+.headline-graphic {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 40px;
+}
+
+.headline-graphic img {
+  max-width: 100%;
+  width: 500px;          /* controls size on desktop */
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 122, 0.25));
+}

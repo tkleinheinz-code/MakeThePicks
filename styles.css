@@ -405,9 +405,9 @@ button.cta-button:hover {
 
 /* RIGHT SIDE */
 .draft-sidebar {
-  background: #111;
-  padding: 20px;
-  border: 1px solid #333;
+  background: none;
+  padding: 0;
+  border: none;
 }
 
 .draft-sidebar h3 {

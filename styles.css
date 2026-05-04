@@ -460,7 +460,7 @@ button.cta-button:hover {
 
 /* FINAL override for draft headline image */
 img.draft-graphic {
-  width: 620px;
+  width: 700px;
   max-width: 100%;
   height: auto;
   display: block;

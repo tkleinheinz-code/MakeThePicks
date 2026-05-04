@@ -462,5 +462,4 @@ button.cta-button:hover {
   max-width: 100%;
   width: 500px;          /* controls size on desktop */
   height: auto;
-  filter: drop-shadow(0 0 10px rgba(255, 215, 122, 0.25));
 }

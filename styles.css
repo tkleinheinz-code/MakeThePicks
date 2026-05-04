@@ -40,6 +40,12 @@ button.cta-button:hover {
 .logo {
   font-weight: bold;
   letter-spacing: 2px;
+  color: inherit;        /* keeps logo color */
+  text-decoration: none; /* removes underline */
+
+}
+.logo a:hover {
+  opacity: 0.85;
 }
 
 /* Hero Draft Night */

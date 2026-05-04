@@ -460,7 +460,7 @@ button.cta-button:hover {
 
 /* Force headline graphic size */
 .headline-graphic img {
-  width: 350px !important;
-  max-width: 100% !important;
+  width: 550px !important;
+  max-width: 200% !important;
   height: auto !important;
 }

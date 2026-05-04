@@ -460,7 +460,7 @@ button.cta-button:hover {
 
 .headline-graphic img {
   max-width: 100%;
-  width: 400px;          /* controls size on desktop */
+  width: 500px;          /* controls size on desktop */
   height: auto;
   filter: drop-shadow(0 0 10px rgba(255, 215, 122, 0.25));
 }

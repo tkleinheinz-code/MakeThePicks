@@ -182,43 +182,40 @@
 <script>
 const players = document.querySelectorAll('.player');
 const boxes = document.querySelectorAll('.drop-box');
+const playerList = document.querySelector('.player-list');
 
 let dragged = null;
 
-// Start dragging
+// DRAG START
 players.forEach(player => {
   player.addEventListener('dragstart', (e) => {
     dragged = player;
-
-    // REQUIRED for some browsers
     e.dataTransfer.setData("text/plain", "");
   });
 });
 
-// Allow drop + handle it
+// DROP INTO BOXES
 boxes.forEach(box => {
   box.addEventListener('dragover', (e) => {
-    e.preventDefault();               // ✅ required
-    e.dataTransfer.dropEffect = "move"; // ✅ fixes red circle
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
   });
 
-  box.addEventListener('drop', (e) => {
-    e.preventDefault();               // ✅ required
+box.addEventListener('drop', (e) => {
+  e.preventDefault();
 
-    if (!dragged) return;
+  if (!dragged) return;
 
-    // Remove existing player (optional)
-    const existing = box.querySelector('.player');
-    if (existing) existing.remove();
+  // ✅ Just add player — no limit
+  box.appendChild(dragged);
+});
 
-    // Clone and place
-    const copy = dragged.cloneNode(true);
-    copy.setAttribute('draggable', "false");
 
-    box.appendChild(copy);
+    // ✅ MOVE instead of copy
+    box.appendChild(dragged);
   });
-  
-/* ✅ ADD THIS PART RIGHT HERE */
+
+  // Highlight (optional)
   box.addEventListener('dragenter', () => {
     box.style.borderColor = '#ffd77a';
   });
@@ -226,5 +223,19 @@ boxes.forEach(box => {
   box.addEventListener('dragleave', () => {
     box.style.borderColor = '#333';
   });
+});
+
+
+// ✅ ALLOW DROPPING BACK INTO PLAYER LIST
+playerList.addEventListener('dragover', (e) => {
+  e.preventDefault();
+});
+
+playerList.addEventListener('drop', (e) => {
+  e.preventDefault();
+
+  if (!dragged) return;
+
+  playerList.appendChild(dragged);
 });
 </script>

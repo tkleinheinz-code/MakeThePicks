@@ -190,32 +190,28 @@ let dragged = null;
 players.forEach(player => {
   player.addEventListener('dragstart', (e) => {
     dragged = player;
-    e.dataTransfer.setData("text/plain", "");
+    e.dataTransfer.setData("text/plain", "player");
   });
 });
 
 // DROP INTO BOXES
 boxes.forEach(box => {
+
   box.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
   });
 
-box.addEventListener('drop', (e) => {
-  e.preventDefault();
+  box.addEventListener('drop', (e) => {
+    e.preventDefault();
 
-  if (!dragged) return;
+    if (!dragged) return;
 
-  // ✅ Just add player — no limit
-  box.appendChild(dragged);
-});
-
-
-    // ✅ MOVE instead of copy
+    // ✅ Allow multiple players
     box.appendChild(dragged);
   });
 
-  // Highlight (optional)
+  // Highlight box
   box.addEventListener('dragenter', () => {
     box.style.borderColor = '#ffd77a';
   });
@@ -226,7 +222,7 @@ box.addEventListener('drop', (e) => {
 });
 
 
-// ✅ ALLOW DROPPING BACK INTO PLAYER LIST
+// ✅ DROP BACK INTO PLAYER LIST
 playerList.addEventListener('dragover', (e) => {
   e.preventDefault();
 });

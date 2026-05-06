@@ -185,14 +185,37 @@ const boxes = document.querySelectorAll('.drop-box');
 
 let dragged = null;
 
+// Start dragging
 players.forEach(player => {
-  player.addEventListener('dragstart', () => {
+  player.addEventListener('dragstart', (e) => {
     dragged = player;
+
+    // REQUIRED for some browsers
+    e.dataTransfer.setData("text/plain", "");
   });
 });
 
+// Allow drop + handle it
 boxes.forEach(box => {
-  box.addEventListener('dragover', e => {
-    e.preventDefault();
+  box.addEventListener('dragover', (e) => {
+    e.preventDefault();               // ✅ required
+    e.dataTransfer.dropEffect = "move"; // ✅ fixes red circle
   });
 
+  box.addEventListener('drop', (e) => {
+    e.preventDefault();               // ✅ required
+
+    if (!dragged) return;
+
+    // Remove existing player (optional)
+    const existing = box.querySelector('.player');
+    if (existing) existing.remove();
+
+    // Clone and place
+    const copy = dragged.cloneNode(true);
+    copy.setAttribute('draggable', "false");
+
+    box.appendChild(copy);
+  });
+});
+</script>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account | Make The Picks</title>
+<link rel="stylesheet" href="styles.css">
+
+<style>
+/* Container */
+.create-container {
+  max-width: 420px;
+  margin: 80px auto;
+  padding: 28px;
+  background: #111;
+  border: 1px solid #333;
+}
+
+/* Title */
+.create-container h1 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Inputs */
+.create-container input,
+.create-container select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+}
+
+  /* ✅ Highlight active input field */
+.create-container input:focus,
+.create-container select:focus {
+  outline: none;
+  border-color: #ffd77a;
+}
+
+
+/* File upload spacing */
+.file-upload {
+  margin-bottom: 20px;
+}
+
+/* Label styling */
+.create-container label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* Button */
+.create-container button {
+  width: 100%;
+}
+
+  .error-text {
+  color: #ff4c4c;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 12px;
+}
+  
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">
+    <a href="index.html">MAKE THE PICKS</a>
+  </div>
+</header>
+
+<main class="content">
+
+  <div class="create-container">
+
+    <h1>CREATE ACCOUNT</h1>
+
+    <form>
+
+      <!-- Email -->
+      <label>Email Address</label>
+      <input type="email" required>
+      <input type="email" id="email" required>
+<p id="emailError" class="error-text"></p>
+
+      <!-- Password -->
+      <label>Password</label>
+      <input type="password" required>
+
+      <!-- Upload Photo -->
+      <label>Upload Profile Photo</label>
+      <input type="file" class="file-upload" accept="image/*">
+
+      <!-- GM Team Dropdown -->
+      <label>GM For Which Team</label>
+      <select required>
+        <option value="">Select Team</option>
+        <option>Arizona Cardinals</option>
+        <option>Atlanta Falcons</option>
+        <option>Baltimore Ravens</option>
+        <option>Buffalo Bills</option>
+        <option>Carolina Panthers</option>
+        <option>Chicago Bears</option>
+        <option>Cincinnati Bengals</option>
+        <option>Cleveland Browns</option>
+        <option>Dallas Cowboys</option>
+        <option>Denver Broncos</option>
+        <option>Detroit Lions</option>
+        <option>Green Bay Packers</option>
+        <option>Houston Texans</option>
+        <option>Indianapolis Colts</option>
+        <option>Jacksonville Jaguars</option>
+        <option>Kansas City Chiefs</option>
+        <option>Las Vegas Raiders</option>
+        <option>Los Angeles Chargers</option>
+        <option>Los Angeles Rams</option>
+        <option>Miami Dolphins</option>
+        <option>Minnesota Vikings</option>
+        <option>New England Patriots</option>
+        <option>New Orleans Saints</option>
+        <option>New York Giants</option>
+        <option>New York Jets</option>
+        <option>Philadelphia Eagles</option>
+        <option>Pittsburgh Steelers</option>
+        <option>San Francisco 49ers</option>
+        <option>Seattle Seahawks</option>
+        <option>Tampa Bay Buccaneers</option>
+        <option>Tennessee Titans</option>
+        <option>Washington Commanders</option>
+      </select>
+
+      <!-- Submit -->
+      
+<button class="cta-button" id="submitBtn" disabled>
+  CREATE ACCOUNT
+</button>
+  <p id="successMessage" style="text-align:center; margin-top:16px;"></p>
+      
+<p style="text-align:center; margin-top:16px;">
+  <a href="sign-in.html" style="color:#caa343;">Already have an account? Sign in</a>
+</p>
+    </form>
+
+  </div>
+
+</main>
+
+<script>
+/* ✅ ALL YOUR JS GOES HERE */
+
+// Email validation
+const emailInput = document.getElementById('email');
+const emailError = document.getElementById('emailError');
+
+emailInput.addEventListener('input', () => {
+  if (emailInput.validity.valid) {
+    emailError.textContent = "";
+  } else {
+    emailError.textContent = "Please enter a valid email address";
+  }
+});
+
+// Password strength
+const passwordInput = document.getElementById('password');
+const strengthText = document.getElementById('passwordStrength');
+
+passwordInput.addEventListener('input', () => {
+  const value = passwordInput.value;
+
+  if (value.length < 6) {
+    strengthText.textContent = "Weak";
+    strengthText.style.color = "red";
+  } else if (value.length < 10) {
+    strengthText.textContent = "Medium";
+    strengthText.style.color = "orange";
+  } else {
+    strengthText.textContent = "Strong";
+    strengthText.style.color = "#4cff4c";
+  }
+});
+
+// Photo preview
+const photoUpload = document.getElementById('photoUpload');
+const photoPreview = document.getElementById('photoPreview');
+
+photoUpload.addEventListener('change', () => {
+  const file = photoUpload.files[0];
+
+  if (file) {
+    photoPreview.src = URL.createObjectURL(file);
+    photoPreview.style.display = "block";
+  }
+});
+
+// Enable/disable button
+const submitBtn = document.getElementById('submitBtn');
+
+function checkForm() {
+  if (
+    emailInput.validity.valid &&
+    passwordInput.value.length >= 6
+  ) {
+    submitBtn.disabled = false;
+  } else {
+    submitBtn.disabled = true;
+  }
+}
+
+emailInput.addEventListener('input', checkForm);
+
+  const submitBtn = document.getElementById('submitBtn');
+
+function checkForm() {
+  if (
+    emailInput.validity.valid &&
+    passwordInput.value.length >= 6
+  ) {
+    submitBtn.disabled = false;
+  } else {
+    submitBtn.disabled = true;
+  }
+}
+
+emailInput.addEventListener('input', checkForm);
+passwordInput.addEventListener('input', checkForm);
+
+  // Submit behavior
+document.querySelector('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const message = document.getElementById('successMessage');
+  message.textContent = "✅ Account created successfully!";
+  message.style.color = "#4cff4c";
+});
+</script>
+</body>
+</html>

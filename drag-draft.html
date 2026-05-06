@@ -217,5 +217,14 @@ boxes.forEach(box => {
 
     box.appendChild(copy);
   });
+  
+/* ✅ ADD THIS PART RIGHT HERE */
+  box.addEventListener('dragenter', () => {
+    box.style.borderColor = '#ffd77a';
+  });
+
+  box.addEventListener('dragleave', () => {
+    box.style.borderColor = '#333';
+  });
 });
 </script>

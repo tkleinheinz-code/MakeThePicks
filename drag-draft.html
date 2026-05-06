@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drag Draft Board</title>
+<link rel="stylesheet" href="styles.css">
+
+<style>
+/* Layout */
+.drag-layout {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+/* LEFT COLUMN (Players) */
+.player-list {
+  background: #111;
+  border: 1px solid #333;
+  padding: 16px;
+  height: 80vh;
+  overflow-y: auto;
+}
+
+.player {
+  background: #1a1a1a;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: grab;
+  border: 1px solid #333;
+}
+
+/* RIGHT COLUMN (Drop boxes) */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* Individual drop boxes */
+.drop-box {
+  background: #111;
+  min-height: 120px;
+  border: 2px dashed #333;
+  padding: 12px;
+}
+
+.drop-box h4 {
+  margin-bottom: 10px;
+  color: #ffd77a;
+}
+
+/* Dropped player inside box */
+.drop-box .player {
+  cursor: default;
+  border-style: solid;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">
+    <a href="index.html">MAKE THE PICKS</a>
+  </div>
+</header>
+
+<main class="content">
+
+<h1>DRAFT BOARD</h1>
+
+<div class="drag-layout">
+
+  <!-- LEFT COLUMN -->
+  <div class="player-list">
+    <h3 style="color:#ffd77a; margin-bottom:12px;">Players</h3>
+
+    <div class="player" draggable="true">Fernando Mendoza — QB</div>
+    <div class="player" draggable="true">David Bailey — EDGE</div>
+    <div class="player" draggable="true">Jeremiyah Love — RB</div>
+    <div class="player" draggable="true">Carnell Tate — WR</div>
+    <div class="player" draggable="true">Arvell Reese — EDGE</div>
+    <div class="player" draggable="true">Mansoor Delane — CB</div>
+    <div class="player" draggable="true">Sonny Styles — LB</div>
+    <div class="player" draggable="true">Jordyn Tyson — WR</div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="board">
+
+    <div class="drop-box">
+      <h4>Pick 1</h4>
+    </div>
+
+    <div class="drop-box">
+      <h4>Pick 2</h4>
+    </div>
+
+    <div class="drop-box">
+      <h4>Pick 3</h4>
+    </div>
+
+    <div class="drop-box">
+      <h4>Pick 4</h4>
+    </div>
+
+    <div class="drop-box">
+      <h4>Pick 5</h4>
+    </div>
+
+    <div class="drop-box">
+      <h4>Pick 6</h4>
+    </div>
+
+  </div>
+
+</div>
+
+</main>
+
+<script>
+const players = document.querySelectorAll('.player');
+const boxes = document.querySelectorAll('.drop-box');
+
+let dragged = null;
+
+players.forEach(player => {
+  player.addEventListener('dragstart', () => {
+    dragged = player;
+  });
+});
+
+boxes.forEach(box => {
+  box.addEventListener('dragover', e => {
+    e.preventDefault();
+  });
+

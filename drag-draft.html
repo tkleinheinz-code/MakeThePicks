@@ -190,6 +190,11 @@ const boxes = document.querySelectorAll('.drop-box');
 const playerList = document.querySelector('.player-list');
 
 let dragged = null;
+  
+// 2️⃣ ✅ STEP 1
+players.forEach((player, index) => {
+  player.dataset.index = index;
+});
 
 // DRAG START
 players.forEach(player => {
@@ -237,6 +242,26 @@ playerList.addEventListener('drop', (e) => {
 
   if (!dragged) return;
 
+const draggedIndex = Number(dragged.dataset.index);
+
+// Find all current players still in list
+const currentPlayers = Array.from(playerList.querySelectorAll('.player'));
+
+let inserted = false;
+
+for (let i = 0; i < currentPlayers.length; i++) {
+  const currentIndex = Number(currentPlayers[i].dataset.index);
+
+  if (draggedIndex < currentIndex) {
+    playerList.insertBefore(dragged, currentPlayers[i]);
+    inserted = true;
+    break;
+  }
+}
+
+// If it belongs at the end
+if (!inserted) {
   playerList.appendChild(dragged);
+}
 });
 </script>

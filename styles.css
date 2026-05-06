@@ -466,3 +466,10 @@ img.draft-graphic {
   display: block;
   margin: 0 auto;
 }
+
+.player-count {
+  text-align: center;
+  color: #ffd77a;
+  font-weight: bold;
+  margin-bottom: 24px;
+}

@@ -1,0 +1,78 @@
+
+import React, { useState } from "react";
+
+const initialPlayers = [
+  "Player 1",
+  "Player 2",
+  "Player 3",
+  "Player 4",
+  "Player 5",
+  "Player 6"
+];
+
+const boxes = ["Box A", "Box B", "Box C", "Box D"];
+
+export default function DragDropBoard() {
+  const [players, setPlayers] = useState(initialPlayers);
+  const [boxItems, setBoxItems] = useState({});
+
+  const onDragStart = (e, player) => {
+    e.dataTransfer.setData("player", player);
+  };
+
+  const onDrop = (e, box) => {
+    const player = e.dataTransfer.getData("player");
+
+    setPlayers(players.filter((p) => p !== player));
+
+    setBoxItems({
+      ...boxItems,
+      [box]: [...(boxItems[box] || []), player]
+    });
+  };
+
+  const onDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  return (
+    <div className="flex h-screen p-4 gap-4">
+      {/* Left Column (Players) */}
+      <div className="w-1/4 bg-gray-100 p-4 rounded-2xl shadow">
+        <h2 className="text-xl font-bold mb-4">Players</h2>
+        {players.map((player) => (
+          <div
+            key={player}
+            draggable
+            onDragStart={(e) => onDragStart(e, player)}
+            className="mb-2 p-2 bg-white rounded shadow cursor-move"
+          >
+            {player}
+          </div>
+        ))}
+      </div>
+
+      {/* Right Section (Boxes) */}
+      <div className="w-3/4 grid grid-cols-2 gap-4">
+        {boxes.map((box) => (
+          <div
+            key={box}
+            onDrop={(e) => onDrop(e, box)}
+            onDragOver={onDragOver}
+            className="bg-blue-100 rounded-2xl p-4 shadow min-h-[150px]"
+          >
+            <h3 className="font-semibold mb-2">{box}</h3>
+            {(boxItems[box] || []).map((player) => (
+              <div
+                key={player}
+                className="p-2 mb-1 bg-white rounded shadow"
+              >
+                {player}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

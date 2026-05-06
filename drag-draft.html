@@ -289,6 +289,16 @@ const boxes = document.querySelectorAll('.drop-box');
 const playerList = document.querySelector('.player-list');
 
 let dragged = null;
+
+function updatePlayerCount() {
+  let count = 0;
+
+  boxes.forEach(box => {
+    count += box.querySelectorAll('.player').length;
+  });
+
+  document.getElementById('playerCount').textContent = count;
+}
   
 // 2️⃣ ✅ STEP 1
 players.forEach((player, index) => {
@@ -311,14 +321,15 @@ boxes.forEach(box => {
     e.dataTransfer.dropEffect = "move";
   });
 
-  box.addEventListener('drop', (e) => {
-    e.preventDefault();
+box.addEventListener('drop', (e) => {
+  e.preventDefault();
 
-    if (!dragged) return;
+  if (!dragged) return;
 
-    // ✅ Allow multiple players
-    box.appendChild(dragged);
-  });
+  box.appendChild(dragged);
+
+  updatePlayerCount();   // ✅ ADD THIS LINE
+});
 
   // Highlight box
   box.addEventListener('dragenter', () => {
@@ -332,14 +343,15 @@ boxes.forEach(box => {
 
 
 // ✅ DROP BACK INTO PLAYER LIST
-playerList.addEventListener('dragover', (e) => {
-  e.preventDefault();
-});
-
 playerList.addEventListener('drop', (e) => {
   e.preventDefault();
 
   if (!dragged) return;
+
+  playerList.appendChild(dragged);
+
+  updatePlayerCount();   // ✅ ADD THIS
+});
 
 const draggedIndex = Number(dragged.dataset.index);
 
@@ -363,4 +375,5 @@ if (!inserted) {
   playerList.appendChild(dragged);
 }
 });
+  updatePlayerCount();
 </script>

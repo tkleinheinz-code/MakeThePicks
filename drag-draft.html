@@ -111,6 +111,22 @@
   font-weight: bold;
   margin-bottom: 24px;
 }
+
+  /* ✅ PRINT STYLES */
+@media print {
+  .drop-box {
+    border: 1px solid #000;
+    min-height: auto;
+  }
+
+  .drop-box h4 {
+    color: #000;
+  }
+
+  body {
+    color: #000;
+  }
+}
   
 </style>
 </head>
@@ -139,6 +155,10 @@
 </p>
 
 <div class="drag-layout">
+
+  <button class="cta-button do-not-print" onclick="printDepthChart()">
+  PRINT DEPTH CHART
+</button>
 
   <!-- LEFT COLUMN -->
   <div class="player-list">
@@ -393,4 +413,9 @@ function updatePlayerCount() {
 }
 
 updatePlayerCount();
+
+  function printDepthChart() {
+  window.print();
+}
+``
 </script>

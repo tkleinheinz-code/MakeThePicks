@@ -82,21 +82,20 @@
 /* RIGHT COLUMN (Drop boxes) */
 .board {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
 }
 
 /* Individual drop boxes */
 .drop-box {
   background: #111;
-  min-height: 120px;
+  min-height: 50px;
   border: 2px dashed #333;
-  padding: 12px;
+  padding: 8px;
 
-  /* ✅ ADD THESE LINES */
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .drop-box h4 {
@@ -290,48 +289,37 @@ const playerList = document.querySelector('.player-list');
 
 let dragged = null;
 
-function updatePlayerCount() {
-  let count = 0;
-
-  boxes.forEach(box => {
-    count += box.querySelectorAll('.player').length;
-  });
-
-  document.getElementById('playerCount').textContent = count;
-}
-  
-// 2️⃣ ✅ STEP 1
+/* ✅ STEP 1: store original index */
 players.forEach((player, index) => {
   player.dataset.index = index;
 });
 
-// DRAG START
+/* ✅ DRAG START */
 players.forEach(player => {
   player.addEventListener('dragstart', (e) => {
     dragged = player;
-    e.dataTransfer.setData("text/plain", "player");
+    e.dataTransfer.setData("text/plain", "player"); // REQUIRED
   });
 });
 
-// DROP INTO BOXES
+/* ✅ DROP INTO BOXES */
 boxes.forEach(box => {
 
   box.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+    e.preventDefault();                       // REQUIRED
+    e.dataTransfer.dropEffect = "move";       // fixes 🚫
   });
 
-box.addEventListener('drop', (e) => {
-  e.preventDefault();
+  box.addEventListener('drop', (e) => {
+    e.preventDefault();
 
-  if (!dragged) return;
+    if (!dragged) return;
 
-  box.appendChild(dragged);
+    box.appendChild(dragged);
 
-  updatePlayerCount();   // ✅ ADD THIS LINE
-});
+    updatePlayerCount(); // keep your counter working
+  });
 
-  // Highlight box
   box.addEventListener('dragenter', () => {
     box.style.borderColor = '#ffd77a';
   });
@@ -341,39 +329,58 @@ box.addEventListener('drop', (e) => {
   });
 });
 
+/* ✅ DROP BACK INTO LIST (CORRECT ORDER) */
+playerList.addEventListener('dragover', (e) => {
+  e.preventDefault();
+});
 
-// ✅ DROP BACK INTO PLAYER LIST
 playerList.addEventListener('drop', (e) => {
   e.preventDefault();
 
   if (!dragged) return;
 
-  playerList.appendChild(dragged);
+  const draggedIndex = Number(dragged.dataset.index);
+  const currentPlayers = Array.from(playerList.querySelectorAll('.player'));
 
-  updatePlayerCount();   // ✅ ADD THIS
+  let inserted = false;
+
+  for (let i = 0; i < currentPlayers.length; i++) {
+    const currentIndex = Number(currentPlayers[i].dataset.index);
+
+    if (draggedIndex < currentIndex) {
+      playerList.insertBefore(dragged, currentPlayers[i]);
+      inserted = true;
+      break;
+    }
+  }
+
+  if (!inserted) {
+    playerList.appendChild(dragged);
+  }
+
+  updatePlayerCount();
 });
 
-const draggedIndex = Number(dragged.dataset.index);
+/* ✅ PLAYER COUNT FUNCTION */
+function updatePlayerCount() {
+  let count = 0;
 
-// Find all current players still in list
-const currentPlayers = Array.from(playerList.querySelectorAll('.player'));
+  boxes.forEach(box => {
+    count += box.querySelectorAll('.player').length;
+  });
 
-let inserted = false;
+  const counter = document.getElementById('playerCount');
 
-for (let i = 0; i < currentPlayers.length; i++) {
-  const currentIndex = Number(currentPlayers[i].dataset.index);
+  counter.textContent = count;
 
-  if (draggedIndex < currentIndex) {
-    playerList.insertBefore(dragged, currentPlayers[i]);
-    inserted = true;
-    break;
+  if (count === 53) {
+    counter.style.color = "#4cff4c";
+  } else if (count > 53) {
+    counter.style.color = "red";
+  } else {
+    counter.style.color = "#ffd77a";
   }
 }
 
-// If it belongs at the end
-if (!inserted) {
-  playerList.appendChild(dragged);
-}
-});
-  updatePlayerCount();
+updatePlayerCount();
 </script>

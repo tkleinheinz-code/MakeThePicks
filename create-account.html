@@ -40,12 +40,6 @@
   border-color: #ffd77a;
 }
 
-
-/* File upload spacing */
-.file-upload {
-  margin-bottom: 20px;
-}
-
 /* Label styling */
 .create-container label {
   display: block;
@@ -94,10 +88,6 @@
       <!-- Password -->
       <label>Password</label>
       <input type="password" required>
-
-      <!-- Upload Photo -->
-      <label>Upload Profile Photo</label>
-      <input type="file" class="file-upload" accept="image/*">
 
       <!-- GM Team Dropdown -->
       <label>GM For Which Team</label>
@@ -187,18 +177,6 @@ passwordInput.addEventListener('input', () => {
   }
 });
 
-// Photo preview
-const photoUpload = document.getElementById('photoUpload');
-const photoPreview = document.getElementById('photoPreview');
-
-photoUpload.addEventListener('change', () => {
-  const file = photoUpload.files[0];
-
-  if (file) {
-    photoPreview.src = URL.createObjectURL(file);
-    photoPreview.style.display = "block";
-  }
-});
 
 // Enable/disable button
 const submitBtn = document.getElementById('submitBtn');

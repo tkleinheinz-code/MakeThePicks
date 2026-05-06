@@ -114,17 +114,24 @@
 
   /* ✅ PRINT STYLES */
 @media print {
-  .drop-box {
-    border: 1px solid #000;
-    min-height: auto;
+
+  body * {
+    visibility: hidden;
   }
 
-  .drop-box h4 {
-    color: #000;
+  .board, .board * {
+    visibility: visible;
   }
 
-  body {
-    color: #000;
+  .board {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .do-not-print {
+    display: none;
   }
 }
   
@@ -154,11 +161,11 @@
   <span id="playerCount">0</span> / 53 roster spots
 </p>
 
-<div class="drag-layout">
-
-  <button class="cta-button do-not-print" onclick="printDepthChart()">
+<button class="cta-button do-not-print" onclick="printDepthChart()">
   PRINT DEPTH CHART
 </button>
+
+<div class="drag-layout">
 
   <!-- LEFT COLUMN -->
   <div class="player-list">
@@ -417,5 +424,4 @@ updatePlayerCount();
   function printDepthChart() {
   window.print();
 }
-``
 </script>

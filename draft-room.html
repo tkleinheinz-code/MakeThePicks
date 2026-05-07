@@ -233,17 +233,22 @@ function createRoom() {
 
   const code = generateCode();
 
-  const includeExperts = document.getElementById('includeExperts').checked;
-  const requirePassword = document.getElementById('requirePassword').checked;
-  const password = document.getElementById('roomPassword').value;
+  const room = {
+    name: name,
+    code: code,
+    drafts: [],
+    creator: localStorage.getItem('userName') || "You"
+  };
 
-  // Get selected experts
-  let selectedExperts = [];
-  if (includeExperts) {
-    document.querySelectorAll('#expertBox input:checked').forEach(cb => {
-      selectedExperts.push(cb.value);
-    });
-  }
+  // Save room
+  localStorage.setItem(code, JSON.stringify(room));
+
+  // ✅ CRITICAL: mark this as the active room
+  localStorage.setItem('currentRoom', JSON.stringify(room));
+
+  // ✅ Redirect to room dashboard
+  window.location.href = "mock-room.html";
+}
 
   const room = {
     name: name,

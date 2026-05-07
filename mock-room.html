@@ -119,6 +119,10 @@ textarea {
   color: #fff;
 }
 
+  .player-select option:disabled {
+  color: #666;
+}
+
 </style>
 </head>
 
@@ -174,6 +178,8 @@ textarea {
 </main>
 
 <script>
+
+  let selectedPlayers = new Set();
 
 /* Load room from localStorage */
 const room = JSON.parse(localStorage.getItem('currentRoom'));
@@ -261,7 +267,7 @@ function buildDraftBoard() {
 container.innerHTML = "";  // ✅ prevents duplication if run again
 
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 32; i++) {
     const row = document.createElement('div');
     row.className = "pick-row";
 
@@ -281,6 +287,45 @@ container.innerHTML = "";  // ✅ prevents duplication if run again
 
     container.appendChild(row);
   }
+  
+  // ✅ ADD THIS AFTER building rows
+function bindPlayerSelection() {
+  const selects = document.querySelectorAll(".player-select");
+
+  selects.forEach(select => {
+    select.addEventListener("change", () => {
+      updateSelectedPlayers();
+      refreshDropdowns();
+    });
+  });
+}
+  function updateSelectedPlayers() {
+  selectedPlayers.clear();
+
+  document.querySelectorAll(".player-select").forEach(select => {
+    if (select.value) {
+      selectedPlayers.add(select.value);
+    }
+  });
+}
+  function refreshDropdowns() {
+  const selects = document.querySelectorAll(".player-select");
+
+  selects.forEach(select => {
+    const currentValue = select.value;
+
+    select.querySelectorAll("option").forEach(option => {
+      if (
+        option.value &&
+        selectedPlayers.has(option.value) &&
+        option.value !== currentValue
+      ) {
+        option.disabled = true;
+      } else {
+        option.disabled = false;
+      }
+    });
+  });
 }
 
     // ✅ Team list

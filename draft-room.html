@@ -67,6 +67,69 @@ input {
 .checkbox-row input {
   margin: 0;
 }
+
+  /* Toggle container */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #ccc;
+}
+
+/* Switch wrapper */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+/* Hide default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #333;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.3s;
+}
+
+/* Circle */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+/* ON state */
+.switch input:checked + .slider {
+  background-color: #ffd77a;
+}
+
+/* Move circle */
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+  .switch:hover .slider {
+  box-shadow: 0 0 4px #ffd77a;
+}
 </style>
 </head>
 
@@ -89,22 +152,21 @@ input {
 <!-- Room Options -->
 <div style="margin-top:10px;">
 
-<label class="checkbox-row">
-  <input type="checkbox" id="includeExperts" onchange="toggleExperts()">
-  Include Expert's Mock Drafts
-</label>
+  <div class="toggle-row">
+    <span>Include Expert's Mock Drafts</span>
+    <label class="switch">
+      <input type="checkbox" id="includeExperts" onchange="toggleExperts()">
+      <span class="slider"></span>
+    </label>
+  </div>
 
-<label class="checkbox-row">
-  <input type="checkbox" id="requirePassword" onchange="togglePassword()">
-  Require Password
-</label>
-
-  <br>
-
-  <label>
-    <input type="checkbox" id="requirePassword" onchange="togglePassword()">
-    Require Password
-  </label>
+  <div class="toggle-row">
+    <span>Require Password</span>
+    <label class="switch">
+      <input type="checkbox" id="requirePassword" onchange="togglePassword()">
+      <span class="slider"></span>
+    </label>
+  </div>
 
 </div>
 

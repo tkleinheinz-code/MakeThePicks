@@ -216,9 +216,17 @@ passwordInput.addEventListener('input', checkForm);
 document.querySelector('form').addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const message = document.getElementById('successMessage');
-  message.textContent = "✅ Account created successfully!";
-  message.style.color = "#4cff4c";
+  const name = document.getElementById('name').value;
+
+  // ✅ Save name
+  localStorage.setItem('userName', name);
+
+  // ✅ Save GM since year
+  const signupYear = new Date().getFullYear();
+  localStorage.setItem('gmSince', signupYear);
+
+  // ✅ Redirect
+  window.location.href = "profile.html";
 });
 </script>
 </body>

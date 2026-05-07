@@ -258,6 +258,8 @@ function submitDraft() {
 // Create draft rows
 function buildDraftBoard() {
   const container = document.getElementById('draftBuilder');
+container.innerHTML = "";  // ✅ prevents duplication if run again
+
 
   for (let i = 1; i <= 5; i++) {
     const row = document.createElement('div');
@@ -284,6 +286,31 @@ function buildDraftBoard() {
 // Run on load
 buildDraftBoard();
 
+  // ✅ Team list
+const teams = [
+  "Arizona Cardinals","Atlanta Falcons","Baltimore Ravens","Buffalo Bills",
+  "Carolina Panthers","Chicago Bears","Cincinnati Bengals","Cleveland Browns",
+  "Dallas Cowboys","Denver Broncos","Detroit Lions","Green Bay Packers",
+  "Houston Texans","Indianapolis Colts","Jacksonville Jaguars","Kansas City Chiefs",
+  "Las Vegas Raiders","Los Angeles Chargers","Los Angeles Rams","Miami Dolphins",
+  "Minnesota Vikings","New England Patriots","New Orleans Saints","New York Giants",
+  "New York Jets","Philadelphia Eagles","Pittsburgh Steelers","San Francisco 49ers",
+  "Seattle Seahawks","Tampa Bay Buccaneers","Tennessee Titans","Washington Commanders"
+];
+
+// ✅ Player list (example — you can expand this later)
+const players = [
+  "Caleb Williams (QB)",
+  "Drake Maye (QB)",
+  "Jayden Daniels (QB)",
+  "Marvin Harrison Jr. (WR)",
+  "Malik Nabers (WR)",
+  "Rome Odunze (WR)",
+  "Joe Alt (OT)",
+  "Olu Fashanu (OT)",
+  "Dallas Turner (EDGE)",
+  "Jared Verse (EDGE)"
+];
 </script>
 
 </body>

@@ -74,6 +74,39 @@ input {
 
     <input type="text" id="roomName" placeholder="Enter Room Name">
 
+<!-- Room Options -->
+<div style="margin-top:10px;">
+
+  <label>
+    <input type="checkbox" id="includeExperts" onchange="toggleExperts()">
+    Include Expert's Mock Drafts
+  </label>
+
+  <br>
+
+  <label>
+    <input type="checkbox" id="requirePassword" onchange="togglePassword()">
+    Require Password
+  </label>
+
+</div>
+
+<!-- Expert selection (hidden by default) -->
+<div id="expertBox" style="display:none; margin-top:10px;">
+  <p>Select Experts:</p>
+
+  <label><input type="checkbox" value="Mel Kiper"> Mel Kiper</label><br>
+  <label><input type="checkbox" value="Todd McShay"> Todd McShay</label><br>
+  <label><input type="checkbox" value="Daniel Jeremiah"> Daniel Jeremiah</label><br>
+  <label><input type="checkbox" value="Peter Schrager"> Peter Schrager</label><br>
+  <label><input type="checkbox" value="Lance Zierlein"> Lance Zierlein</label>
+</div>
+
+<!-- Password field (hidden by default) -->
+<div id="passwordBox" style="display:none; margin-top:10px;">
+  <input type="password" id="roomPassword" placeholder="Enter room password">
+</div>
+
     <button class="cta-button" onclick="createRoom()">
       Create Room
     </button>
@@ -121,10 +154,26 @@ function createRoom() {
 
   const code = generateCode();
 
+  const includeExperts = document.getElementById('includeExperts').checked;
+  const requirePassword = document.getElementById('requirePassword').checked;
+  const password = document.getElementById('roomPassword').value;
+
+  // Get selected experts
+  let selectedExperts = [];
+  if (includeExperts) {
+    document.querySelectorAll('#expertBox input:checked').forEach(cb => {
+      selectedExperts.push(cb.value);
+    });
+  }
+
   const room = {
     name: name,
     code: code,
-    drafts: []
+    drafts: [],
+    includeExperts: includeExperts,
+    experts: selectedExperts,
+    requirePassword: requirePassword,
+    password: requirePassword ? password : null
   };
 
   localStorage.setItem(code, JSON.stringify(room));
@@ -135,15 +184,24 @@ function createRoom() {
   loadRoom(room);
 }
 
+
 // Join Room
 function joinRoom() {
   const code = document.getElementById('joinCode').value.toUpperCase();
-
   const room = JSON.parse(localStorage.getItem(code));
 
   if (!room) {
     alert("Room not found");
     return;
+  }
+
+  // ✅ Check password if required
+  if (room.requirePassword) {
+    const input = prompt("Enter room password:");
+    if (input !== room.password) {
+      alert("Incorrect password");
+      return;
+    }
   }
 
   loadRoom(room);
@@ -170,6 +228,17 @@ function loadRoom(room) {
   }
 }
 
+  // Show/hide expert selection
+function toggleExperts() {
+  const box = document.getElementById('expertBox');
+  box.style.display = document.getElementById('includeExperts').checked ? 'block' : 'none';
+}
+
+// Show/hide password field
+function togglePassword() {
+  const box = document.getElementById('passwordBox');
+  box.style.display = document.getElementById('requirePassword').checked ? 'block' : 'none';
+}
 </script>
 
 </body>

@@ -88,24 +88,20 @@
   color: #ffd77a;
 }
 
-/* Draft cards */
-.draft-cards {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
+  .draft-list {
+  list-style: none;
+  padding: 0;
+  display: flex;        /* ✅ makes items horizontal */
+  gap: 16px;            /* space between items */
+  flex-wrap: wrap;      /* wraps on smaller screens */
 }
 
-.draft-card {
-  background: #111;
+.draft-list li {
+  padding: 12px;
   border: 1px solid #333;
-  padding: 14px;
   border-radius: 6px;
+  background: #111;
   min-width: 220px;
-  flex: 1;
-}
-
-.draft-card:hover {
-  border-color: #ffd77a;
 }
 
 </style>
@@ -156,11 +152,11 @@
   <div class="past-drafts">
     <h2>Past Draft Picks</h2>
 
-    <div class="draft-cards">
-      <div class="draft-card">2026 Mock Draft – 87 Points</div>
-      <div class="draft-card">2025 Mock Draft – 102 Points</div>
-      <div class="draft-card">49ers Roster Build – Completed</div>
-    </div>
+    <ul class="draft-list">
+  <li>2026 Draft Picks</li>
+  <li>2025 Draft Picks</li>
+  <li>Current Roster</li>
+</ul>
   </div>
 
 </main>

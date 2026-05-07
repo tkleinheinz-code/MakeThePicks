@@ -119,10 +119,11 @@
   padding: 10px;
   border-bottom: 1px solid #333;
 }
+  
 .draft-cards {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  flex-wrap: wrap;   /* keeps responsive */
 }
 
 .draft-card {
@@ -130,10 +131,17 @@
   border: 1px solid #333;
   padding: 14px;
   border-radius: 6px;
+  min-width: 220px;
+  flex: 1;
 }
 
   .draft-card:hover {
   border-color: #ffd77a;
+}
+
+  .profile-info {
+  flex: 1;
+  padding-left: 40px;  /* ⬅ pushes everything right */
 }
 
 </style>
@@ -174,7 +182,7 @@
 
   <!-- Left column buttons -->
   <div class="primary-actions">
-    <button class="cta-button" onclick="location.href='drag-draft.html's="cta-button" onclick="location.href='mock-draft-- Right side row -->
+    <button class="cta-button" onclick="location.href='drag-draft.html's="cta-button" onclick="location.href='mock-draft.html'ht row of buttons -->
   <div class="secondary-actions">
     <button class="cta-button">DRAFT NEW TEAM</button>
     <button class="cta-button">SUBMIT MOCK DRAFT</button>

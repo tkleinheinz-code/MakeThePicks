@@ -71,17 +71,19 @@
 /* Buttons */
 .profile-actions {
   display: flex;
-  gap: 32px;
-  align-items: flex-start;
+  flex-direction: column;   /* ✅ vertical stack */
+  gap: 12px;
+  max-width: 240px;
   margin-top: 16px;
 }
 
 /* Left column buttons */
-.primary-actions {
+.profile-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: column;   /* ✅ vertical stack */
   gap: 12px;
-  max-width: 220px;
+  max-width: 240px;
+  margin-top: 16px;
 }
 
 /* Right row of buttons */
@@ -174,14 +176,17 @@
 <div class="profile-actions">
 
   <!-- Left column buttons -->
-  <div class="primary-actions">
-    <button class="cta-button" onclick="location.href='drag-draft.htmlss="cta-button" onclick="location.href='mock-draft.htmlght row of buttons -->
-  <div class="secondary-actions">
-    <button class="cta-button">DRAFT NEW TEAM</button>
-    <button class="cta-button">SUBMIT MOCK DRAFT</button>
-    <button class="cta-button">VIEW MY TEAM</button>
-    <button class="cta-button">DRAFT MY NFL TEAM</button>
-  </div>
+ <div class="profile-actions">
+
+  <button class="cta-button" onclick="location.href='drag-draft.html'-button" onclick="location.href='mock-draft.html'tton">
+    DRAFT NEW TEAM
+  </button>
+
+  <button class="cta-button">
+    SUBMIT MOCK DRAFT
+  </button>
+
+</div>
 
 </div>
 

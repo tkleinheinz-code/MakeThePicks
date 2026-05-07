@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft Rooms | Make The Picks</title>
+<link rel="stylesheet" href="styles.css">
+
+<style>
+
+/* Layout */
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+/* Sections */
+.section {
+  background: #111;
+  border: 1px solid #333;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Titles */
+.section h2 {
+  margin-bottom: 12px;
+  color: #ffd77a;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+}
+
+/* Row buttons */
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+/* Draft list */
+.draft-list {
+  list-style: none;
+  padding: 0;
+}
+
+.draft-list li {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">
+    <a href="index.html">MAKE THE PICKS</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- CREATE ROOM -->
+  <div class="section">
+    <h2>Create a Draft Room</h2>
+
+    <input type="text" id="roomName" placeholder="Enter Room Name">
+
+    <button class="cta-button" onclick="createRoom()">
+      Create Room
+    </button>
+
+    <p id="roomCodeDisplay" style="margin-top:10px;"></p>
+  </div>
+
+  <!-- JOIN ROOM -->
+  <div class="section">
+    <h2>Join a Room</h2>
+
+    <input type="text" id="joinCode" placeholder="Enter Room Code">
+
+    <button class="cta-button" onclick="joinRoom()">
+      Join Room
+    </button>
+  </div>
+
+  <!-- ACTIVE ROOM -->
+  <div class="section" id="activeRoom" style="display:none;">
+    <h2 id="roomTitle"></h2>
+
+    <p><strong>Room Code:</strong> <span id="roomCode"></span></p>
+
+    <h3>Mock Drafts</h3>
+
+    <ul class="draft-list" id="draftList">
+      <li>No drafts submitted yet</li>
+    </ul>
+  </div>
+
+</main>
+
+<script>
+
+// Create unique room code
+function generateCode() {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+}
+
+// Create Room
+function createRoom() {
+  const name = document.getElementById('roomName').value;
+  if (!name) return;
+
+  const code = generateCode();
+
+  const room = {
+    name: name,
+    code: code,
+    drafts: []
+  };
+
+  localStorage.setItem(code, JSON.stringify(room));
+
+  document.getElementById('roomCodeDisplay').textContent =
+    "Room Created! Code: " + code;
+
+  loadRoom(room);
+}
+
+// Join Room
+function joinRoom() {
+  const code = document.getElementById('joinCode').value.toUpperCase();
+
+  const room = JSON.parse(localStorage.getItem(code));
+
+  if (!room) {
+    alert("Room not found");
+    return;
+  }
+
+  loadRoom(room);
+}
+
+// Load Room Info
+function loadRoom(room) {
+  document.getElementById('activeRoom').style.display = "block";
+
+  document.getElementById('roomTitle').textContent = room.name;
+  document.getElementById('roomCode').textContent = room.code;
+
+  const draftList = document.getElementById('draftList');
+  draftList.innerHTML = "";
+
+  if (room.drafts.length === 0) {
+    draftList.innerHTML = "<li>No drafts submitted yet</li>";
+  } else {
+    room.drafts.forEach(draft => {
+      const li = document.createElement('li');
+      li.textContent = draft;
+      draftList.appendChild(li);
+    });
+  }
+}
+
+</script>
+
+</body>
+</html>

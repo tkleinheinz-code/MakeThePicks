@@ -54,7 +54,19 @@ input {
   padding: 10px;
   border-bottom: 1px solid #333;
 }
+  
+/* Checkbox label alignment */
+.checkbox-row {
+  display: flex;
+  align-items: center;   /* ✅ vertical alignment fix */
+  gap: 4px;              /* ✅ space between box and text */
+  margin-bottom: 6px;
+}
 
+/* Optional: make checkbox slightly smaller/cleaner */
+.checkbox-row input {
+  margin: 0;
+}
 </style>
 </head>
 
@@ -77,10 +89,15 @@ input {
 <!-- Room Options -->
 <div style="margin-top:10px;">
 
-  <label>
-    <input type="checkbox" id="includeExperts" onchange="toggleExperts()">
-    Include Expert's Mock Drafts
-  </label>
+<label class="checkbox-row">
+  <input type="checkbox" id="includeExperts" onchange="toggleExperts()">
+  Include Expert's Mock Drafts
+</label>
+
+<label class="checkbox-row">
+  <input type="checkbox" id="requirePassword" onchange="togglePassword()">
+  Require Password
+</label>
 
   <br>
 

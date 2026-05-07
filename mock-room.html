@@ -101,6 +101,24 @@ textarea {
   margin-bottom: 10px;
 }
 
+  .pick-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.pick-row span {
+  width: 60px;
+}
+
+.pick-row select {
+  flex: 1;
+  padding: 6px;
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+}
+
 </style>
 </head>
 
@@ -146,12 +164,12 @@ textarea {
 
   <!-- SUBMIT -->
   <div class="submit-box">
-    <h2>Submit Your Mock Draft</h2>
+  <h2>Submit Your Mock Draft</h2>
 
-    <textarea id="draftInput" placeholder="Paste your mock draft..."></textarea>
+  <div id="draftBuilder"></div>
 
-    <button class="cta-button" onclick="submitDraft()">Submit Draft</button>
-  </div>
+  <button class="cta-button" onclick="submitDraft()">Submit Draft</button>
+</div>
 
 </main>
 
@@ -211,17 +229,60 @@ function loadExperts(room) {
 
 /* Submit draft */
 function submitDraft() {
-  const input = document.getElementById('draftInput').value;
-  if (!input) return;
+  const rows = document.querySelectorAll('.pick-row');
+  let draft = [];
 
-  room.drafts.push(input);
+  rows.forEach((row, index) => {
+    const team = row.querySelector('.team-select').value;
+    const player = row.querySelector('.player-select').value;
+
+    if (team && player) {
+      draft.push(`Pick ${index + 1}: ${team} — ${player}`);
+    }
+  });
+
+  if (draft.length === 0) {
+    alert("Fill out at least one pick");
+    return;
+  }
+
+  const formatted = draft.join(" | ");
+
+  room.drafts.push(formatted);
 
   localStorage.setItem('currentRoom', JSON.stringify(room));
 
   loadDrafts(room);
-
-  document.getElementById('draftInput').value = "";
 }
+
+// Create draft rows
+function buildDraftBoard() {
+  const container = document.getElementById('draftBuilder');
+
+  for (let i = 1; i <= 5; i++) {
+    const row = document.createElement('div');
+    row.className = "pick-row";
+
+    row.innerHTML = `
+      <span>Pick ${i}</span>
+
+      <select class="team-select">
+        <option value="">Team</option>
+        ${teams.map(t => `<option>${t}</option>`).join("")}
+      </select>
+
+      <select class="player-select">
+        <option value="">Player</option>
+        ${players.map(p => `<option>${p}</option>`).join("")}
+      </select>
+    `;
+
+    container.appendChild(row);
+  }
+}
+
+// Run on load
+buildDraftBoard();
 
 </script>
 

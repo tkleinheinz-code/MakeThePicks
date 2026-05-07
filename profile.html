@@ -20,7 +20,7 @@
   gap: 24px;
 }
 
-/* Photo box */
+/* Photo */
 .profile-photo {
   width: 150px;
 }
@@ -35,9 +35,10 @@
   margin-top: 10px;
 }
 
-/* Right side info */
+/* Right side */
 .profile-info {
   flex: 1;
+  padding-left: 40px; /* space from file input */
 }
 
 /* Name */
@@ -51,7 +52,6 @@
   width: 100%;
 }
 
-/* Subtle underline on focus */
 .profile-name:focus {
   outline: none;
   border-bottom: 2px solid #ffd77a;
@@ -68,18 +68,17 @@
   margin-bottom: 20px;
 }
 
-/* Buttons */
+/* Buttons (3 only) */
 .profile-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
   max-width: 240px;
-  margin-top: 16px;
 }
 
 /* Bottom section */
 .past-drafts {
-  margin-top: 48px;
+  margin-top: 80px;   /* ✅ pushes to bottom half */
 }
 
 .past-drafts h2 {
@@ -87,21 +86,11 @@
   color: #ffd77a;
 }
 
-/* Placeholder list */
-.past-drafts ul {
-  list-style: none;
-  padding: 0;
-}
-
-.past-drafts li {
-  padding: 10px;
-  border-bottom: 1px solid #333;
-}
-  
+/* Draft cards */
 .draft-cards {
   display: flex;
   gap: 16px;
-  flex-wrap: wrap;   /* keeps responsive */
+  flex-wrap: wrap;
 }
 
 .draft-card {
@@ -113,13 +102,8 @@
   flex: 1;
 }
 
-  .draft-card:hover {
+.draft-card:hover {
   border-color: #ffd77a;
-}
-
-  .profile-info {
-  flex: 1;
-  padding-left: 40px;  /* ⬅ pushes everything right */
 }
 
 </style>
@@ -147,50 +131,41 @@
     <!-- Info -->
     <div class="profile-info">
 
-    <input
-  type="text" 
-  class="profile-name" 
-  id="profileName" 
-  value="<<Your Name>>"
-/>
+      <input 
+        type="text" 
+        class="profile-name" 
+        id="profileName" 
+        value="Your Name"
+      >
 
       <textarea class="profile-bio" placeholder="Add a short bio..."></textarea>
 
-<div class="profile-actions">
+      <!-- ✅ 3 CLEAN BUTTONS -->
+      <div class="profile-actions">
+        <button class="cta-button">SUBMIT MOCK DRAFT</button>
+        <button class="cta-button">VIEW MY NFL TEAM</button>
+        <button class="cta-button">VIEW MY TEAM</button>
+      </div>
 
-  <button class="cta-button">
-    SUBMIT MOCK DRAFT
-  </button>
-
-  <button class="cta-button">
-    VIEW MY NFL TEAM
-  </button>
-
-  <button class="cta-button">
-    VIEW MY TEAM
-  </button>
-
-</div>
-
+    </div>
   </div>
 
-  <!-- BOTTOM SECTION -->
+  <!-- ✅ BOTTOM HALF -->
   <div class="past-drafts">
     <h2>Past Draft Picks</h2>
 
-<div class="draft-cards">
-  <div class="draft-card">2026 Mock Draft – 87 Points</div>
-  <div class="draft-card">2025 Mock Draft – 102 Points</div>
-  <div class="draft-card">49ers Roster Build – Completed</div>
-</div>
-
+    <div class="draft-cards">
+      <div class="draft-card">2026 Mock Draft – 87 Points</div>
+      <div class="draft-card">2025 Mock Draft – 102 Points</div>
+      <div class="draft-card">49ers Roster Build – Completed</div>
+    </div>
   </div>
 
 </main>
 
 <script>
 
-/* ✅ Photo upload preview */
+/* ✅ Photo preview */
 const photoUpload = document.getElementById('photoUpload');
 const profilePreview = document.getElementById('profilePreview');
 

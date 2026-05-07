@@ -125,6 +125,12 @@
   color: #fff;
 }
 
+  .gm-since {
+  color: #caa343;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
 </style>
 </head>
 
@@ -157,6 +163,8 @@
         value="<<Your Name>>"
       >
 
+      <p id="gmSince" class="gm-since"></p>
+      
       <label class="team-label">What team would you like to GM?</label>
 
 <select class="team-select">
@@ -233,7 +241,11 @@ photoUpload.addEventListener('change', () => {
     profilePreview.src = URL.createObjectURL(file);
   }
 });
+const gmSince = localStorage.getItem('gmSince');
 
+if (gmSince) {
+  document.getElementById('gmSince').textContent = "GM since " + gmSince + " • " + (new Date().getFullYear() - gmSince) + " yrs";
+}
 </script>
 
 </body>

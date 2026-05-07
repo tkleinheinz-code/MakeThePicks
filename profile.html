@@ -77,6 +77,28 @@
   margin-top: 12px;
 }
 
+  .profile-actions {
+  display: flex;
+  gap: 32px;   /* space between left + right groups */
+  align-items: flex-start;
+}
+
+/* Left column buttons */
+.primary-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 220px;
+}
+
+/* Right row of buttons */
+.secondary-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;   /* wraps nicely on smaller screens */
+}
+``
+
 /* Bottom section */
 .past-drafts {
   margin-top: 48px;
@@ -96,6 +118,22 @@
 .past-drafts li {
   padding: 10px;
   border-bottom: 1px solid #333;
+}
+.draft-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.draft-card {
+  background: #111;
+  border: 1px solid #333;
+  padding: 14px;
+  border-radius: 6px;
+}
+
+  .draft-card:hover {
+  border-color: #ffd77a;
 }
 
 </style>
@@ -133,9 +171,17 @@
       <textarea class="profile-bio" placeholder="Add a short bio..."></textarea>
 
 <div class="profile-actions">
-  <button class="cta-button" onclick="location.href='drag-drafts="cta-button" onclick="location.href='mock-draft.html'tton">
-    DRAFT NEW TEAM
-  </button>
+
+  <!-- Left column buttons -->
+  <div class="primary-actions">
+    <button class="cta-button" onclick="location.href='drag-draft.html's="cta-button" onclick="location.href='mock-draft-- Right side row -->
+  <div class="secondary-actions">
+    <button class="cta-button">DRAFT NEW TEAM</button>
+    <button class="cta-button">SUBMIT MOCK DRAFT</button>
+    <button class="cta-button">VIEW MY TEAM</button>
+    <button class="cta-button">DRAFT MY NFL TEAM</button>
+  </div>
+
 </div>
 
     </div>
@@ -146,11 +192,11 @@
   <div class="past-drafts">
     <h2>Past Draft Picks</h2>
 
-    <ul>
-      <li>2026 Mock Draft – 87 Points</li>
-      <li>2025 Mock Draft – 102 Points</li>
-      <li>49ers Roster Build – Completed</li>
-    </ul>
+<div class="draft-cards">
+  <div class="draft-card">2026 Mock Draft – 87 Points</div>
+  <div class="draft-card">2025 Mock Draft – 102 Points</div>
+  <div class="draft-card">49ers Roster Build – Completed</div>
+</div>
 
   </div>
 

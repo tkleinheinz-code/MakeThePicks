@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Draft Room</title>
+<link rel="stylesheet" href="styles.css">
+
+<style>
+
+/* Layout */
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+}
+
+/* Header */
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Left */
+.room-info h1 {
+  margin-bottom: 4px;
+}
+
+.room-info p {
+  color: #ccc;
+}
+
+/* Invite */
+.invite-box {
+  margin-top: 10px;
+}
+
+.invite-box input {
+  width: 240px;
+  padding: 8px;
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+}
+
+/* Leaderboard */
+.leaderboard {
+  background: #111;
+  border: 1px solid #333;
+  padding: 15px;
+  width: 260px;
+}
+
+.leaderboard h3 {
+  color: #ffd77a;
+  margin-bottom: 10px;
+}
+
+.leaderboard ul {
+  padding: 0;
+  list-style: none;
+}
+
+.leaderboard li {
+  padding: 6px 0;
+  border-bottom: 1px solid #333;
+}
+
+/* Draft list */
+.drafts {
+  background: #111;
+  border: 1px solid #333;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.drafts h2 {
+  color: #ffd77a;
+  margin-bottom: 10px;
+}
+
+.draft-item {
+  padding: 12px;
+  border-bottom: 1px solid #333;
+}
+
+/* Submit box */
+.submit-box {
+  background: #111;
+  border: 1px solid #333;
+  padding: 20px;
+}
+
+textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">
+    <a href="index.html">MAKE THE PICKS</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- TOP HEADER -->
+  <div class="room-header">
+
+    <!-- LEFT SIDE -->
+    <div class="room-info">
+      <h1 id="roomName">Mock Room</h1>
+      <p>Created by <span id="roomCreator">You</span></p>
+
+      <div class="invite-box">
+        <input id="roomCode" readonly>
+        <button onclick="copyCode()">Copy Link</button>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="leaderboard">
+      <h3>Leaderboard</h3>
+      <ul id="leaderboardList">
+        <li>You — 0 pts</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- MOCK DRAFT LIST -->
+  <div class="drafts">
+    <h2>Mock Drafts</h2>
+    <div id="draftList"></div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-box">
+    <h2>Submit Your Mock Draft</h2>
+
+    <textarea id="draftInput" placeholder="Paste your mock draft..."></textarea>
+
+    <button class="cta-button" onclick="submitDraft()">Submit Draft</button>
+  </div>
+
+</main>
+
+<script>
+
+/* Load room from localStorage */
+const room = JSON.parse(localStorage.getItem('currentRoom'));
+
+if (room) {
+  document.getElementById('roomName').textContent = room.name;
+  document.getElementById('roomCreator').textContent = room.creator || "You";
+  document.getElementById('roomCode').value = room.code;
+
+  loadDrafts(room);
+  loadExperts(room);
+}
+
+/* Copy invite code */
+function copyCode() {
+  const codeInput = document.getElementById("roomCode");
+  codeInput.select();
+  document.execCommand("copy");
+  alert("Room code copied!");
+}
+
+/* Load drafts */
+function loadDrafts(room) {
+  const container = document.getElementById('draftList');
+  container.innerHTML = "";
+
+  if (!room.drafts || room.drafts.length === 0) {
+    container.innerHTML = "<div class='draft-item'>No drafts yet</div>";
+    return;
+  }
+
+  room.drafts.forEach(d => {
+    const div = document.createElement('div');
+    div.className = "draft-item";
+    div.textContent = d;
+    container.appendChild(div);
+  });
+}
+
+/* Load expert drafts */
+function loadExperts(room) {
+  if (!room.includeExperts || !room.experts) return;
+
+  const container = document.getElementById('draftList');
+
+  room.experts.forEach(e => {
+    const div = document.createElement('div');
+    div.className = "draft-item";
+    div.textContent = e + " (Expert)";
+    container.appendChild(div);
+  });
+}
+
+/* Submit draft */
+function submitDraft() {
+  const input = document.getElementById('draftInput').value;
+  if (!input) return;
+
+  room.drafts.push(input);
+
+  localStorage.setItem('currentRoom', JSON.stringify(room));
+
+  loadDrafts(room);
+
+  document.getElementById('draftInput').value = "";
+}
+
+</script>
+
+</body>
+</html>

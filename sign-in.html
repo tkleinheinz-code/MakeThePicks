@@ -115,11 +115,17 @@ function forgotPassword() {
   }
 }
 
-document.getElementById('signInBtn').addEventListener('click', function(e) {
-  e.preventDefault(); // prevents form reload
+document.querySelector('form').addEventListener('submit', function(e) {
+  e.preventDefault();
 
-  // ✅ Redirect to profile page
-  window.location.href = "profile.html";
+  const emailInput = document.querySelector('input[type="email"]').value;
+  const savedEmail = localStorage.getItem('userEmail');
+
+  if (emailInput === savedEmail) {
+    window.location.href = "profile.html";
+  } else {
+    alert("Email not found");
+  }
 });
 
 </script>

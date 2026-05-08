@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="styles.css">
 
 <style>
+  body {
+  transition: all 0.3s ease;
+}
+  
 /* Layout */
 .drag-layout {
   display: grid;
@@ -134,7 +138,59 @@
     display: none;
   }
 }
-  
+ /* ✅ LIGHT MODE */
+body.light {
+  background: #fff;
+  color: #111;
+}
+
+/* Player list + board boxes */
+body.light .player-list,
+body.light .drop-box {
+  background: #f8f8f8;
+  border-color: #ccc;
+}
+
+/* Players */
+body.light .player {
+  background: #eaeaea;
+  border-color: #ccc;
+  color: #111;
+}
+
+/* Red (offense) */
+body.light .player.red-group {
+  background: #f2bcbc;
+  border-color: #caa343;
+}
+
+/* Gold (defense) */
+body.light .player.gold-group {
+  background: #ffd77a;
+  color: #000;
+}
+
+/* Titles */
+body.light h1,
+body.light h3,
+body.light .player-count,
+body.light .subtitle {
+  color: #111;
+}
+
+/* Subtitle line */
+body.light .subtitle::after {
+  background: linear-gradient(to right, #999, #333, #999);
+}
+
+/* Toggle button */
+.theme-toggle button {
+  background: none;
+  border: 1px solid #333;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: inherit;
+} 
 </style>
 </head>
 
@@ -143,6 +199,11 @@
 <header class="header">
   <div class="logo">
     <a href="index.html">MAKE THE PICKS</a>
+  </div>
+
+  <!-- ✅ ADD THIS -->
+  <div class="theme-toggle">
+    <button id="themeToggle">🌙</button>
   </div>
 </header>
 
@@ -424,4 +485,27 @@ updatePlayerCount();
   function printDepthChart() {
   window.print();
 }
+  <script>
+
+// ✅ Get button
+const toggleBtn = document.getElementById('themeToggle');
+
+// ✅ Load saved theme
+if (localStorage.getItem('theme') === 'light') {
+  document.body.classList.add('light');
+  toggleBtn.textContent = "☀️";
+}
+
+// ✅ Toggle on click
+toggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('light');
+
+  const isLight = document.body.classList.contains('light');
+
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+  toggleBtn.textContent = isLight ? "☀️" : "🌙";
+});
+
+</script>
 </script>

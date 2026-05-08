@@ -196,8 +196,6 @@ function checkForm() {
 
 emailInput.addEventListener('input', checkForm);
 
-  const submitBtn = document.getElementById('submitBtn');
-
 function checkForm() {
   if (
     emailInput.validity.valid &&
@@ -223,20 +221,13 @@ document.querySelector('form').addEventListener('submit', (e) => {
   localStorage.setItem('userName', name);
   localStorage.setItem('userEmail', email);   // ✅ THIS IS STEP 3
 
-  // ✅ Optional: GM since
-  const year = new Date().getFullYear();
-  localStorage.setItem('gmSince', year);
-
   // ✅ Redirect to profile
   window.location.href = "profile.html";
-});
 
   // ✅ Save GM since year
   const signupYear = new Date().getFullYear();
   localStorage.setItem('gmSince', signupYear);
 
-  // ✅ Redirect
-  window.location.href = "profile.html";
 });
 </script>
 </body>

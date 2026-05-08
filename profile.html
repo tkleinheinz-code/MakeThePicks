@@ -244,16 +244,26 @@
 
 <script>
 
-// Load Name
-const name = localStorage.getItem('userName');
-if (name) document.getElementById('profileName').value = name;
+// ✅ Load user name ON PAGE LOAD
+window.addEventListener("DOMContentLoaded", function() {
 
-// GM Since
-const gmSince = localStorage.getItem('gmSince');
-if (gmSince) {
-  document.getElementById('gmSince').textContent = "GM since " + gmSince;
-}
+  const savedName = localStorage.getItem('userName');
+  const nameField = document.getElementById('profileName');
 
+  if (savedName && nameField) {
+    nameField.value = savedName;
+  }
+
+  // ✅ GM Since
+  const gmSince = localStorage.getItem('gmSince');
+  if (gmSince) {
+    document.getElementById('gmSince').textContent = "GM since " + gmSince;
+  }
+
+});
+  document.getElementById('profileName').addEventListener('input', function(e) {
+  localStorage.setItem('userName', e.target.value);
+});
 </script>
 
 </body>

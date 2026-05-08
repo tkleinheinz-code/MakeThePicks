@@ -191,6 +191,31 @@ body.light .subtitle::after {
   cursor: pointer;
   color: inherit;
 } 
+  .player {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect */
+.player:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+  .player:active {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+  .player.dropped {
+  animation: dropBounce 0.3s ease;
+}
+
+@keyframes dropBounce {
+  0%   { transform: scale(1.2); }
+  60%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+  .drop-box {
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
 </style>
 </head>
 
@@ -414,6 +439,14 @@ boxes.forEach(box => {
     if (!dragged) return;
 
     box.appendChild(dragged);
+
+// ✅ Add animation class
+dragged.classList.add('dropped');
+
+// ✅ Remove after animation so it can replay next time
+setTimeout(() => {
+  dragged.classList.remove('dropped');
+}, 300);
     updatePlayerCount();
   });
 

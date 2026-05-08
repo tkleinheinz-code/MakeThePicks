@@ -90,7 +90,7 @@
       </div>
 
       <!-- Button -->
-      <button class="cta-button">SIGN IN</button>
+      <button class="cta-button" id="signInBtn">SIGN IN</button>
 
     </form>
 
@@ -114,6 +114,13 @@ function forgotPassword() {
     alert("Email not found");
   }
 }
+
+document.getElementById('signInBtn').addEventListener('click', function(e) {
+  e.preventDefault(); // prevents form reload
+
+  // ✅ Redirect to profile page
+  window.location.href = "profile.html";
+});
 
 </script>
   </body>

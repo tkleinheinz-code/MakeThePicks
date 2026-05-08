@@ -381,6 +381,7 @@ body.light .subtitle::after {
 </main>
 
 <script>
+
 const players = document.querySelectorAll('.player');
 const boxes = document.querySelectorAll('.drop-box');
 const playerList = document.querySelector('.player-list');
@@ -396,7 +397,7 @@ players.forEach((player, index) => {
 players.forEach(player => {
   player.addEventListener('dragstart', (e) => {
     dragged = player;
-    e.dataTransfer.setData("text/plain", "player"); // REQUIRED
+    e.dataTransfer.setData("text/plain", "player");
   });
 });
 
@@ -404,18 +405,16 @@ players.forEach(player => {
 boxes.forEach(box => {
 
   box.addEventListener('dragover', (e) => {
-    e.preventDefault();                       // REQUIRED
-    e.dataTransfer.dropEffect = "move";       // fixes 🚫
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
   });
 
   box.addEventListener('drop', (e) => {
     e.preventDefault();
-
     if (!dragged) return;
 
     box.appendChild(dragged);
-
-    updatePlayerCount(); // keep your counter working
+    updatePlayerCount();
   });
 
   box.addEventListener('dragenter', () => {
@@ -427,14 +426,11 @@ boxes.forEach(box => {
   });
 });
 
-/* ✅ DROP BACK INTO LIST (CORRECT ORDER) */
-playerList.addEventListener('dragover', (e) => {
-  e.preventDefault();
-});
+/* ✅ DROP BACK INTO LIST */
+playerList.addEventListener('dragover', (e) => e.preventDefault());
 
 playerList.addEventListener('drop', (e) => {
   e.preventDefault();
-
   if (!dragged) return;
 
   const draggedIndex = Number(dragged.dataset.index);
@@ -468,7 +464,6 @@ function updatePlayerCount() {
   });
 
   const counter = document.getElementById('playerCount');
-
   counter.textContent = count;
 
   if (count === 53) {
@@ -482,30 +477,27 @@ function updatePlayerCount() {
 
 updatePlayerCount();
 
-  function printDepthChart() {
+function printDepthChart() {
   window.print();
 }
-  <script>
 
-// ✅ Get button
+/* ✅ THEME TOGGLE (KEEP IN SAME SCRIPT) */
 const toggleBtn = document.getElementById('themeToggle');
 
-// ✅ Load saved theme
+// Load saved theme
 if (localStorage.getItem('theme') === 'light') {
   document.body.classList.add('light');
   toggleBtn.textContent = "☀️";
 }
 
-// ✅ Toggle on click
+// Toggle
 toggleBtn.addEventListener('click', () => {
   document.body.classList.toggle('light');
 
   const isLight = document.body.classList.contains('light');
 
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
-
   toggleBtn.textContent = isLight ? "☀️" : "🌙";
 });
 
-</script>
 </script>

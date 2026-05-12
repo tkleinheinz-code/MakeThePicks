@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>2026 Mock Schedule Grid</title>
 
-  <script src="https://ss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     .home { background: #d1fae5; }
@@ -43,6 +43,12 @@ const teams = [
   "DAL","NYG","PHI","WAS","CHI","DET","GB","MIN",
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
+
+  const validOpponents = {};
+
+teams.forEach(team => {
+  validOpponents[team] = teams.filter(t => t !== team);
+});
 
 // ✅ LOGOS
 const logos = {};

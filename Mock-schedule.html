@@ -2,23 +2,119 @@
 <html>
 <body>
 
+<h2>Mock Schedule</h2>
+
 <table border="1" id="grid">
-<tbody></tbody>
+  <thead>
+    <tr>
+      <th>Team</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
 </table>
 
 <script>
 
+// ✅ Teams (small set first)
+const teams = ["BUF","MIA","NE","NYJ"];
+
+// ✅ Opponent rules
+const validOpponents = {
+  BUF:["MIA","NE","NYJ"],
+  MIA:["BUF","NE","NYJ"],
+  NE:["BUF","MIA","NYJ"],
+  NYJ:["BUF","MIA","NE"]
+};
+
+// ✅ Weeks
+const weeks = ["W1","W2","W3"];
+
+// ✅ Add headers
+const headerRow = document.querySelector("#grid thead tr");
+weeks.forEach(w=>{
+  const th = document.createElement("th");
+  th.textContent = w;
+  headerRow.appendChild(th);
+});
+
+// ✅ Schedule storage
+let schedule = {};
+teams.forEach(t=>{
+  schedule[t]={};
+  weeks.forEach(w=>schedule[t][w]="");
+});
+
 const tbody = document.querySelector("#grid tbody");
 
-const tr = document.createElement("tr");
-const td = document.createElement("td");
+// ✅ Create cell
+function createCell(team, week){
 
-td.textContent = "Click me";
+  const td = document.createElement("td");
+  const val = schedule[team][week];
 
-td.onclick = ()=>alert("Working!");
+  // ✅ If already filled → show value
+  if(val){
+    td.textContent = val;
 
-tr.appendChild(td);
-tbody.appendChild(tr);
+    td.onclick = ()=>{
+      schedule[team][week] = "";
+      render();
+    };
+
+    return td;
+  }
+
+  // ✅ Otherwise → dropdown button
+  const btn = document.createElement("button");
+  btn.textContent = "Pick";
+
+  const menu = document.createElement("div");
+  menu.style.display = "none";
+
+  validOpponents[team].forEach(t=>{
+    const item = document.createElement("div");
+    item.textContent = t;
+
+    item.onclick = ()=>{
+      schedule[team][week] = "vs " + t;
+      schedule[t][week] = "@ " + team;
+      render();
+    };
+
+    menu.appendChild(item);
+  });
+
+  btn.onclick = ()=>{
+    menu.style.display = menu.style.display === "none" ? "block" : "none";
+  };
+
+  td.appendChild(btn);
+  td.appendChild(menu);
+
+  return td;
+}
+
+// ✅ Render grid
+function render(){
+  tbody.innerHTML = "";
+
+  teams.forEach(team=>{
+    const tr = document.createElement("tr");
+
+    const td = document.createElement("td");
+    td.textContent = team;
+    tr.appendChild(td);
+
+    weeks.forEach(w=>{
+      tr.appendChild(createCell(team,w));
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+// ✅ Start
+render();
 
 </script>
 

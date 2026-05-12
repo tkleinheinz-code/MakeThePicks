@@ -45,47 +45,13 @@ const teams = [
 ];
 
 // ✅ YOUR REAL OPPONENT DATA (cleaned)
-const validOpponents = {
-  BUF:["Bye", "vMIA", "vNE", "vNYJ", "vKC", "vLAC", "vBAL", "vCHI", "vDET", "aMIA", "aNE", "aNYJ", "aDEN", "aLV", "aHOU", "aGB", "aMIN", "aLAR"],
-  MIA:["Bye", "vBUF", "vNE", "vNYJ", "vKC", "vLAC", "vCIN", "vCHI", "vDET", "aBUF", "aNE", "aNYJ", "aDEN", "aLV", "aIND", "aGB", "aMIN", "aSF"],
-  NE:["Bye", "vBUF", "vMIA", "vNYJ", "vDEN", "vLV", "vPIT", "vGB", "vMIN", "aBUF", "aMIA", "aNYJ", "aKC", "aLAC", "aJAX", "aCHI", "aDET", "aSEA"],
-  NYJ:["Bye", "vBUF", "vMIA", "vNE", "vDEN", "vLV", "vCLE", "vGB", "vMIN", "aBUF", "aMIA", "aNE", "aKC", "aLAC", "aTEN", "aCHI", "aDET", "aARI"],
+const validOpponents = {};
 
-  BAL:["Bye", "vCIN", "vCLE", "vPIT", "vJAX", "vTEN", "vLAC", "vNO", "vTB", "aCIN", "aCLE", "aPIT", "aHOU", "aIND", "aBUF", "aATL", "aCAR", "aDAL"],
-  CIN:["Bye", "vBAL", "vCLE", "vPIT", "vJAX", "vTEN", "vKC", "vNO", "vTB", "aBAL", "aCLE", "aPIT", "aHOU", "aIND", "aMIA", "aATL", "aCAR", "aWAS"],
-  CLE:["Bye", "vBAL", "vCIN", "vPIT", "vHOU", "vIND", "vLV", "vATL", "vCAR", "aBAL", "aCIN", "aPIT", "aJAX", "aTEN", "aNYJ", "aNO", "aTB", "aNYG"],
-  PIT:["Bye", "vBAL", "vCIN", "vCLE", "vHOU", "vIND", "vDEN", "vATL", "vCAR", "aBAL", "aCIN", "aCLE", "aJAX", "aTEN", "aNE", "aNO", "aTB", "aPHI"],
-
-  HOU:["Bye", "vIND", "vJAX", "vTEN", "vBAL", "vCIN", "vBUF", "vDAL", "vNYG", "aIND", "aJAX", "aTEN", "aCLE", "aPIT", "aLAC", "aPHI", "aWAS", "aGB"],
-  IND:["Bye", "vHOU", "vJAX", "vTEN", "vBAL", "vCIN", "vMIA", "vDAL", "vNYG", "aHOU", "aJAX", "aTEN", "aCLE", "aPIT", "aKC", "aPHI", "aWAS", "aMIN"],
-  JAX:["Bye", "vHOU", "vIND", "vTEN", "vCLE", "vPIT", "vNE", "vPHI", "vWAS", "aHOU", "aIND", "aTEN", "aBAL", "aCIN", "aDEN", "aDAL", "aNYG", "aCHI"],
-  TEN:["Bye", "vHOU", "vIND", "vJAX", "vCLE", "vPIT", "vNYJ", "vPHI", "vWAS", "aHOU", "aIND", "aJAX", "aBAL", "aCIN", "aLV", "aDAL", "aNYG", "aDET"],
-
-  DEN:["Bye", "vKC", "vLAC", "vLV", "vBUF", "vMIA", "vJAX", "vLAR", "vSEA", "aKC", "aLAC", "aLV", "aNE", "aNYJ", "aPIT", "aARI", "aSF", "aCAR"],
-  KC:["Bye", "vDEN", "vLAC", "vLV", "vNE", "vNYJ", "vIND", "vARI", "vSF", "aDEN", "aLAC", "aLV", "aBUF", "aMIA", "aCIN", "aLAR", "aSEA", "aATL"],
-  LV:["Bye", "vDEN", "vKC", "vLAC", "vBUF", "vMIA", "vTEN", "vLAR", "vSEA", "aDEN", "aKC", "aLAC", "aNE", "aNYJ", "aCLE", "aARI", "aSF", "aNO"],
-  LAC:["Bye", "vDEN", "vKC", "vLV", "vNE", "vNYJ", "vHOU", "vARI", "vSF", "aDEN", "aKC", "aLV", "aBUF", "aMIA", "aBAL", "aLAR", "aSEA", "aTB"],
-
-  DAL:["Bye", "vNYG", "vPHI", "vWAS", "vARI", "vSF", "vTB", "vJAX", "vTEN", "aNYG", "aPHI", "aWAS", "aLAR", "aSEA", "aGB", "aHOU", "aIND", "vBAL"],
-  NYG:["Bye", "vDAL", "vPHI", "vWAS", "vARI", "vSF", "vNO", "vJAX", "vTEN", "aDAL", "aPHI", "aWAS", "aLAR", "aSEA", "aDET", "aHOU", "aIND", "vCLE"],
-  PHI:["Bye", "vDAL", "vNYG", "vWAS", "vLAR", "vSEA", "vCAR", "vHOU", "vIND", "aDAL", "aNYG", "aWAS", "aARI", "aSF", "aCHI", "aJAX", "aTEN", "vPIT"],
-  WAS:["Bye", "vDAL", "vNYG", "vPHI", "vLAR", "vSEA", "vATL", "vHOU", "vIND", "aDAL", "aNYG", "aPHI", "aARI", "aSF", "aMIN", "aJAX", "aTEN", "vCIN"],
-
-  CHI:["Bye", "vDET", "vGB", "vMIN", "vNO", "vTB", "vPHI", "vNE", "vNYJ", "aDET", "aGB", "aMIN", "aATL", "aCAR", "aSEA", "aBUF", "aMIA", "vJAX"],
-  DET:["Bye", "vCHI", "vGB", "vMIN", "vNO", "vTB", "vNYG", "vNE", "vNYJ", "aCHI", "aGB", "aMIN", "aATL", "aCAR", "aARI", "aBUF", "aMIA", "vTEN"],
-  GB:["Bye", "vCHI", "vDET", "vMIN", "vATL", "vCAR", "vDAL", "vBUF", "vMIA", "aCHI", "aDET", "aMIN", "aNO", "aTB", "aLAR", "aNE", "aNYJ", "vHOU"],
-  MIN:["Bye", "vCHI", "vDET", "vGB", "vATL", "vCAR", "vWAS", "vBUF", "vMIA", "aCHI", "aDET", "aGB", "aNO", "aTB", "aSF", "aNE", "aNYJ", "vIND"],
-
-  ATL:["Bye", "vCAR", "vNO", "vTB", "vCHI", "vDET", "vSF", "vBAL", "vCIN", "aCAR", "aNO", "aTB", "aGB", "aMIN", "aWAS", "aCLE", "aPIT", "vKC"],
-  CAR:["Bye", "vATL", "vNO", "vTB", "vCHI", "vDET", "vSEA", "vBAL", "vCIN", "aATL", "aNO", "aTB", "aGB", "aMIN", "aPHI", "aCLE", "aPIT", "vDEN"],
-  NO:["Bye", "vATL", "vCAR", "vTB", "vGB", "vMIN", "vARI", "vCLE", "vPIT", "aATL", "aCAR", "aTB", "aCHI", "aDET", "aNYG", "aBAL", "aCIN", "vLV"],
-  TB:["Bye", "vATL", "vCAR", "vNO", "vGB", "vMIN", "vLAR", "vCLE", "vPIT", "aATL", "aCAR", "aNO", "aCHI", "aDET", "aDAL", "aBAL", "aCIN", "vLAC"],
-
-  ARI:["Bye", "vLAR", "vSF", "vSEA", "vPHI", "vWAS", "vDET", "vDEN", "vLV", "aLAR", "aSF", "aSEA", "aDAL", "aNYG", "aNO", "aKC", "aLAC", "vNYJ"],
-  LAR:["Bye", "vARI", "vSF", "vSEA", "vDAL", "vNYG", "vGB", "vKC", "vLAC", "aARI", "aSF", "aSEA", "aPHI", "aWAS", "aTB", "aDEN", "aLV", "vBUF"],
-  SF:["Bye", "vARI", "vLAR", "vSEA", "vPHI", "vWAS", "vMIN", "vDEN", "vLV", "aARI", "aLAR", "aSEA", "aDAL", "aNYG", "aATL", "aKC", "aLAC", "vMIA"],
-  SEA:["Bye", "vARI", "vLAR", "vSF", "vDAL", "vNYG", "vCHI", "vKC", "vLAC", "aARI", "aLAR", "aSF", "aPHI", "aWAS", "aCAR", "aDEN", "aLV", "vNE"]
-};
+Object.keys(rawScheduleData).forEach(team => {
+  validOpponents[team] = rawScheduleData[team]
+    .filter(x => x !== "Bye")
+    .map(x => x.substring(1)); // remove v/a
+});
 
 // ✅ LOGOS
 const logos = {};

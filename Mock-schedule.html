@@ -84,14 +84,52 @@ function getColorClass(value) {
 
 // Create cell
 function createCell(team, week) {
-
   const td = document.createElement("td");
   td.className = "p-1 border";
 
+  const value = schedule[team][week];
+
+  // ✅ DISPLAY MODE (already filled)
+  if(value) {
+
+    const container = document.createElement("div");
+    container.className = "flex items-center justify-center gap-1 cursor-pointer p-1 rounded";
+
+    // color
+    const cls = getColorClass(value);
+    if(cls) container.classList.add(cls);
+
+    if(value === "BYE") {
+      container.textContent = "BYE";
+    } else {
+      const opponent = value.substring(1);
+
+      const img = document.createElement("img");
+      img.src = logos[opponent];
+      img.className = "w-5 h-5";
+
+      const span = document.createElement("span");
+      span.className = "text-xs font-bold";
+      span.textContent = opponent;
+
+      container.appendChild(img);
+      container.appendChild(span);
+    }
+
+    // ✅ click to edit
+    container.onclick = () => {
+      schedule[team][week] = "";
+      render(document.getElementById("search").value);
+    };
+
+    td.appendChild(container);
+    return td;
+  }
+
+  // ✅ EDIT MODE (empty cell)
   const wrapper = document.createElement("div");
   wrapper.className = "flex flex-col gap-1";
 
-  // type select
   const typeSelect = document.createElement("select");
   typeSelect.className = "text-xs border rounded";
 
@@ -102,7 +140,6 @@ function createCell(team, week) {
     typeSelect.appendChild(o);
   });
 
-  // dropdown
   const dropdown = document.createElement("div");
   dropdown.className = "relative";
 
@@ -110,7 +147,7 @@ function createCell(team, week) {
   button.type = "button";
   button.dataset.value = "";
   button.className = "text-xs border rounded w-full flex items-center gap-1 px-1 py-1 bg-white";
-  button.textContent = "Select";
+  button.textContent = "Team";
 
   const menu = document.createElement("div");
   menu.className = "absolute bg-white border rounded shadow-md hidden z-10 max-h-40 overflow-auto w-28";
@@ -130,7 +167,9 @@ function createCell(team, week) {
     item.appendChild(span);
 
     item.onclick = () => {
-      button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4   menu.classList.add("hidden");
+      button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4"/> ${t}`;
+      button.dataset.value = t;
+      menu.classList.add("hidden");
       updateValue();
     };
 
@@ -143,19 +182,19 @@ function createCell(team, week) {
   dropdown.appendChild(menu);
 
   function updateValue() {
-    let value = "";
+    let val = "";
 
     if(typeSelect.value === "BYE") {
-      value = "BYE";
+      val = "BYE";
     } else if(typeSelect.value && button.dataset.value) {
-      value = typeSelect.value + button.dataset.value;
+      val = typeSelect.value + button.dataset.value;
     }
 
-    schedule[team][week] = value;
+    schedule[team][week] = val;
 
-    if(value.startsWith("v") || value.startsWith("a")) {
+    if(val.startsWith("v") || val.startsWith("a")) {
       const opponent = button.dataset.value;
-      const opposite = getOpposite(value, team);
+      const opposite = getOpposite(val, team);
 
       if(opponent && teams.includes(opponent)) {
         schedule[opponent][week] = opposite;
@@ -166,10 +205,6 @@ function createCell(team, week) {
   }
 
   typeSelect.onchange = updateValue;
-
-  const existing = schedule[team][week];
-  const cls = getColorClass(existing);
-  if(cls) td.classList.add(cls);
 
   wrapper.appendChild(typeSelect);
   wrapper.appendChild(dropdown);

@@ -190,7 +190,19 @@ function createCell(team, week) {
 
 item.onclick = () => {
   // Show logo + team
+ item.onclick = () => {
+  // Show logo + team
   button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> ${t}`;
+
+  // Save selected team
+  button.dataset.value = t;
+
+  // Close dropdown
+  menu.classList.add("hidden");
+
+  // Trigger update
+  updateValue();
+};
 
   // Save selected team
   button.dataset.value = t;

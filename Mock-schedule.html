@@ -48,7 +48,7 @@ const teams = [
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
 
-// ✅ ✅ PASTE YOUR EXCEL VALUES HERE (trimmed example – expand as needed)
+// ✅ YOUR EXCEL-CONVERTED DATA
 const rawScheduleData = {
   BUF: ["vMIA","vNE","vNYJ","aBAL","aKC","aDAL","vCHI"],
   MIA: ["aBUF","vNE","vNYJ","aSF","aSEA","vDEN"],
@@ -60,20 +60,20 @@ const rawScheduleData = {
   CLE: ["aBAL","aCIN","vPIT","vNYG"],
   PIT: ["aBAL","aCIN","aCLE","vPHI"],
 
-  HOU: ["vIND","vJAX","vTEN","aBUF"],
-  IND: ["aHOU","vJAX","vTEN","aNYJ"],
-  JAX: ["aHOU","aIND","vTEN","vNO"],
-  TEN: ["aHOU","aIND","aJAX","vTB"],
+  HOU: ["vIND","vJAX","vTEN"],
+  IND: ["aHOU","vJAX","vTEN"],
+  JAX: ["aHOU","aIND","vTEN"],
+  TEN: ["aHOU","aIND","aJAX"],
 
-  DEN: ["vKC","vLV","vLAC","aCHI"],
-  KC: ["aDEN","vLV","vLAC","aBUF"],
-  LV: ["aDEN","aKC","vLAC","aNE"],
-  LAC: ["aDEN","aKC","aLV","vJAX"],
+  DEN: ["vKC","vLV","vLAC"],
+  KC: ["aDEN","vLV","vLAC"],
+  LV: ["aDEN","aKC","vLAC"],
+  LAC: ["aDEN","aKC","aLV"],
 
   DAL: ["vNYG","vPHI","vWAS","aBUF","aBAL"],
-  NYG: ["aDAL","vPHI","vWAS","aCLE"],
-  PHI: ["aDAL","aNYG","vWAS","vKC"],
-  WAS: ["aDAL","aNYG","aPHI","vARI"],
+  NYG: ["aDAL","vPHI","vWAS"],
+  PHI: ["aDAL","aNYG","vWAS"],
+  WAS: ["aDAL","aNYG","aPHI"],
 
   CHI: ["vDET","vGB","vMIN","aBUF"],
   DET: ["aCHI","vGB","vMIN","aPIT"],
@@ -83,47 +83,20 @@ const rawScheduleData = {
   ATL: ["vCAR","vNO","vTB","aHOU"],
   CAR: ["aATL","vNO","vTB","aTEN"],
   NO: ["aATL","aCAR","vTB","aJAX"],
-  TB: ["aATL","aCAR","aNO","aTEN"],
+  TB: ["aATL","aCAR","aNO"],
 
-  ARI: ["vLAR","vSF","vSEA","aCAR"],
-  LAR: ["aARI","vSF","vSEA","aMIA"],
-  SF: ["aARI","aLAR","vSEA","vNO"],
-  SEA: ["aARI","aLAR","aSF","vIND"]
+  ARI: ["vLAR","vSF","vSEA"],
+  LAR: ["aARI","vSF","vSEA"],
+  SF: ["aARI","aLAR","vSEA"],
+  SEA: ["aARI","aLAR","aSF"]
 };
 
-  const validOpponents = {};
-
-Object.entries(rawScheduleData).forEach(([team, games]) => {
-  validOpponents[team] = [];
-
-  games.forEach(g => {
-    if (g.startsWith("v") || g.startsWith("a")) {
-      const opp = g.substring(1);
-      if (!validOpponents[team].includes(opp)) {
-        validOpponents[team].push(opp);
-      }
-    }
-  });
-});
-
-
-// ✅ ✅ Build validOpponents dynamically
+// ✅ Build valid opponent list
 const validOpponents = {};
-
-teams.forEach(team => {
-  validOpponents[team] = [];
-});
-
-Object.entries(rawScheduleData).forEach(([team, games]) => {
-  games.forEach(game => {
-    if(game.startsWith("v") || game.startsWith("a")) {
-      const opponent = game.substring(1);
-
-      if(!validOpponents[team].includes(opponent)) {
-        validOpponents[team].push(opponent);
-      }
-    }
-  });
+Object.keys(rawScheduleData).forEach(team => {
+  validOpponents[team] = rawScheduleData[team]
+    .filter(g => g.startsWith("v") || g.startsWith("a"))
+    .map(g => g.substring(1));
 });
 
 // ✅ Logos
@@ -137,67 +110,57 @@ teams.forEach(t => {
 // ✅ Weeks
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 
+// Build header
 const table = document.getElementById("grid");
 const headerRow = table.querySelector("thead tr");
 
 weeks.forEach(w=>{
-  const th = document.createElement("th");
-  th.textContent = w;
-  th.className = "p-2 border";
+  const th=document.createElement("th");
+  th.textContent=w;
+  th.className="p-2 border";
   headerRow.appendChild(th);
 });
 
 // ✅ Schedule storage
 let schedule = {};
 teams.forEach(t=>{
-  schedule[t] = {};
-  weeks.forEach(w => schedule[t][w]="");
+  schedule[t]={};
+  weeks.forEach(w=>schedule[t][w]="");
 });
 
 const tbody = table.querySelector("tbody");
 
-// Helpers
-function getOpposite(value, team) {
-  if(value.startsWith("v")) return "a"+team;
-  if(value.startsWith("a")) return "v"+team;
-  return "";
+// ✅ Helpers
+function getOpposite(val, team){
+  return val.startsWith("v") ? "a"+team :
+         val.startsWith("a") ? "v"+team : "";
 }
 
-function getColorClass(value) {
-  if(value.startsWith("v")) return "home";
-  if(value.startsWith("a")) return "away";
-  if(value === "BYE") return "bye";
-  return "";
-}
+// ✅ Cell creation
+function createCell(team, week){
+  const td=document.createElement("td");
+  const val=schedule[team][week];
 
-// ✅ Cell renderer
-function createCell(team, week) {
+  // DISPLAY MODE
+  if(val){
+    const d=document.createElement("div");
+    d.className="cursor-pointer p-1";
 
-  const td = document.createElement("td");
-  const value = schedule[team][week];
-
-  // DISPLAY
-  if(value){
-    const c=document.createElement("div");
-    c.className="p-1 cursor-pointer";
-
-    if(value==="BYE"){
-      c.textContent="BYE";
-    }else{
-      const opp=value.substring(1);
-      c.innerHTML=`<img src="${logos[opp]}" class="w-5 inline:"@"} ${opp}`;
-    }
-
-    c.onclick=()=>{
+    if(val==="BYE"){
+      d.textContent="BYE";
+    } else {
+      const opp=val.substring(1);
+      const isHome=val.startsWith("v");
+      d.innerHTML=`<img src="${logos[opp]}" class="w-5 d.onclick=()=>{
       schedule[team][week]="";
       render();
     };
 
-    td.appendChild(c);
+    td.appendChild(d);
     return td;
   }
 
-  // EDIT
+  // EDIT MODE
   const btn=document.createElement("button");
   btn.textContent="Pick";
 
@@ -206,7 +169,8 @@ function createCell(team, week) {
 
   (validOpponents[team] || []).forEach(t=>{
     const item=document.createElement("div");
-    item.innerHTML=`<img src="${logos[t]}" class="w-4 inline>{
+    item.className="p-1 cursor-pointer hover:bg-gray-100";
+    item.innerHTML=`<img src="${logos[t]}" class="w-4ick=()=>{
       schedule[team][week]="v"+t;
       schedule[t][week]="a"+team;
       render();
@@ -222,15 +186,16 @@ function createCell(team, week) {
   return td;
 }
 
-// Render
+// ✅ Render
 function render(){
   tbody.innerHTML="";
+
   teams.forEach(team=>{
     const tr=document.createElement("tr");
 
     const td=document.createElement("td");
     td.textContent=team;
-    td.className="sticky-col";
+    td.className="sticky-col font-bold bg-gray-100";
     tr.appendChild(td);
 
     weeks.forEach(w=>tr.appendChild(createCell(team,w)));

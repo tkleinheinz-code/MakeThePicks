@@ -48,11 +48,48 @@ const teams = [
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
 
-// ✅ Valid opponents (all except self)
-const validOpponents = {};
-teams.forEach(team => {
-  validOpponents[team] = teams.filter(t => t !== team);
-});
+// ✅ ✅ CUSTOM opponent lists (EDIT THIS TO MATCH YOUR FILE)
+const validOpponents = {
+  BUF: ["MIA","NE","NYJ","DAL","CHI","BAL","KC"],
+  MIA: ["BUF","NE","NYJ","LAR","SEA","DEN"],
+  NE: ["BUF","MIA","NYJ","KC","LV","PHI"],
+  NYJ: ["BUF","MIA","NE","SF","DAL","IND"],
+
+  BAL: ["CIN","CLE","PIT","BUF","KC","DAL"],
+  CIN: ["BAL","CLE","PIT","DEN","TEN","JAX"],
+  CLE: ["BAL","CIN","PIT","NYG","WAS"],
+  PIT: ["BAL","CIN","CLE","PHI","DET"],
+
+  HOU: ["IND","JAX","TEN","BUF","ATL"],
+  IND: ["HOU","JAX","TEN","NYJ","SEA"],
+  JAX: ["HOU","IND","TEN","LAC","NO"],
+  TEN: ["HOU","IND","JAX","TB","CAR"],
+
+  DEN: ["KC","LV","LAC","CHI","CIN"],
+  KC: ["DEN","LV","LAC","BUF","PHI"],
+  LV: ["DEN","KC","LAC","NE","MIN"],
+  LAC: ["DEN","KC","LV","JAX","GB"],
+
+  DAL: ["NYG","PHI","WAS","BUF","BAL"],
+  NYG: ["DAL","PHI","WAS","CLE","SF"],
+  PHI: ["DAL","NYG","WAS","KC","PIT"],
+  WAS: ["DAL","NYG","PHI","ARI","DET"],
+
+  CHI: ["DET","GB","MIN","BUF","DEN"],
+  DET: ["CHI","GB","MIN","PIT","WAS"],
+  GB: ["CHI","DET","MIN","LAC","SEA"],
+  MIN: ["CHI","DET","GB","LV","ATL"],
+
+  ATL: ["CAR","NO","TB","HOU","MIN"],
+  CAR: ["ATL","NO","TB","TEN","ARI"],
+  NO: ["ATL","CAR","TB","JAX","SF"],
+  TB: ["ATL","CAR","NO","TEN","SEA"],
+
+  ARI: ["LAR","SF","SEA","CAR","WAS"],
+  LAR: ["ARI","SF","SEA","MIA","NYJ"],
+  SF: ["ARI","LAR","SEA","NO","NYG"],
+  SEA: ["ARI","LAR","SF","IND","GB"]
+};
 
 // ✅ Logos
 const logos = {};
@@ -65,11 +102,10 @@ teams.forEach(t => {
 // ✅ Weeks
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 
-// ✅ Table setup
+// Table setup
 const table = document.getElementById("grid");
 const headerRow = table.querySelector("thead tr");
 
-// Add week headers
 weeks.forEach(w=>{
   const th = document.createElement("th");
   th.textContent = w;
@@ -77,7 +113,7 @@ weeks.forEach(w=>{
   headerRow.appendChild(th);
 });
 
-// ✅ Data store
+// Data store
 let schedule = {};
 teams.forEach(t=>{
   schedule[t] = {};
@@ -86,7 +122,7 @@ teams.forEach(t=>{
 
 const tbody = table.querySelector("tbody");
 
-// ✅ Helpers
+// Helpers
 function getOpposite(value, team) {
   if(value.startsWith("v")) return "a"+team;
   if(value.startsWith("a")) return "v"+team;
@@ -100,198 +136,84 @@ function getColorClass(value) {
   return "";
 }
 
-// ✅ CREATE CELL
+// Create cell
 function createCell(team, week) {
 
   const td = document.createElement("td");
-  td.className = "p-1 border";
 
   const value = schedule[team][week];
 
-  // ✅ DISPLAY MODE
   if (value) {
-    const container = document.createElement("div");
-    container.className = "flex items-center justify-center gap-2 cursor-pointer p-1 rounded text-sm hover:opacity-80";
+    const c = document.createElement("div");
+    c.className = "p-1 cursor-pointer rounded";
 
-    const cls = getColorClass(value);
-    if (cls) container.classList.add(cls);
-
-    if (value === "BYE") {
-      container.textContent = "BYE";
+    if(value === "BYE") {
+      c.textContent = "BYE";
     } else {
-      const isHome = value.startsWith("v");
-      const opponent = value.substring(1);
-
+      const opp = value.substring(1);
       const img = document.createElement("img");
-      img.src = logos[opponent];
-      img.className = "w-5 h-5";
-
-      const label = document.createElement("span");
-      label.className = "text-xs font-bold";
-      label.textContent = isHome ? `vs ${opponent}` : `@ ${opponent}`;
-
-      container.appendChild(img);
-      container.appendChild(label);
+      img.src = logos[opp];
+      img.className = "inline w-5 h-5";
+      c.appendChild(img);
+      c.append(` ${value.startsWith("v")?"vs":"@"} ${opp}`);
     }
 
-    container.onclick = () => {
+    c.onclick = () => {
       schedule[team][week] = "";
-      render(document.getElementById("search").value);
+      render();
     };
 
-    td.appendChild(container);
+    td.appendChild(c);
     return td;
   }
 
-  // ✅ EDIT MODE
-  const wrapper = document.createElement("div");
-  wrapper.className = "flex flex-col gap-1";
-
-  const typeSelect = document.createElement("select");
-  typeSelect.className = "text-xs border rounded";
-
-  ["","v","a","BYE"].forEach(opt=>{
-    const o = document.createElement("option");
-    o.value = opt;
-    o.textContent =
-      opt==="v" ? "Home" :
-      opt==="a" ? "Away" :
-      opt==="BYE" ? "BYE" : "-";
-    typeSelect.appendChild(o);
-  });
-
-  const dropdown = document.createElement("div");
-  dropdown.className = "relative";
-
-  const button = document.createElement("button");
-  button.type = "button";
-  button.dataset.value = "";
-  button.className = "text-xs border rounded w-full flex items-center gap-1 px-1 py-1 bg-white";
-  button.textContent = "Team";
+  // EDIT
+  const btn = document.createElement("button");
+  btn.textContent = "Pick";
 
   const menu = document.createElement("div");
-  menu.className = "absolute bg-white border rounded shadow-md hidden z-10 max-h-40 overflow-auto w-28";
+  menu.className = "absolute bg-white border hidden";
 
-  // ✅ DROPDOWN LOOP
-  validOpponents[team].forEach(t => {
-
+  validOpponents[team].forEach(t=>{
     const item = document.createElement("div");
-    item.className = "flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer";
+    item.textContent = t;
 
-    const img = document.createElement("img");
-    img.src = logos[t];
-    img.className = "w-4 h-4";
+    item.onclick = ()=>{
+      schedule[team][week] = "v"+t;
+      schedule[t][week] = "a"+team;
+      render();
+    };
 
-    const span = document.createElement("span");
-    span.textContent = t;
-
-    item.appendChild(img);
-    item.appendChild(span);
-
-item.onclick = () => {
-  // Show logo + team
- item.onclick = () => {
-  // Show logo + team
-  button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> ${t}`;
-
-  // Save selected team
-  button.dataset.value = t;
-
-  // Close dropdown
-  menu.classList.add("hidden");
-
-  // Trigger update
-  updateValue();
-};
-
-  // Save selected team
-  button.dataset.value = t;
-
-  // Close dropdown
-  menu.classList.add("hidden");
-
-  // Trigger update
-  updateValue();
-};
-    
     menu.appendChild(item);
   });
 
-  button.onclick = () => menu.classList.toggle("hidden");
+  btn.onclick = ()=>menu.classList.toggle("hidden");
 
-  dropdown.appendChild(button);
-  dropdown.appendChild(menu);
-
-  function updateValue() {
-    let val = "";
-
-    if(!typeSelect.value && button.dataset.value) {
-      typeSelect.value = "v";
-    }
-
-    if(typeSelect.value === "BYE") {
-      val = "BYE";
-    } else if(typeSelect.value && button.dataset.value) {
-      val = typeSelect.value + button.dataset.value;
-    }
-
-    if(!val) return;
-
-    schedule[team][week] = val;
-
-    if(val.startsWith("v") || val.startsWith("a")) {
-      const opponent = button.dataset.value;
-      const opposite = getOpposite(val, team);
-
-      if(opponent && validOpponents[team].includes(opponent)) {
-        schedule[opponent][week] = opposite;
-      }
-    }
-
-    render(document.getElementById("search").value);
-  }
-
-  typeSelect.onchange = updateValue;
-
-  wrapper.appendChild(typeSelect);
-  wrapper.appendChild(dropdown);
-
-  td.appendChild(wrapper);
+  td.appendChild(btn);
+  td.appendChild(menu);
   return td;
 }
 
-// ✅ RENDER
+// Render
 function render(filter="") {
-  tbody.innerHTML = "";
+  tbody.innerHTML="";
 
-  teams
-    .filter(t => t.toLowerCase().includes(filter.toLowerCase()))
-    .forEach(team => {
+  teams.forEach(team=>{
+    const tr=document.createElement("tr");
 
-      const tr = document.createElement("tr");
+    const tdTeam=document.createElement("td");
+    tdTeam.textContent=team;
+    tdTeam.className="sticky-col bg-gray-100 font-bold";
+    tr.appendChild(tdTeam);
 
-      const tdTeam = document.createElement("td");
-      tdTeam.textContent = team;
-      tdTeam.className = "p-2 border font-bold bg-gray-100 sticky-col";
+    weeks.forEach(w=>tr.appendChild(createCell(team,w)));
 
-      tr.appendChild(tdTeam);
-
-      weeks.forEach(w=>{
-        tr.appendChild(createCell(team, w));
-      });
-
-      tbody.appendChild(tr);
-    });
+    tbody.appendChild(tr);
+  });
 }
 
 render();
 
-// ✅ Search
-document.getElementById("search").oninput = e=>{
-  render(e.target.value);
-};
-
 </script>
-
 </body>
 </html>

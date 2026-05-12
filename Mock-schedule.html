@@ -2,20 +2,26 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>NFL Schedule Grid</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>2026 Mock Schedule Grid</title>
+  https://cdn.tailwindcss.com
+
+  <style>
+    .home { background: #d1fae5; }   /* green */
+    .away { background: #fee2e2; }   /* red */
+    .bye  { background: #e5e7eb; }   /* gray */
+  </style>
 </head>
 
-<body class="p-6">
+<body class="p-6 bg-gray-100">
 
-<h1 class="text-3xl font-bold mb-4">NFL Schedule Grid</h1>
+<h1 class="text-3xl font-bold mb-4">2026 Mock Schedule Grid</h1>
 
-<input id="search" placeholder="Search team..."
-  class="mb-4 p-2 border rounded w-64" />
+<input id="search" class="mb-4 p-2 border rounded w-64"
+  placeholder="Search team..." />
 
-<div class="overflow-auto border">
+<div class="overflow-auto border bg-white">
   <table class="min-w-full text-sm text-center" id="grid">
-    <thead class="bg-gray-200">
+    <thead class="bg-gray-300 sticky top-0">
       <tr>
         <th class="p-2 border">Team</th>
       </tr>
@@ -25,19 +31,26 @@
 </div>
 
 <script>
+// Teams (from your sheet)
 const teams = [
-  "ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN",
-  "DET","GB","HOU","IND","JAX","KC","LV","LAC","LAR","MIA",
-  "MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"
+  "BUF","MIA","NE","NYJ",
+  "BAL","CIN","CLE","PIT",
+  "HOU","IND","JAX","TEN",
+  "DEN","KC","LV","LAC",
+  "DAL","NYG","PHI","WAS",
+  "CHI","DET","GB","MIN",
+  "ATL","CAR","NO","TB",
+  "ARI","LAR","SF","SEA"
 ];
 
-const weeks = Array.from({ length: 18 }, (_, i) => "W" + (i+1));
+// Weeks
+const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 
+// Build header
 const table = document.getElementById("grid");
 const headerRow = table.querySelector("thead tr");
 
-// Add week headers
-weeks.forEach(w => {
+weeks.forEach(w=>{
   const th = document.createElement("th");
   th.textContent = w;
   th.className = "p-2 border";
@@ -46,8 +59,17 @@ weeks.forEach(w => {
 
 const tbody = table.querySelector("tbody");
 
-// Build rows
-function renderRows(filter="") {
+// Store schedule data
+let schedule = {};
+
+// initialize
+teams.forEach(t=>{
+  schedule[t] = {};
+  weeks.forEach(w => schedule[t][w]="");
+});
+
+// Render table
+function render(filter="") {
   tbody.innerHTML = "";
 
   teams
@@ -55,18 +77,37 @@ function renderRows(filter="") {
     .forEach(team => {
       const tr = document.createElement("tr");
 
+      // Team column
       const tdTeam = document.createElement("td");
       tdTeam.textContent = team;
       tdTeam.className = "p-2 border font-bold bg-gray-100";
       tr.appendChild(tdTeam);
 
-      weeks.forEach(() => {
+      weeks.forEach(w=>{
         const td = document.createElement("td");
         td.className = "p-1 border";
 
         const input = document.createElement("input");
-        input.className = "w-20 p-1 text-xs border rounded";
-        input.placeholder = "@DAL";
+        input.value = schedule[team][w];
+        input.className = "w-20 p-1 text-xs border rounded text-center";
+
+        // color logic (matches Excel)
+        function updateColor() {
+          const v = input.value.trim();
+
+          input.classList.remove("home","away","bye");
+
+          if(v.startsWith("v")) input.classList.add("home");
+          else if(v.startsWith("a")) input.classList.add("away");
+          else if(v.toUpperCase() === "BYE") input.classList.add("bye");
+        }
+
+        updateColor();
+
+        input.addEventListener("input", e=>{
+          schedule[team][w] = e.target.value;
+          updateColor();
+        });
 
         td.appendChild(input);
         tr.appendChild(td);
@@ -76,11 +117,11 @@ function renderRows(filter="") {
     });
 }
 
-renderRows();
+render();
 
-// Search
-document.getElementById("search").addEventListener("input", e => {
-  renderRows(e.target.value);
+// search
+document.getElementById("search").addEventListener("input", e=>{
+  render(e.target.value);
 });
 </script>
 

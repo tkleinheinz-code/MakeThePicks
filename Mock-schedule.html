@@ -1,0 +1,98 @@
+
+import React, { useState } from "react";
+
+const teams = [
+  "ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN",
+  "DET","GB","HOU","IND","JAX","KC","LV","LAC","LAR","MIA",
+  "MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"
+];
+
+const weeks = Array.from({ length: 18 }, (_, i) => `W${i + 1}`);
+
+export default function NFLGrid() {
+  const [data, setData] = useState(() => {
+    const initial = {};
+    teams.forEach(team => {
+      initial[team] = {};
+      weeks.forEach(w => (initial[team][w] = ""));
+    });
+    return initial;
+  });
+
+  const [search, setSearch] = useState("");
+
+  const handleChange = (team, week, value) => {
+    setData(prev => ({
+      ...prev,
+      [team]: {
+        ...prev[team],
+        [week]: value
+      }
+    }));
+  };
+
+  const filteredTeams = teams.filter(t =>
+    t.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">NFL Schedule Grid</h1>
+
+      <input
+        placeholder="Search team..."
+        className="mb-4 p-2 border rounded w-64"
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+      />
+
+      <div className="overflow-auto border">
+        <table className="min-w-full text-sm text-center">
+          <thead className="bg-gray-200 sticky top-0">
+            <tr>
+              <th className="p-2 border">Team</th>
+              {weeks.map(w => (
+                <th key={w} className="p-2 border">{w}</th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {filteredTeams.map(team => (
+              <tr key={team}>
+                <td className="p-2 border font-bold bg-gray-100">{team}</td>
+
+                {weeks.map(w => (
+                  <td key={w} className="p-1 border">
+                    <input
+                      value={data[team][w]}
+                      onChange={e => handleChange(team, w, e.target.value)}
+                      className="w-20 p-1 text-xs border rounded"
+                      placeholder="@DAL"
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-6 flex gap-4">
+        <button
+          onClick={() => setData({})}
+          className="px-4 py-2 bg-red-500 text-white rounded"
+        >
+          Clear
+        </button>
+
+        <button
+          onClick={() => navigator.clipboard.writeText(JSON.stringify(data, null, 2))}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Copy Data
+        </button>
+      </div>
+    </div>
+  );
+}

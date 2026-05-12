@@ -88,47 +88,122 @@ const rawScheduleData = {
   SEA:["Bye","vARI","vLAR","vSF","vDAL","vNYG","vCHI","vKC","vLAC","aARI","aLAR","aSF","aPHI","aWAS","aCAR","aDEN","aLV","vNE"]
 };
 
+// ✅ TEAMS
+const teams = Object.keys(rawScheduleData);
+
+// ✅ LOGOS
+const logos = {};
+teams.forEach(t=>{
+  logos[t] = "https://a.espncdn.com/i/teamlogos/nfl/500/" +
+    (t === "WAS" ? "wsh" : t.toLowerCase()) + ".png";
+});
+
 // ✅ WEEKS
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 const tbody = document.querySelector("#grid tbody");
 
-// HEADER
+// ✅ HEADER
 const headerRow = document.querySelector("#grid thead tr");
 weeks.forEach(w=>{
   const th=document.createElement("th");
   th.textContent=w;
+  th.className="border p-1";
   headerRow.appendChild(th);
 });
 
-// SCHEDULE STORE
+// ✅ DATA STORE
 let schedule = {};
 teams.forEach(t=>{
   schedule[t]={};
   weeks.forEach(w=>schedule[t][w]="");
 });
 
-// CELL
+// ✅ CREATE CELL
 function createCell(team,week){
+
   const td=document.createElement("td");
+  td.className="border p-1 relative";
+
   const val=schedule[team][week];
 
+  // ✅ DISPLAY MODE
   if(val){
-    td.textContent = val;
-    td.onclick=()=>{ schedule[team][week]=""; render(); };
+
+    const box=document.createElement("div");
+
+    if(val==="BYE"){
+      box.textContent="BYE";
+      box.className="bye cursor-pointer";
+    } else {
+
+      const opp=val.substring(1);
+      const isHome=val.startsWith("v");
+
+      const img=document.createElement("img");
+      img.src=logos[opp];
+      img.style.width="18px";
+
+      box.appendChild(img);
+      box.appendChild(document.createTextNode(
+        " " + (isHome ? "vs " : "@ ") + opp
+      ));
+
+      box.className = (isHome ? "home " : "away ") + "cursor-pointer";
+    }
+
+    box.onclick=()=>{
+      schedule[team][week]="";
+      render();
+    };
+
+    td.appendChild(box);
     return td;
   }
 
+  // ✅ EDIT MODE
   const btn=document.createElement("button");
   btn.textContent="Pick";
+  btn.className="text-xs border px-1";
 
   const menu=document.createElement("div");
+
+  // ✅ FIXED DROPDOWN STYLING
   menu.style.display="none";
+  menu.style.position="absolute";
+  menu.style.background="white";
+  menu.style.border="1px solid black";
+  menu.style.maxHeight="150px";
+  menu.style.overflowY="auto";
+  menu.style.zIndex="1000";
+  menu.style.width="130px";
 
   rawScheduleData[team].forEach(opt=>{
+
     const item=document.createElement("div");
-    item.textContent=opt;
+    item.style.padding="4px";
+    item.style.cursor="pointer";
+
+    if(opt==="Bye"){
+      item.textContent="BYE";
+    } 
+    else {
+
+      const opp=opt.substring(1);
+
+      const img=document.createElement("img");
+      img.src=logos[opp];
+      img.style.width="14px";
+      img.style.marginRight="5px";
+
+      item.appendChild(img);
+      item.appendChild(document.createTextNode(opt));
+    }
+
+    item.onmouseover=()=>item.style.background="#eee";
+    item.onmouseout=()=>item.style.background="white";
 
     item.onclick=()=>{
+
       if(opt==="Bye"){
         schedule[team][week]="BYE";
       } else {
@@ -138,36 +213,56 @@ function createCell(team,week){
         schedule[team][week]=opt;
         schedule[opp][week]=(isHome?"a":"v")+team;
       }
+
       render();
     };
 
     menu.appendChild(item);
   });
 
-  btn.onclick=()=>menu.style.display = menu.style.display==="none"?"block":"none";
+  btn.onclick=()=>{
+    menu.style.display =
+      (menu.style.display==="none") ? "block" : "none";
+  };
 
   td.appendChild(btn);
   td.appendChild(menu);
+
   return td;
 }
 
-// RENDER
+// ✅ RENDER
 function render(){
   tbody.innerHTML="";
+
   teams.forEach(team=>{
     const tr=document.createElement("tr");
 
     const td=document.createElement("td");
-    td.textContent=team;
+    td.className="sticky-col border";
+
+    // ✅ TEAM LOGO
+    const img=document.createElement("img");
+    img.src=logos[team];
+    img.style.width="20px";
+
+    td.appendChild(img);
+    td.appendChild(document.createTextNode(" "+team));
+
     tr.appendChild(td);
 
-    weeks.forEach(w=>tr.appendChild(createCell(team,w)));
+    weeks.forEach(w=>{
+      tr.appendChild(createCell(team,w));
+    });
+
     tbody.appendChild(tr);
   });
 }
 
+// ✅ START
 render();
 
 </script>
+
 </body>
 </html>

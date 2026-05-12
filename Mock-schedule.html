@@ -40,23 +40,10 @@
 
 <script>
 
-  const validOpponents = {};
+const validOpponents = {};
 
 teams.forEach(team => {
   validOpponents[team] = teams.filter(t => t !== team);
-});
-  
-// ✅ REQUIRED: teams array
-const teams = [
-  "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",(validOpponents[team] || []).forEach(t => {
-  "HOU","IND","JAX","TEN","DEN","KC","LV","LAC",
-  "DAL","NYG","PHI","WAS","CHI","DET","GB","MIN",
-  "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
-];
-
-const logos = {};
-(validOpponents[team] || []).forEach(t => {
-  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${t.toLowerCase() === "was" ? "wsh" : t.toLowerCase()}.png`;
 });
 
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
@@ -185,9 +172,13 @@ container.onclick = () => {
   const menu = document.createElement("div");
   menu.className = "absolute bg-white border rounded shadow-md hidden z-10 max-h-40 overflow-auto w-28";
 
-  (validOpponents[team] || []).forEach(t=>{
-    const item = document.createElement("div");
-    item.className = "flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer";
+const logos = {};
+
+teams.forEach(t => {
+  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${
+    t === "WAS" ? "wsh" : t.toLowerCase()
+  }.png`;
+});
 
     const img = document.createElement("img");
     img.src = logos[t];

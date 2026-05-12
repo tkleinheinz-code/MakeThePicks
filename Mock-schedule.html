@@ -12,11 +12,11 @@
     .bye  { background: #e5e7eb; }
 
     .sticky-col {
-  position: sticky;
-  left: 0;
-  background: #f3f4f6; /* same as bg-gray-100 */
-  z-index: 20;
-}
+      position: sticky;
+      left: 0;
+      background: #f3f4f6;
+      z-index: 20;
+    }
   </style>
 </head>
 
@@ -39,7 +39,8 @@
 </div>
 
 <script>
-// ✅ Teams FIRST
+
+// ✅ Teams
 const teams = [
   "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",
   "HOU","IND","JAX","TEN","DEN","KC","LV","LAC",
@@ -47,7 +48,7 @@ const teams = [
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
 
-// ✅ Valid opponents (everyone except self)
+// ✅ Valid opponents (all except self)
 const validOpponents = {};
 teams.forEach(team => {
   validOpponents[team] = teams.filter(t => t !== team);
@@ -60,19 +61,15 @@ teams.forEach(t => {
     t === "WAS" ? "wsh" : t.toLowerCase()
   }.png`;
 });
-  
-const validOpponents = {};
 
-teams.forEach(team => {
-  validOpponents[team] = teams.filter(t => t !== team);
-});
-
+// ✅ Weeks
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 
+// ✅ Table setup
 const table = document.getElementById("grid");
 const headerRow = table.querySelector("thead tr");
 
-// Build header
+// Add week headers
 weeks.forEach(w=>{
   const th = document.createElement("th");
   th.textContent = w;
@@ -80,7 +77,7 @@ weeks.forEach(w=>{
   headerRow.appendChild(th);
 });
 
-// Data store
+// ✅ Data store
 let schedule = {};
 teams.forEach(t=>{
   schedule[t] = {};
@@ -89,7 +86,7 @@ teams.forEach(t=>{
 
 const tbody = table.querySelector("tbody");
 
-// Helpers
+// ✅ Helpers
 function getOpposite(value, team) {
   if(value.startsWith("v")) return "a"+team;
   if(value.startsWith("a")) return "v"+team;
@@ -103,54 +100,50 @@ function getColorClass(value) {
   return "";
 }
 
-// Create cell
+// ✅ CREATE CELL
 function createCell(team, week) {
+
   const td = document.createElement("td");
   td.className = "p-1 border";
 
   const value = schedule[team][week];
 
-// ✅ DISPLAY MODE (already filled)
-if (value) {
+  // ✅ DISPLAY MODE
+  if (value) {
+    const container = document.createElement("div");
+    container.className = "flex items-center justify-center gap-2 cursor-pointer p-1 rounded text-sm hover:opacity-80";
 
-  const container = document.createElement("div");
-  container.className = "flex items-center justify-center gap-2 cursor-pointer p-1 rounded text-sm hover:opacity-80";
+    const cls = getColorClass(value);
+    if (cls) container.classList.add(cls);
 
-  // Apply color
-  const cls = getColorClass(value);
-  if (cls) container.classList.add(cls);
+    if (value === "BYE") {
+      container.textContent = "BYE";
+    } else {
+      const isHome = value.startsWith("v");
+      const opponent = value.substring(1);
 
-  if (value === "BYE") {
-    container.textContent = "BYE";
-  } else {
-    const isHome = value.startsWith("v");
-    const opponent = value.substring(1);
+      const img = document.createElement("img");
+      img.src = logos[opponent];
+      img.className = "w-5 h-5";
 
-    // Logo
-    const img = document.createElement("img");
-    img.src = logos[opponent];
-    img.className = "w-5 h-5";
+      const label = document.createElement("span");
+      label.className = "text-xs font-bold";
+      label.textContent = isHome ? `vs ${opponent}` : `@ ${opponent}`;
 
-    // Label
-    const label = document.createElement("span");
-    label.className = "text-xs font-bold";
-    label.textContent = isHome ? `vs ${opponent}` : `@ ${opponent}`;
+      container.appendChild(img);
+      container.appendChild(label);
+    }
 
-    container.appendChild(img);
-    container.appendChild(label);
+    container.onclick = () => {
+      schedule[team][week] = "";
+      render(document.getElementById("search").value);
+    };
+
+    td.appendChild(container);
+    return td;
   }
 
-  // ✅ click to edit
-container.onclick = () => {
-  schedule[team][week] = "";
-  render(document.getElementById("search").value);
-};
-  
-  td.appendChild(container);
-  return td;
-}
-
-  // ✅ EDIT MODE (empty cell)
+  // ✅ EDIT MODE
   const wrapper = document.createElement("div");
   wrapper.className = "flex flex-col gap-1";
 
@@ -160,7 +153,10 @@ container.onclick = () => {
   ["","v","a","BYE"].forEach(opt=>{
     const o = document.createElement("option");
     o.value = opt;
-    o.textContent = opt==="v"?"Home":opt==="a"?"Away":opt==="BYE"?"BYE":"-";
+    o.textContent =
+      opt==="v" ? "Home" :
+      opt==="a" ? "Away" :
+      opt==="BYE" ? "BYE" : "-";
     typeSelect.appendChild(o);
   });
 
@@ -176,39 +172,11 @@ container.onclick = () => {
   const menu = document.createElement("div");
   menu.className = "absolute bg-white border rounded shadow-md hidden z-10 max-h-40 overflow-auto w-28";
 
+  // ✅ DROPDOWN LOOP
   validOpponents[team].forEach(t => {
 
-  const item = document.createElement("div");
-  item.className = "flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer";
-
-  const img = document.createElement("img");
-  img.src = logos[t];
-  img.className = "w-4 h-4";
-
-  const span = document.createElement("span");
-  span.textContent = t;
-
-  item.appendChild(img);
-  item.appendChild(span);
-
-  item.onclick = () => {
-    button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> ${t}`;
-    button.dataset.value = t;
-
-    menu.classList.add("hidden"); // close dropdown
-    updateValue();
-  };
-
-  menu.appendChild(item);
-
-});
-const logos = {};
-
-teams.forEach(t => {
-  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${
-    t === "WAS" ? "wsh" : t.toLowerCase()
-  }.png`;
-});
+    const item = document.createElement("div");
+    item.className = "flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer";
 
     const img = document.createElement("img");
     img.src = logos[t];
@@ -220,57 +188,47 @@ teams.forEach(t => {
     item.appendChild(img);
     item.appendChild(span);
 
-item.onclick = () => {
-  button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> <span>${t}</span>`;
-  button.dataset.value = t;
-
-  // ✅ CLOSE menu
-  menu.classList.add("hidden");
-
-  updateValue();
-};
+    item.onclick = () => {
+      button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-blockadd("hidden");
+      updateValue();
+    };
 
     menu.appendChild(item);
   });
 
-  button.onclick = ()=> menu.classList.toggle("hidden");
+  button.onclick = () => menu.classList.toggle("hidden");
 
   dropdown.appendChild(button);
   dropdown.appendChild(menu);
 
-function updateValue() {
-  let val = "";
+  function updateValue() {
+    let val = "";
 
-  // ✅ AUTO DEFAULT to Home if not selected
-  if(!typeSelect.value && button.dataset.value) {
-    typeSelect.value = "v";
-  }
-
-  if(typeSelect.value === "BYE") {
-    val = "BYE";
-  } else if(typeSelect.value && button.dataset.value) {
-    val = typeSelect.value + button.dataset.value;
-  }
-
-  // ✅ If still nothing, stop
-  if(!val) return;
-
-  schedule[team][week] = val;
-
-  // ✅ AUTO SYNC opponent
-  if(val.startsWith("v") || val.startsWith("a")) {
-    const opponent = button.dataset.value;
-    const opposite = getOpposite(val, team);
-
-   if(opponent && validOpponents[team].includes(opponent))
- {
-      schedule[opponent][week] = opposite;
+    if(!typeSelect.value && button.dataset.value) {
+      typeSelect.value = "v";
     }
-  }
 
-  // ✅ Re-render AFTER saving
-  render(document.getElementById("search").value);
-}
+    if(typeSelect.value === "BYE") {
+      val = "BYE";
+    } else if(typeSelect.value && button.dataset.value) {
+      val = typeSelect.value + button.dataset.value;
+    }
+
+    if(!val) return;
+
+    schedule[team][week] = val;
+
+    if(val.startsWith("v") || val.startsWith("a")) {
+      const opponent = button.dataset.value;
+      const opposite = getOpposite(val, team);
+
+      if(opponent && validOpponents[team].includes(opponent)) {
+        schedule[opponent][week] = opposite;
+      }
+    }
+
+    render(document.getElementById("search").value);
+  }
 
   typeSelect.onchange = updateValue;
 
@@ -281,18 +239,19 @@ function updateValue() {
   return td;
 }
 
-// Render
+// ✅ RENDER
 function render(filter="") {
   tbody.innerHTML = "";
 
   teams
     .filter(t => t.toLowerCase().includes(filter.toLowerCase()))
-    .forEach(team=>{
+    .forEach(team => {
+
       const tr = document.createElement("tr");
 
-const tdTeam = document.createElement("td");
-tdTeam.textContent = team;
-tdTeam.className = "p-2 border font-bold bg-gray-100 sticky-col";
+      const tdTeam = document.createElement("td");
+      tdTeam.textContent = team;
+      tdTeam.className = "p-2 border font-bold bg-gray-100 sticky-col";
 
       tr.appendChild(tdTeam);
 
@@ -306,7 +265,7 @@ tdTeam.className = "p-2 border font-bold bg-gray-100 sticky-col";
 
 render();
 
-// Search
+// ✅ Search
 document.getElementById("search").oninput = e=>{
   render(e.target.value);
 };

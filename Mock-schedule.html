@@ -24,8 +24,7 @@
 
 <h1 class="text-3xl font-bold mb-4">2026 Mock Schedule Grid</h1>
 
-<input id="search" class="mb-4 p-2 border rounded w-64"
- placeholder="Search team..." />
+<input id="search" class="mb-4 p-2 border rounded w-64" placeholder="Search team..." />
 
 <div class="overflow-auto border bg-white">
 <table class="min-w-full text-sm text-center" id="grid">
@@ -40,7 +39,7 @@
 
 <script>
 
-// ✅ Teams
+// Teams
 const teams = [
   "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",
   "HOU","IND","JAX","TEN","DEN","KC","LV","LAC",
@@ -48,50 +47,23 @@ const teams = [
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
 
-// ✅ YOUR EXCEL-CONVERTED DATA
+// Raw data
 const rawScheduleData = {
   BUF: ["vMIA","vNE","vNYJ","aBAL","aKC","aDAL","vCHI"],
   MIA: ["aBUF","vNE","vNYJ","aSF","aSEA","vDEN"],
   NE:  ["aBUF","aMIA","vNYJ","aKC","vLV","vPHI"],
   NYJ: ["aBUF","aMIA","aNE","vIND","vDAL","aSF"],
-
-  BAL: ["vCIN","vCLE","vPIT","aBUF","vKC"],
-  CIN: ["aBAL","vCLE","vPIT","aTEN","vDEN"],
-  CLE: ["aBAL","aCIN","vPIT","vNYG"],
-  PIT: ["aBAL","aCIN","aCLE","vPHI"],
-
+  BAL: ["vCIN","vCLE","vPIT","aBUF"],
+  CIN: ["aBAL","vCLE","vPIT"],
+  CLE: ["aBAL","aCIN","vPIT"],
+  PIT: ["aBAL","aCIN","aCLE"],
   HOU: ["vIND","vJAX","vTEN"],
   IND: ["aHOU","vJAX","vTEN"],
   JAX: ["aHOU","aIND","vTEN"],
-  TEN: ["aHOU","aIND","aJAX"],
-
-  DEN: ["vKC","vLV","vLAC"],
-  KC: ["aDEN","vLV","vLAC"],
-  LV: ["aDEN","aKC","vLAC"],
-  LAC: ["aDEN","aKC","aLV"],
-
-  DAL: ["vNYG","vPHI","vWAS","aBUF","aBAL"],
-  NYG: ["aDAL","vPHI","vWAS"],
-  PHI: ["aDAL","aNYG","vWAS"],
-  WAS: ["aDAL","aNYG","aPHI"],
-
-  CHI: ["vDET","vGB","vMIN","aBUF"],
-  DET: ["aCHI","vGB","vMIN","aPIT"],
-  GB: ["aCHI","aDET","vMIN","aLAC"],
-  MIN: ["aCHI","aDET","aGB","vLV"],
-
-  ATL: ["vCAR","vNO","vTB","aHOU"],
-  CAR: ["aATL","vNO","vTB","aTEN"],
-  NO: ["aATL","aCAR","vTB","aJAX"],
-  TB: ["aATL","aCAR","aNO"],
-
-  ARI: ["vLAR","vSF","vSEA"],
-  LAR: ["aARI","vSF","vSEA"],
-  SF: ["aARI","aLAR","vSEA"],
-  SEA: ["aARI","aLAR","aSF"]
+  TEN: ["aHOU","aIND","aJAX"]
 };
 
-// ✅ Build valid opponent list
+// Build valid opponents
 const validOpponents = {};
 Object.keys(rawScheduleData).forEach(team => {
   validOpponents[team] = rawScheduleData[team]
@@ -99,15 +71,13 @@ Object.keys(rawScheduleData).forEach(team => {
     .map(g => g.substring(1));
 });
 
-// ✅ Logos
+// Logos
 const logos = {};
 teams.forEach(t => {
-  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${
-    t === "WAS" ? "wsh" : t.toLowerCase()
-  }.png`;
+  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${t === "WAS" ? "wsh" : t.toLowerCase()}.png`;
 });
 
-// ✅ Weeks
+// Weeks
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 
 // Build header
@@ -121,7 +91,7 @@ weeks.forEach(w=>{
   headerRow.appendChild(th);
 });
 
-// ✅ Schedule storage
+// Schedule store
 let schedule = {};
 teams.forEach(t=>{
   schedule[t]={};
@@ -130,18 +100,12 @@ teams.forEach(t=>{
 
 const tbody = table.querySelector("tbody");
 
-// ✅ Helpers
-function getOpposite(val, team){
-  return val.startsWith("v") ? "a"+team :
-         val.startsWith("a") ? "v"+team : "";
-}
-
-// ✅ Cell creation
+// Create cell
 function createCell(team, week){
   const td=document.createElement("td");
   const val=schedule[team][week];
 
-  // DISPLAY MODE
+  // DISPLAY
   if(val){
     const d=document.createElement("div");
     d.className="cursor-pointer p-1";
@@ -151,8 +115,9 @@ function createCell(team, week){
     } else {
       const opp=val.substring(1);
       const isHome=val.startsWith("v");
-      d.innerHTML = `<img src="${logos[opp]}" class="w-5 inline"/> ${isHome ? "vs" : "@"} ${opp}`;
-      schedule[team][week]="";
+
+      d.innerHTML = `<img src="${logos[opp]}" class="w-5 inline = () => {
+      schedule[team][week] = "";
       render();
     };
 
@@ -167,39 +132,28 @@ function createCell(team, week){
   const menu=document.createElement("div");
   menu.className="absolute bg-white border hidden";
 
-(validOpponents[team] || []).forEach(t => {
-
-  const item = document.createElement("div");
-  item.className = "p-1 cursor-pointer hover:bg-gray-100";
-
-  // ✅ FIX: proper HTML
-  item.innerHTML = `<img src="${logos[t]}" class="w-4 inline"/> ${t}`;
-
-  // ✅ ✅ THIS is the click handler you were missing
-  item.onclick = () => {
-    schedule[team][week] = "v" + t;
-    schedule[t][week] = "a" + team;
-    render();
-  };
-
-  menu.appendChild(item);
-
-});
+  (validOpponents[team] || []).forEach(t=>{
+    const item=document.createElement("div");
+    item.className="p-1 cursor-pointer hover:bg-gray-100";
+    item.innerHTML = `<img src="${logos[t]}" class="w-4ick = () => {
+      schedule[team][week] = "v"+t;
+      schedule[t][week] = "a"+team;
+      render();
+    };
 
     menu.appendChild(item);
   });
 
-  btn.onclick=()=>menu.classList.toggle("hidden");
+  btn.onclick = ()=>menu.classList.toggle("hidden");
 
   td.appendChild(btn);
   td.appendChild(menu);
   return td;
 }
 
-// ✅ Render
+// Render
 function render(){
   tbody.innerHTML="";
-
   teams.forEach(team=>{
     const tr=document.createElement("tr");
 
@@ -217,6 +171,5 @@ function render(){
 render();
 
 </script>
-
 </body>
 </html>

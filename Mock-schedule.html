@@ -96,36 +96,40 @@ function createCell(team, week) {
 
   const value = schedule[team][week];
 
-  // ✅ DISPLAY MODE (already filled)
- if(value === "BYE") {
-  container.textContent = "BYE";
-} else {
-  const isHome = value.startsWith("v");
-  const opponent = value.substring(1);
+// ✅ DISPLAY MODE (already filled)
+if (value) {
 
-  // Logo
-  const img = document.createElement("img");
-  img.src = logos[opponent];
-  img.className = "w-5 h-5";
+  const container = document.createElement("div");
+  container.className = "flex items-center justify-center gap-2 cursor-pointer p-1 rounded text-sm";
 
-  // Label (@ or vs)
-  const label = document.createElement("span");
-  label.className = "text-xs font-bold";
-  label.textContent = (isHome ? "vs " : "@ ") + opponent;
+  // Apply color
+  const cls = getColorClass(value);
+  if (cls) container.classList.add(cls);
 
-  container.appendChild(img);
-  container.appendChild(label);
-}
+  if (value === "BYE") {
+    container.textContent = "BYE";
+  } else {
+    const isHome = value.startsWith("v");
+    const opponent = value.substring(1);
 
-    // ✅ click to edit
-    container.onclick = () => {
-      schedule[team][week] = "";
-      render(document.getElementById("search").value);
-    };
+    // Logo
+    const img = document.createElement("img");
+    img.src = logos[opponent];
+    img.className = "w-5 h-5";
 
-    td.appendChild(container);
-    return td;
+    // Label
+    const label = document.createElement("span");
+    label.className = "text-xs font-bold";
+    label.textContent = (isHome ? "vs " : "@ ") + opponent;
+
+    container.appendChild(img);
+    container.appendChild(label);
   }
+
+  // ✅ click to edit
+  container.onclick = () => {
+    schedule[team][week] = "";
+    render(document.getElementById("search").value);
 
   // ✅ EDIT MODE (empty cell)
   const wrapper = document.createElement("div");

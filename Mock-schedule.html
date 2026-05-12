@@ -1,34 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Grid Test</title>
-</head>
 <body>
 
-<h1>Grid</h1>
-
 <table border="1" id="grid">
-  <thead>
-    <tr><th>Team</th></tr>
-  </thead>
-  <tbody></tbody>
+<tbody></tbody>
 </table>
 
 <script>
 
-const teams = ["BUF","MIA","NE"];
-
 const tbody = document.querySelector("#grid tbody");
 
-teams.forEach(team=>{
-  const tr = document.createElement("tr");
-  const td = document.createElement("td");
+const tr = document.createElement("tr");
+const td = document.createElement("td");
 
-  td.textContent = team;
+td.textContent = "Click me";
 
-  tr.appendChild(td);
-  tbody.appendChild(tr);
-});
+td.onclick = ()=>alert("Working!");
+
+tr.appendChild(td);
+tbody.appendChild(tr);
 
 </script>
 

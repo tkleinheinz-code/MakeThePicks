@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<h2>Mock Schedule</h2>
+<h2>2026 Mock Schedule</h2>
 
 <table border="1" id="grid">
   <thead>
@@ -15,21 +15,32 @@
 
 <script>
 
-// ✅ Teams (small set first)
-const teams = ["BUF","MIA","NE","NYJ"];
+// ✅ FULL 32 TEAMS
+const teams = [
+  "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",
+  "HOU","IND","JAX","TEN","DEN","KC","LV","LAC",
+  "DAL","NYG","PHI","WAS","CHI","DET","GB","MIN",
+  "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
+];
 
-// ✅ Opponent rules
-const validOpponents = {
-  BUF:["MIA","NE","NYJ"],
-  MIA:["BUF","NE","NYJ"],
-  NE:["BUF","MIA","NYJ"],
-  NYJ:["BUF","MIA","NE"]
-};
+// ✅ SIMPLE OPPONENT RULE (no self)
+const validOpponents = {};
+teams.forEach(team=>{
+  validOpponents[team] = teams.filter(t => t !== team);
+});
 
-// ✅ Weeks
-const weeks = ["W1","W2","W3"];
+// ✅ LOGOS
+const logos = {};
+teams.forEach(t=>{
+  logos[t] =
+    "https://a.espncdn.com/i/teamlogos/nfl/500/" +
+    (t === "WAS" ? "wsh" : t.toLowerCase()) + ".png";
+});
 
-// ✅ Add headers
+// ✅ WEEKS
+const weeks = ["W1","W2","W3","W4","W5"];
+
+// ✅ ADD HEADERS
 const headerRow = document.querySelector("#grid thead tr");
 weeks.forEach(w=>{
   const th = document.createElement("th");
@@ -37,46 +48,73 @@ weeks.forEach(w=>{
   headerRow.appendChild(th);
 });
 
-// ✅ Schedule storage
+// ✅ DATA STORE
 let schedule = {};
 teams.forEach(t=>{
-  schedule[t]={};
-  weeks.forEach(w=>schedule[t][w]="");
+  schedule[t] = {};
+  weeks.forEach(w=>schedule[t][w] = "");
 });
 
 const tbody = document.querySelector("#grid tbody");
 
-// ✅ Create cell
+// ✅ CREATE CELL
 function createCell(team, week){
 
   const td = document.createElement("td");
   const val = schedule[team][week];
 
-  // ✅ If already filled → show value
+  // ✅ DISPLAY MODE
   if(val){
-    td.textContent = val;
+    const d = document.createElement("div");
 
-    td.onclick = ()=>{
+    const opp = val.substring(2);   // remove "v " or "@ "
+    const isHome = val.startsWith("v");
+
+    // ✅ LOGO + TEXT (safe, no template issues)
+    const img = document.createElement("img");
+    img.src = logos[opp];
+    img.width = 18;
+
+    d.appendChild(img);
+
+    const label = document.createTextNode(
+      " " + (isHome ? "vs " : "@ ") + opp
+    );
+    d.appendChild(label);
+
+    d.onclick = ()=>{
       schedule[team][week] = "";
       render();
     };
 
+    td.appendChild(d);
     return td;
   }
 
-  // ✅ Otherwise → dropdown button
+  // ✅ EDIT MODE
   const btn = document.createElement("button");
   btn.textContent = "Pick";
 
   const menu = document.createElement("div");
   menu.style.display = "none";
+  menu.style.border = "1px solid #ccc";
+  menu.style.background = "white";
+  menu.style.position = "absolute";
 
   validOpponents[team].forEach(t=>{
+
     const item = document.createElement("div");
-    item.textContent = t;
+    item.style.cursor = "pointer";
+
+    const img = document.createElement("img");
+    img.src = logos[t];
+    img.width = 14;
+
+    item.appendChild(img);
+    item.appendChild(document.createTextNode(" " + t));
 
     item.onclick = ()=>{
-      schedule[team][week] = "vs " + t;
+      schedule[team][week] = "v " + t;
       schedule[t][week] = "@ " + team;
       render();
     };
@@ -94,17 +132,26 @@ function createCell(team, week){
   return td;
 }
 
-// ✅ Render grid
+// ✅ RENDER
 function render(){
   tbody.innerHTML = "";
 
   teams.forEach(team=>{
     const tr = document.createElement("tr");
 
+    // TEAM CELL
     const td = document.createElement("td");
-    td.textContent = team;
+
+    const img = document.createElement("img");
+    img.src = logos[team];
+    img.width = 18;
+
+    td.appendChild(img);
+    td.appendChild(document.createTextNode(" " + team));
+
     tr.appendChild(td);
 
+    // WEEK CELLS
     weeks.forEach(w=>{
       tr.appendChild(createCell(team,w));
     });
@@ -113,7 +160,7 @@ function render(){
   });
 }
 
-// ✅ Start
+// ✅ START
 render();
 
 </script>

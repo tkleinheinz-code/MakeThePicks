@@ -40,16 +40,22 @@
 
 <script>
 
+  const validOpponents = {};
+
+teams.forEach(team => {
+  validOpponents[team] = teams.filter(t => t !== team);
+});
+  
 // ✅ REQUIRED: teams array
 const teams = [
-  "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",
+  "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",(validOpponents[team] || []).forEach(t => {
   "HOU","IND","JAX","TEN","DEN","KC","LV","LAC",
   "DAL","NYG","PHI","WAS","CHI","DET","GB","MIN",
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
 
 const logos = {};
-teams.forEach(t=>{
+(validOpponents[team] || []).forEach(t => {
   logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${t.toLowerCase() === "was" ? "wsh" : t.toLowerCase()}.png`;
 });
 
@@ -89,6 +95,23 @@ function getColorClass(value) {
   return "";
 }
 
+  const validOpponents = {};
+
+// initialize
+teams.forEach(t => validOpponents[t] = new Set());
+
+// ✅ parse your schedule (from Excel-style structure)
+Object.keys(schedule).forEach(team => {
+  weeks.forEach(w => {
+    const val = schedule[team][w];
+
+    if(val.startsWith("v") || val.startsWith("a")) {
+      const opp = val.substring(1);
+      validOpponents[team].add(opp);
+    }
+  });
+});
+  
 // Create cell
 function createCell(team, week) {
   const td = document.createElement("td");
@@ -162,7 +185,7 @@ container.onclick = () => {
   const menu = document.createElement("div");
   menu.className = "absolute bg-white border rounded shadow-md hidden z-10 max-h-40 overflow-auto w-28";
 
-  teams.forEach(t=>{
+  (validOpponents[team] || []).forEach(t=>{
     const item = document.createElement("div");
     item.className = "flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer";
 
@@ -218,7 +241,8 @@ function updateValue() {
     const opponent = button.dataset.value;
     const opposite = getOpposite(val, team);
 
-    if(opponent && teams.includes(opponent)) {
+   if(opponent && validOpponents[team].includes(opponent))
+ {
       schedule[opponent][week] = opposite;
     }
   }

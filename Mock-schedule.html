@@ -39,7 +39,28 @@
 </div>
 
 <script>
+// ✅ Teams FIRST
+const teams = [
+  "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",
+  "HOU","IND","JAX","TEN","DEN","KC","LV","LAC",
+  "DAL","NYG","PHI","WAS","CHI","DET","GB","MIN",
+  "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
+];
 
+// ✅ Valid opponents (everyone except self)
+const validOpponents = {};
+teams.forEach(team => {
+  validOpponents[team] = teams.filter(t => t !== team);
+});
+
+// ✅ Logos
+const logos = {};
+teams.forEach(t => {
+  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${
+    t === "WAS" ? "wsh" : t.toLowerCase()
+  }.png`;
+});
+  
 const validOpponents = {};
 
 teams.forEach(team => {
@@ -82,23 +103,6 @@ function getColorClass(value) {
   return "";
 }
 
-  const validOpponents = {};
-
-// initialize
-teams.forEach(t => validOpponents[t] = new Set());
-
-// ✅ parse your schedule (from Excel-style structure)
-Object.keys(schedule).forEach(team => {
-  weeks.forEach(w => {
-    const val = schedule[team][w];
-
-    if(val.startsWith("v") || val.startsWith("a")) {
-      const opp = val.substring(1);
-      validOpponents[team].add(opp);
-    }
-  });
-});
-  
 // Create cell
 function createCell(team, week) {
   const td = document.createElement("td");
@@ -172,6 +176,32 @@ container.onclick = () => {
   const menu = document.createElement("div");
   menu.className = "absolute bg-white border rounded shadow-md hidden z-10 max-h-40 overflow-auto w-28";
 
+  validOpponents[team].forEach(t => {
+
+  const item = document.createElement("div");
+  item.className = "flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer";
+
+  const img = document.createElement("img");
+  img.src = logos[t];
+  img.className = "w-4 h-4";
+
+  const span = document.createElement("span");
+  span.textContent = t;
+
+  item.appendChild(img);
+  item.appendChild(span);
+
+  item.onclick = () => {
+    button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> ${t}`;
+    button.dataset.value = t;
+
+    menu.classList.add("hidden"); // close dropdown
+    updateValue();
+  };
+
+  menu.appendChild(item);
+
+});
 const logos = {};
 
 teams.forEach(t => {

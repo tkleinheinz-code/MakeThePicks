@@ -44,15 +44,6 @@ const teams = [
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
 
-// ✅ YOUR REAL OPPONENT DATA (cleaned)
-const validOpponents = {};
-
-Object.keys(rawScheduleData).forEach(team => {
-  validOpponents[team] = rawScheduleData[team]
-    .filter(x => x !== "Bye")
-    .map(x => x.substring(1)); // remove v/a
-});
-
 // ✅ LOGOS
 const logos = {};
 teams.forEach(t=>{

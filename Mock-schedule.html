@@ -168,9 +168,10 @@ function createCell(team, week) {
 
     item.onclick = () => {
       button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4"/> ${t}`;
-      button.dataset.value = t;
-      menu.classList.add("hidden");
-      updateValue();
+button.dataset.value = t;
+
+// ✅ force immediate update
+updateValue();
     };
 
     menu.appendChild(item);
@@ -181,28 +182,38 @@ function createCell(team, week) {
   dropdown.appendChild(button);
   dropdown.appendChild(menu);
 
-  function updateValue() {
-    let val = "";
+function updateValue() {
+  let val = "";
 
-    if(typeSelect.value === "BYE") {
-      val = "BYE";
-    } else if(typeSelect.value && button.dataset.value) {
-      val = typeSelect.value + button.dataset.value;
-    }
-
-    schedule[team][week] = val;
-
-    if(val.startsWith("v") || val.startsWith("a")) {
-      const opponent = button.dataset.value;
-      const opposite = getOpposite(val, team);
-
-      if(opponent && teams.includes(opponent)) {
-        schedule[opponent][week] = opposite;
-      }
-    }
-
-    render(document.getElementById("search").value);
+  // ✅ AUTO DEFAULT to Home if not selected
+  if(!typeSelect.value && button.dataset.value) {
+    typeSelect.value = "v";
   }
+
+  if(typeSelect.value === "BYE") {
+    val = "BYE";
+  } else if(typeSelect.value && button.dataset.value) {
+    val = typeSelect.value + button.dataset.value;
+  }
+
+  // ✅ If still nothing, stop
+  if(!val) return;
+
+  schedule[team][week] = val;
+
+  // ✅ AUTO SYNC opponent
+  if(val.startsWith("v") || val.startsWith("a")) {
+    const opponent = button.dataset.value;
+    const opposite = getOpposite(val, team);
+
+    if(opponent && teams.includes(opponent)) {
+      schedule[opponent][week] = opposite;
+    }
+  }
+
+  // ✅ Re-render AFTER saving
+  render(document.getElementById("search").value);
+}
 
   typeSelect.onchange = updateValue;
 

@@ -97,40 +97,25 @@ function createCell(team, week) {
   const value = schedule[team][week];
 
   // ✅ DISPLAY MODE (already filled)
-  if(value) {
+ if(value === "BYE") {
+  container.textContent = "BYE";
+} else {
+  const isHome = value.startsWith("v");
+  const opponent = value.substring(1);
 
-    const container = document.createElement("div");
-    container.className = "flex items-center justify-center gap-2 cursor-pointer p-1 rounded text-sm";
+  // Logo
+  const img = document.createElement("img");
+  img.src = logos[opponent];
+  img.className = "w-5 h-5";
 
-    // color
-    const cls = getColorClass(value);
-    if(cls) container.classList.add(cls);
+  // Label (@ or vs)
+  const label = document.createElement("span");
+  label.className = "text-xs font-bold";
+  label.textContent = (isHome ? "vs " : "@ ") + opponent;
 
-    if(value === "BYE") {
-      container.textContent = "BYE";
-    } else {
-      const isHome = value.startsWith("v");
-const opponent = value.substring(1);
-
-// Logo
-const img = document.createElement("img");
-img.src = logos[opponent];
-img.className = "w-5 h-5";
-
-// Label (@ or vs)
-const label = document.createElement("span");
-label.className = "text-xs font-bold";
-
-// ✅ Add vs / @
-label.textContent = (isHome ? "vs " : "@ ") + opponent;
-
-// Build UI
-container.appendChild(img);
-container.appendChild(label);
-
-      container.appendChild(img);
-      container.appendChild(span);
-    }
+  container.appendChild(img);
+  container.appendChild(label);
+}
 
     // ✅ click to edit
     container.onclick = () => {
@@ -182,13 +167,15 @@ container.appendChild(label);
     item.appendChild(img);
     item.appendChild(span);
 
-    item.onclick = () => {
-      button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4"/> ${t}`;
-button.dataset.value = t;
+item.onclick = () => {
+  button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4"/> ${t}`;
+  button.dataset.value = t;
 
-// ✅ force immediate update
-updateValue();
-    };
+  // ✅ CLOSE menu
+  menu.classList.add("hidden");
+
+  updateValue();
+};
 
     menu.appendChild(item);
   });

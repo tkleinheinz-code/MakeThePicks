@@ -171,43 +171,44 @@ function createCell(team,week){
 
   rawScheduleData[team].forEach(opt=>{
 
-    const item=document.createElement("div");
-    item.style.padding="4px";
-    item.style.cursor="pointer";
+const item = document.createElement("div");
+item.style.display = "flex";
+item.style.alignItems = "center";
+item.style.gap = "6px";
+item.style.padding = "4px 6px";
+item.style.cursor = "pointer";
+item.style.fontSize = "12px";   // smaller text
+item.style.whiteSpace = "nowrap";
 
-    if(opt==="Bye"){
-      item.textContent="BYE";
-    } 
-    else {
+if (opt === "Bye") {
+  item.textContent = "BYE";
+} else {
+  const opp = opt.substring(1);
 
-      const opp=opt.substring(1);
+  const img = document.createElement("img");
+  img.src = logos[opp];
+  img.style.width = "14px";
+  img.style.height = "14px";
+  img.style.flexShrink = "0";
 
-      const img=document.createElement("img");
-      img.src=logos[opp];
-      img.style.width="14px";
-      img.style.marginRight="5px";
+  const label = document.createElement("span");
+  label.textContent = opt; // keeps vXXX / aXXX
 
-      item.appendChild(img);
-      item.appendChild(document.createTextNode(opt));
-    }
+  item.appendChild(img);
+  item.appendChild(label);
+}
 
-    item.onmouseover=()=>item.style.background="#eee";
-    item.onmouseout=()=>item.style.background="white";
-
-    item.onclick=()=>{
-
-      if(opt==="Bye"){
-        schedule[team][week]="BYE";
-      } else {
-        const opp=opt.substring(1);
-        const isHome=opt.startsWith("v");
-
-        schedule[team][week]=opt;
-        schedule[opp][week]=(isHome?"a":"v")+team;
-      }
-
-      render();
-    };
+item.onclick = () => {
+  if (opt === "Bye") {
+    schedule[team][week] = "BYE";
+  } else {
+    const opp = opt.substring(1);
+    const isHome = opt.startsWith("v");
+    schedule[team][week] = opt;
+    schedule[opp][week] = (isHome ? "a" : "v") + team;
+  }
+  render();
+};
 
     menu.appendChild(item);
   });

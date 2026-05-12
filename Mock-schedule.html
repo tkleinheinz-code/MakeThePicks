@@ -120,7 +120,7 @@ if (value) {
     // Label
     const label = document.createElement("span");
     label.className = "text-xs font-bold";
-    label.textContent = (isHome ? "vs " : "@ ") + opponent;
+    label.textContent = isHome ? `vs ${opponent}` : `@ ${opponent}`;
 
     container.appendChild(img);
     container.appendChild(label);

@@ -31,25 +31,47 @@
 </div>
 
 <script>
-// Teams (from your sheet)
-const teams = [
-  "BUF","MIA","NE","NYJ",
-  "BAL","CIN","CLE","PIT",
-  "HOU","IND","JAX","TEN",
-  "DEN","KC","LV","LAC",
-  "DAL","NYG","PHI","WAS",
-  "CHI","DET","GB","MIN",
-  "ATL","CAR","NO","TB",
-  "ARI","LAR","SF","SEA"
-];
+const logos = {
+  BUF: "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
+  MIA: "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
+  NE: "https://a.espncdn.com/i/teamlogos/nfl/500/ne.png",
+  NYJ: "https://a.espncdn.com/i/teamlogos/nfl/500/nyj.png",
+  BAL: "https://a.espncdn.com/i/teamlogos/nfl/500/bal.png",
+  CIN: "https://a.espncdn.com/i/teamlogos/nfl/500/cin.png",
+  CLE: "https://a.espncdn.com/i/teamlogos/nfl/500/cle.png",
+  PIT: "https://a.espncdn.com/i/teamlogos/nfl/500/pit.png",
+  HOU: "https://a.espncdn.com/i/teamlogos/nfl/500/hou.png",
+  IND: "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
+  JAX: "https://a.espncdn.com/i/teamlogos/nfl/500/jax.png",
+  TEN: "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
+  DEN: "https://a.espncdn.com/i/teamlogos/nfl/500/den.png",
+  KC: "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
+  LV: "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
+  LAC: "https://a.espncdn.com/i/teamlogos/nfl/500/lac.png",
+  DAL: "https://a.espncdn.com/i/teamlogos/nfl/500/dal.png",
+  NYG: "https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png",
+  PHI: "https://a.espncdn.com/i/teamlogos/nfl/500/phi.png",
+  WAS: "https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png",
+  CHI: "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
+  DET: "https://a.espncdn.com/i/teamlogos/nfl/500/det.png",
+  GB: "https://a.espncdn.com/i/teamlogos/nfl/500/gb.png",
+  MIN: "https://a.espncdn.com/i/teamlogos/nfl/500/min.png",
+  ATL: "https://a.espncdn.com/i/teamlogos/nfl/500/atl.png",
+  CAR: "https://a.espncdn.com/i/teamlogos/nfl/500/car.png",
+  NO: "https://a.espncdn.com/i/teamlogos/nfl/500/no.png",
+  TB: "https://a.espncdn.com/i/teamlogos/nfl/500/tb.png",
+  ARI: "https://a.espncdn.com/i/teamlogos/nfl/500/ari.png",
+  LAR: "https://a.espncdn.com/i/teamlogos/nfl/500/lar.png",
+  SF: "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
+  SEA: "https://a.espncdn.com/i/teamlogos/nfl/500/sea.png"
+};
 
-// Weeks
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 
-// Build header
 const table = document.getElementById("grid");
 const headerRow = table.querySelector("thead tr");
 
+// Build header
 weeks.forEach(w=>{
   const th = document.createElement("th");
   th.textContent = w;
@@ -57,18 +79,158 @@ weeks.forEach(w=>{
   headerRow.appendChild(th);
 });
 
-const tbody = table.querySelector("tbody");
-
-// Store schedule data
+// Schedule storage
 let schedule = {};
-
-// initialize
 teams.forEach(t=>{
   schedule[t] = {};
   weeks.forEach(w => schedule[t][w]="");
 });
 
-// Render table
+const tbody = table.querySelector("tbody");
+
+function getOpposite(value, team) {
+  if(value.startsWith("v")) return "a"+team;
+  if(value.startsWith("a")) return "v"+team;
+  return "";
+}
+
+function getColorClass(value) {
+  if(value.startsWith("v")) return "home";
+  if(value.startsWith("a")) return "away";
+  if(value === "BYE") return "bye";
+  return "";
+}
+
+// CREATE DROPDOWN CELL
+function createCell(team, week) {
+  const td = document.createElement("td");
+  td.className = "p-1 border";
+
+  const container = document.createElement("div");
+  container.className = "flex flex-col gap-1";
+
+  // Home/Away selector
+  const typeSelect = document.createElement("select");
+  typeSelect.className = "text-xs border rounded";
+
+  ["", "v", "a", "BYE"].forEach(opt => {
+    const o = document.createElement("option");
+    o.value = opt;
+    o.textContent = opt === "v" ? "Home"
+                    : opt === "a" ? "Away"
+                    : opt === "BYE" ? "BYE"
+                    : "-";
+    typeSelect.appendChild(o);
+  });
+
+  // Team dropdown
+// Custom dropdown container
+const dropdown = document.createElement("div");
+dropdown.className = "relative";
+
+const button = document.createElement("button");
+button.className = "text-xs border rounded w-full flex items-center gap-1 px-1 py-1 bg-white";
+button.textContent = "Select";
+
+const menu = document.createElement("div");
+menu.className = "absolute bg-white border rounded shadow-md hidden z-10 max-h-40 overflow-auto w-28";
+
+// Build menu items
+teams.forEach(t => {
+  const item = document.createElement("div");
+  item.className = "flex items-center gap-2 px-2 py-1 hover:bg-gray-100 cursor-pointer";
+
+  const img = document.createElement("img");
+  img.src = logos[t];
+  img.className = "w-4 h-4";
+
+  const span = document.createElement("span");
+  span.textContent = t;
+
+  item.appendChild(img);
+  item.appendChild(span);
+
+  item.addEventListener("click", () => {
+    button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> ${t}`;
+    button.dataset.value = t;
+    menu.classList.add("hidden");
+
+    updateValue();
+  });
+
+  menu.appendChild(item);
+});
+
+// Toggle menu
+button.addEventListener("click", () => {
+  menu.classList.toggle("hidden");
+});
+
+dropdown.appendChild(button);
+dropdown.appendChild(menu);
+
+
+  const blank = document.createElement("option");
+  blank.value = "";
+  blank.textContent = "Team";
+  teamSelect.appendChild(blank);
+
+  teams.forEach(t=>{
+    const o = document.createElement("option");
+    o.value = t;
+    o.textContent = t;
+    teamSelect.appendChild(o);
+  });
+
+  function updateValue(button.dataset.value) {
+    let value = "";
+
+    if(typeSelect.value === "BYE") {
+      value = "BYE";
+    } else if(typeSelect.value && teamSelect.value) {
+      value = typeSelect.value + teamSelect.value;
+    }
+
+    schedule[team][week] = value;
+
+    // AUTO SYNC
+    if(value.startsWith("v") || value.startsWith("a")) {
+      const opponent = teamSelect.value;
+      const opposite = getOpposite(value, team);
+
+      if(opponent && teams.includes(opponent)) {
+        schedule[opponent][week] = opposite;
+      }
+    }
+
+    render(document.getElementById("search").value);
+  }
+
+  // Pre-fill if data exists
+  const existing = schedule[team][week];
+
+  if(existing.startsWith("v") || existing.startsWith("a")) {
+    typeSelect.value = existing[0];
+    teamSelect.value = existing.substring(1);
+  } else if(existing === "BYE") {
+    typeSelect.value = "BYE";
+  }
+
+  typeSelect.addEventListener("change", updateValue);
+  teamSelect.addEventListener("change", updateValue);
+
+  // Color styling
+  const cls = getColorClass(existing);
+  if(cls) td.classList.add(cls);
+
+  container.appendChild(typeSelect);
+  if(typeSelect.value !== "BYE") container.appendChild(dropdown);
+
+  td.appendChild(container);
+  return td;
+}
+
+// RENDER
 function render(filter="") {
   tbody.innerHTML = "";
 
@@ -77,40 +239,13 @@ function render(filter="") {
     .forEach(team => {
       const tr = document.createElement("tr");
 
-      // Team column
       const tdTeam = document.createElement("td");
       tdTeam.textContent = team;
       tdTeam.className = "p-2 border font-bold bg-gray-100";
       tr.appendChild(tdTeam);
 
       weeks.forEach(w=>{
-        const td = document.createElement("td");
-        td.className = "p-1 border";
-
-        const input = document.createElement("input");
-        input.value = schedule[team][w];
-        input.className = "w-20 p-1 text-xs border rounded text-center";
-
-        // color logic (matches Excel)
-        function updateColor() {
-          const v = input.value.trim();
-
-          input.classList.remove("home","away","bye");
-
-          if(v.startsWith("v")) input.classList.add("home");
-          else if(v.startsWith("a")) input.classList.add("away");
-          else if(v.toUpperCase() === "BYE") input.classList.add("bye");
-        }
-
-        updateColor();
-
-        input.addEventListener("input", e=>{
-          schedule[team][w] = e.target.value;
-          updateColor();
-        });
-
-        td.appendChild(input);
-        tr.appendChild(td);
+        tr.appendChild(createCell(team, w));
       });
 
       tbody.appendChild(tr);
@@ -119,7 +254,7 @@ function render(filter="") {
 
 render();
 
-// search
+// Search
 document.getElementById("search").addEventListener("input", e=>{
   render(e.target.value);
 });

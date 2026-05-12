@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test Grid</title>
+  <title>Grid Test</title>
 </head>
 <body>
 
-<h1>TEST</h1>
+<h1>Grid</h1>
+
+<table border="1" id="grid">
+  <thead>
+    <tr><th>Team</th></tr>
+  </thead>
+  <tbody></tbody>
+</table>
 
 <script>
-  console.log("JS is running");
+
+const teams = ["BUF","MIA","NE"];
+
+const tbody = document.querySelector("#grid tbody");
+
+teams.forEach(team=>{
+  const tr = document.createElement("tr");
+  const td = document.createElement("td");
+
+  td.textContent = team;
+
+  tr.appendChild(td);
+  tbody.appendChild(tr);
+});
+
 </script>
 
 </body>

@@ -112,11 +112,16 @@ function createCell(team, week){
 
     if(val==="BYE"){
       d.textContent="BYE";
-    } else {
-      const opp=val.substring(1);
-      const isHome=val.startsWith("v");
+} else {
+  const opp = val.substring(1);
+  const isHome = val.startsWith("v");
 
-      d.innerHTML = `<img src="${logos[opp]}" class="w-5 inline = () => {
+  d.innerHTML = `${logos[opp]} ${isHome ? "vs" : "@"} ${opp}`;
+}
+    d.onclick = () => {
+  schedule[team][week] = "";
+  render();
+};
       schedule[team][week] = "";
       render();
     };
@@ -135,11 +140,12 @@ function createCell(team, week){
   (validOpponents[team] || []).forEach(t=>{
     const item=document.createElement("div");
     item.className="p-1 cursor-pointer hover:bg-gray-100";
-    item.innerHTML = `<img src="${logos[t]}" class="w-4ick = () => {
-      schedule[team][week] = "v"+t;
-      schedule[t][week] = "a"+team;
-      render();
-    };
+    item.innerHTML = `<${logos[t]} ${t}`;
+item.onclick = () => {
+  schedule[team][week] = "v" + t;
+  schedule[t][week] = "a" + team;
+  render();
+};
 
     menu.appendChild(item);
   });

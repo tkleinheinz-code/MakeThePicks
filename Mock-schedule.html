@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>2026 Mock Schedule Grid</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss
 
   <style>
     .sticky-col {
@@ -33,72 +33,61 @@
 
 <script>
 
-// ✅ Teams
-const teams = [
-  "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",
-  "HOU","IND","JAX","TEN"
-];
+// ✅ TEAMS
+const teams = ["BUF","MIA","NE","NYJ"];
 
-// ✅ Opponents (simplified working version)
+// ✅ SIMPLE VALID OPPONENTS
 const validOpponents = {
-  BUF:["MIA","NE","NYJ","BAL"],
+  BUF:["MIA","NE","NYJ"],
   MIA:["BUF","NE","NYJ"],
   NE:["BUF","MIA","NYJ"],
-  NYJ:["BUF","MIA","NE"],
-  BAL:["CIN","CLE","PIT","BUF"],
-  CIN:["BAL","CLE","PIT"],
-  CLE:["BAL","CIN","PIT"],
-  PIT:["BAL","CIN","CLE"],
-  HOU:["IND","JAX","TEN"],
-  IND:["HOU","JAX","TEN"],
-  JAX:["HOU","IND","TEN"],
-  TEN:["HOU","IND","JAX"]
+  NYJ:["BUF","MIA","NE"]
 };
 
-// ✅ Logos
+// ✅ LOGOS
 const logos = {};
 teams.forEach(t=>{
-  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${t==="WAS"?"wsh":t.toLowerCase()}.png`;
+  logos[t] = `https://a.espncdn.com/i/teamlogos/nfl/500/${t.toLowerCase()}.png`;
 });
 
-// ✅ Weeks
+// ✅ WEEKS
 const weeks = ["W1","W2","W3","W4"];
 
-// ✅ Build header
+// ✅ HEADER
 const headerRow = document.querySelector("#grid thead tr");
 weeks.forEach(w=>{
   const th = document.createElement("th");
   th.textContent = w;
-  th.className = "border p-1";
+  th.className = "border";
   headerRow.appendChild(th);
 });
 
-// ✅ Data store
+// ✅ DATA STORE
 let schedule = {};
 teams.forEach(t=>{
-  schedule[t] = {};
-  weeks.forEach(w => schedule[t][w] = "");
+  schedule[t]={};
+  weeks.forEach(w=>schedule[t][w]="");
 });
 
-const tbody = document.querySelector("#grid tbody");
+const tbody=document.querySelector("#grid tbody");
 
-// ✅ Create cell
-function createCell(team, week){
+// ✅ CREATE CELL
+function createCell(team,week){
 
-  const td = document.createElement("td");
-  const val = schedule[team][week];
+  const td=document.createElement("td");
+  const val=schedule[team][week];
 
-  // ✅ DISPLAY MODE
+  // DISPLAY
   if(val){
-    const d = document.createElement("div");
+    const d=document.createElement("div");
 
     const opp = val.substring(1);
     const isHome = val.startsWith("v");
 
-    d.innerHTML = `<img src="${logos[opp]}" class="w-sName = "cursor-pointer";
+    d.innerHTML = `<img src="${logos[opp]}" class="w-{opp}`;
 
-    d.onclick = () => {
-      schedule[team][week] = "";
+    d.onclick = ()=>{
+      schedule[team][week]="";
       render();
     };
 
@@ -106,28 +95,28 @@ function createCell(team, week){
     return td;
   }
 
-  // ✅ EDIT MODE
-  const btn = document.createElement("button");
-  btn.textContent = "Pick";
+  // EDIT
+  const btn=document.createElement("button");
+  btn.textContent="Pick";
 
-  const menu = document.createElement("div");
-  menu.className = "absolute bg-white border hidden";
+  const menu=document.createElement("div");
+  menu.className="absolute bg-white border hidden";
 
   validOpponents[team].forEach(t=>{
-    const item = document.createElement("div");
+    const item=document.createElement("div");
 
-    item.innerHTML = `<img src="${logos[t]}" class="w-4 inline"p-1 hover:bg-gray-100 cursor-pointer";
+    item.innerHTML = `<img src="${logos[t]}" class="w-4 inlineursor-pointer hover:bg-gray-200 p-1";
 
-    item.onclick = () => {
-      schedule[team][week] = "v"+t;
-      schedule[t][week] = "a"+team;
+    item.onclick = ()=>{
+      schedule[team][week]="v"+t;
+      schedule[t][week]="a"+team;
       render();
     };
 
     menu.appendChild(item);
   });
 
-  btn.onclick = () => menu.classList.toggle("hidden");
+  btn.onclick=()=>menu.classList.toggle("hidden");
 
   td.appendChild(btn);
   td.appendChild(menu);
@@ -135,16 +124,16 @@ function createCell(team, week){
   return td;
 }
 
-// ✅ Render
+// ✅ RENDER
 function render(){
-  tbody.innerHTML = "";
+  tbody.innerHTML="";
 
   teams.forEach(team=>{
-    const tr = document.createElement("tr");
+    const tr=document.createElement("tr");
 
-    const td = document.createElement("td");
-    td.textContent = team;
-    td.className = "sticky-col font-bold";
+    const td=document.createElement("td");
+    td.textContent=team;
+    td.className="sticky-col font-bold";
     tr.appendChild(td);
 
     weeks.forEach(w=>{
@@ -155,7 +144,7 @@ function render(){
   });
 }
 
-// ✅ Run
+// ✅ START
 render();
 
 </script>

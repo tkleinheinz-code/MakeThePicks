@@ -127,9 +127,19 @@ if (value) {
   }
 
   // ✅ click to edit
+container.onclick = () => {
+  schedule[team][week] = "";
+  render(document.getElementById("search").value);
+};
+  
   container.onclick = () => {
     schedule[team][week] = "";
     render(document.getElementById("search").value);
+  };
+
+  td.appendChild(container);
+  return td;
+}
 
   // ✅ EDIT MODE (empty cell)
   const wrapper = document.createElement("div");

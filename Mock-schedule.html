@@ -48,48 +48,83 @@ const teams = [
   "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
 ];
 
-// ✅ ✅ CUSTOM opponent lists (EDIT THIS TO MATCH YOUR FILE)
-const validOpponents = {
-  BUF: ["MIA","NE","NYJ","DAL","CHI","BAL","KC"],
-  MIA: ["BUF","NE","NYJ","LAR","SEA","DEN"],
-  NE: ["BUF","MIA","NYJ","KC","LV","PHI"],
-  NYJ: ["BUF","MIA","NE","SF","DAL","IND"],
+// ✅ ✅ PASTE YOUR EXCEL VALUES HERE (trimmed example – expand as needed)
+const rawScheduleData = {
+  BUF: ["vMIA","vNE","vNYJ","aBAL","aKC","aDAL","vCHI"],
+  MIA: ["aBUF","vNE","vNYJ","aSF","aSEA","vDEN"],
+  NE:  ["aBUF","aMIA","vNYJ","aKC","vLV","vPHI"],
+  NYJ: ["aBUF","aMIA","aNE","vIND","vDAL","aSF"],
 
-  BAL: ["CIN","CLE","PIT","BUF","KC","DAL"],
-  CIN: ["BAL","CLE","PIT","DEN","TEN","JAX"],
-  CLE: ["BAL","CIN","PIT","NYG","WAS"],
-  PIT: ["BAL","CIN","CLE","PHI","DET"],
+  BAL: ["vCIN","vCLE","vPIT","aBUF","vKC"],
+  CIN: ["aBAL","vCLE","vPIT","aTEN","vDEN"],
+  CLE: ["aBAL","aCIN","vPIT","vNYG"],
+  PIT: ["aBAL","aCIN","aCLE","vPHI"],
 
-  HOU: ["IND","JAX","TEN","BUF","ATL"],
-  IND: ["HOU","JAX","TEN","NYJ","SEA"],
-  JAX: ["HOU","IND","TEN","LAC","NO"],
-  TEN: ["HOU","IND","JAX","TB","CAR"],
+  HOU: ["vIND","vJAX","vTEN","aBUF"],
+  IND: ["aHOU","vJAX","vTEN","aNYJ"],
+  JAX: ["aHOU","aIND","vTEN","vNO"],
+  TEN: ["aHOU","aIND","aJAX","vTB"],
 
-  DEN: ["KC","LV","LAC","CHI","CIN"],
-  KC: ["DEN","LV","LAC","BUF","PHI"],
-  LV: ["DEN","KC","LAC","NE","MIN"],
-  LAC: ["DEN","KC","LV","JAX","GB"],
+  DEN: ["vKC","vLV","vLAC","aCHI"],
+  KC: ["aDEN","vLV","vLAC","aBUF"],
+  LV: ["aDEN","aKC","vLAC","aNE"],
+  LAC: ["aDEN","aKC","aLV","vJAX"],
 
-  DAL: ["NYG","PHI","WAS","BUF","BAL"],
-  NYG: ["DAL","PHI","WAS","CLE","SF"],
-  PHI: ["DAL","NYG","WAS","KC","PIT"],
-  WAS: ["DAL","NYG","PHI","ARI","DET"],
+  DAL: ["vNYG","vPHI","vWAS","aBUF","aBAL"],
+  NYG: ["aDAL","vPHI","vWAS","aCLE"],
+  PHI: ["aDAL","aNYG","vWAS","vKC"],
+  WAS: ["aDAL","aNYG","aPHI","vARI"],
 
-  CHI: ["DET","GB","MIN","BUF","DEN"],
-  DET: ["CHI","GB","MIN","PIT","WAS"],
-  GB: ["CHI","DET","MIN","LAC","SEA"],
-  MIN: ["CHI","DET","GB","LV","ATL"],
+  CHI: ["vDET","vGB","vMIN","aBUF"],
+  DET: ["aCHI","vGB","vMIN","aPIT"],
+  GB: ["aCHI","aDET","vMIN","aLAC"],
+  MIN: ["aCHI","aDET","aGB","vLV"],
 
-  ATL: ["CAR","NO","TB","HOU","MIN"],
-  CAR: ["ATL","NO","TB","TEN","ARI"],
-  NO: ["ATL","CAR","TB","JAX","SF"],
-  TB: ["ATL","CAR","NO","TEN","SEA"],
+  ATL: ["vCAR","vNO","vTB","aHOU"],
+  CAR: ["aATL","vNO","vTB","aTEN"],
+  NO: ["aATL","aCAR","vTB","aJAX"],
+  TB: ["aATL","aCAR","aNO","aTEN"],
 
-  ARI: ["LAR","SF","SEA","CAR","WAS"],
-  LAR: ["ARI","SF","SEA","MIA","NYJ"],
-  SF: ["ARI","LAR","SEA","NO","NYG"],
-  SEA: ["ARI","LAR","SF","IND","GB"]
+  ARI: ["vLAR","vSF","vSEA","aCAR"],
+  LAR: ["aARI","vSF","vSEA","aMIA"],
+  SF: ["aARI","aLAR","vSEA","vNO"],
+  SEA: ["aARI","aLAR","aSF","vIND"]
 };
+
+  const validOpponents = {};
+
+Object.entries(rawScheduleData).forEach(([team, games]) => {
+  validOpponents[team] = [];
+
+  games.forEach(g => {
+    if (g.startsWith("v") || g.startsWith("a")) {
+      const opp = g.substring(1);
+      if (!validOpponents[team].includes(opp)) {
+        validOpponents[team].push(opp);
+      }
+    }
+  });
+});
+
+
+// ✅ ✅ Build validOpponents dynamically
+const validOpponents = {};
+
+teams.forEach(team => {
+  validOpponents[team] = [];
+});
+
+Object.entries(rawScheduleData).forEach(([team, games]) => {
+  games.forEach(game => {
+    if(game.startsWith("v") || game.startsWith("a")) {
+      const opponent = game.substring(1);
+
+      if(!validOpponents[team].includes(opponent)) {
+        validOpponents[team].push(opponent);
+      }
+    }
+  });
+});
 
 // ✅ Logos
 const logos = {};
@@ -102,7 +137,6 @@ teams.forEach(t => {
 // ✅ Weeks
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
 
-// Table setup
 const table = document.getElementById("grid");
 const headerRow = table.querySelector("thead tr");
 
@@ -113,7 +147,7 @@ weeks.forEach(w=>{
   headerRow.appendChild(th);
 });
 
-// Data store
+// ✅ Schedule storage
 let schedule = {};
 teams.forEach(t=>{
   schedule[t] = {};
@@ -136,30 +170,26 @@ function getColorClass(value) {
   return "";
 }
 
-// Create cell
+// ✅ Cell renderer
 function createCell(team, week) {
 
   const td = document.createElement("td");
-
   const value = schedule[team][week];
 
-  if (value) {
-    const c = document.createElement("div");
-    c.className = "p-1 cursor-pointer rounded";
+  // DISPLAY
+  if(value){
+    const c=document.createElement("div");
+    c.className="p-1 cursor-pointer";
 
-    if(value === "BYE") {
-      c.textContent = "BYE";
-    } else {
-      const opp = value.substring(1);
-      const img = document.createElement("img");
-      img.src = logos[opp];
-      img.className = "inline w-5 h-5";
-      c.appendChild(img);
-      c.append(` ${value.startsWith("v")?"vs":"@"} ${opp}`);
+    if(value==="BYE"){
+      c.textContent="BYE";
+    }else{
+      const opp=value.substring(1);
+      c.innerHTML=`<img src="${logos[opp]}" class="w-5 inline:"@"} ${opp}`;
     }
 
-    c.onclick = () => {
-      schedule[team][week] = "";
+    c.onclick=()=>{
+      schedule[team][week]="";
       render();
     };
 
@@ -168,26 +198,24 @@ function createCell(team, week) {
   }
 
   // EDIT
-  const btn = document.createElement("button");
-  btn.textContent = "Pick";
+  const btn=document.createElement("button");
+  btn.textContent="Pick";
 
-  const menu = document.createElement("div");
-  menu.className = "absolute bg-white border hidden";
+  const menu=document.createElement("div");
+  menu.className="absolute bg-white border hidden";
 
-  validOpponents[team].forEach(t=>{
-    const item = document.createElement("div");
-    item.textContent = t;
-
-    item.onclick = ()=>{
-      schedule[team][week] = "v"+t;
-      schedule[t][week] = "a"+team;
+  (validOpponents[team] || []).forEach(t=>{
+    const item=document.createElement("div");
+    item.innerHTML=`<img src="${logos[t]}" class="w-4 inline>{
+      schedule[team][week]="v"+t;
+      schedule[t][week]="a"+team;
       render();
     };
 
     menu.appendChild(item);
   });
 
-  btn.onclick = ()=>menu.classList.toggle("hidden");
+  btn.onclick=()=>menu.classList.toggle("hidden");
 
   td.appendChild(btn);
   td.appendChild(menu);
@@ -195,16 +223,15 @@ function createCell(team, week) {
 }
 
 // Render
-function render(filter="") {
+function render(){
   tbody.innerHTML="";
-
   teams.forEach(team=>{
     const tr=document.createElement("tr");
 
-    const tdTeam=document.createElement("td");
-    tdTeam.textContent=team;
-    tdTeam.className="sticky-col bg-gray-100 font-bold";
-    tr.appendChild(tdTeam);
+    const td=document.createElement("td");
+    td.textContent=team;
+    td.className="sticky-col";
+    tr.appendChild(td);
 
     weeks.forEach(w=>tr.appendChild(createCell(team,w)));
 
@@ -215,5 +242,6 @@ function render(filter="") {
 render();
 
 </script>
+
 </body>
 </html>

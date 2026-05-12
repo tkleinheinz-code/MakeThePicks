@@ -132,11 +132,6 @@ container.onclick = () => {
   render(document.getElementById("search").value);
 };
   
-  container.onclick = () => {
-    schedule[team][week] = "";
-    render(document.getElementById("search").value);
-  };
-
   td.appendChild(container);
   return td;
 }
@@ -182,7 +177,7 @@ container.onclick = () => {
     item.appendChild(span);
 
 item.onclick = () => {
-  button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4"/> ${t}`;
+  button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> <span>${t}</span>`;
   button.dataset.value = t;
 
   // ✅ CLOSE menu

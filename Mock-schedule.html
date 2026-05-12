@@ -188,11 +188,20 @@ function createCell(team, week) {
     item.appendChild(img);
     item.appendChild(span);
 
-    item.onclick = () => {
-      button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-blockadd("hidden");
-      updateValue();
-    };
+item.onclick = () => {
+  // Show logo + team
+  button.innerHTML = `<img src="${logos[t]}" class="w-4 h-4 inline-block"/> ${t}`;
 
+  // Save selected team
+  button.dataset.value = t;
+
+  // Close dropdown
+  menu.classList.add("hidden");
+
+  // Trigger update
+  updateValue();
+};
+    
     menu.appendChild(item);
   });
 

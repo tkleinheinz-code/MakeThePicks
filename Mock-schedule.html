@@ -2,13 +2,14 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>2026 Mock Schedule Grid</title>
+  <title>Mock Schedule</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    .home { background: #d1fae5; }
-    .away { background: #fee2e2; }
+    .home { background:#d1fae5; }
+    .away { background:#fee2e2; }
+    .bye  { background:#e5e7eb; }
 
     .sticky-col {
       position: sticky;
@@ -19,160 +20,148 @@
   </style>
 </head>
 
-<body class="p-6 bg-gray-100">
+<body class="p-6">
 
-<h1 class="text-3xl font-bold mb-4">2026 Mock Schedule Grid</h1>
+<h1 class="text-xl font-bold mb-4">2026 Mock Schedule Grid</h1>
 
-<div class="overflow-auto border bg-white">
-<table class="min-w-full text-sm text-center" id="grid">
-  <thead class="bg-gray-300 sticky top-0">
-    <tr>
-      <th class="p-2 border sticky-col">Team</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
+<div class="overflow-auto">
+<table id="grid" class="border">
+<thead>
+<tr>
+<th class="sticky-col border p-1">Team</th>
+</tr>
+</thead>
+<tbody></tbody>
 </table>
 </div>
 
 <script>
 
-// ✅ FULL 32 TEAMS
-const teams = [
-  "BUF","MIA","NE","NYJ","BAL","CIN","CLE","PIT",
-  "HOU","IND","JAX","TEN","DEN","KC","LV","LAC",
-  "DAL","NYG","PHI","WAS","CHI","DET","GB","MIN",
-  "ATL","CAR","NO","TB","ARI","LAR","SF","SEA"
-];
-
-  const validOpponents = {};
-
-teams.forEach(team => {
-  validOpponents[team] = teams.filter(t => t !== team);
+// ✅ TEAMS
+const teams = Object.keys({
+  BUF:1,MIA:1,NE:1,NYJ:1,BAL:1,CIN:1,CLE:1,PIT:1,
+  HOU:1,IND:1,JAX:1,TEN:1,DEN:1,KC:1,LV:1,LAC:1,
+  DAL:1,NYG:1,PHI:1,WAS:1,CHI:1,DET:1,GB:1,MIN:1,
+  ATL:1,CAR:1,NO:1,TB:1,ARI:1,LAR:1,SF:1,SEA:1
 });
 
-// ✅ LOGOS
-const logos = {};
-teams.forEach(t=>{
-  logos[t] = "https://a.espncdn.com/i/teamlogos/nfl/500/" +
-    (t === "WAS" ? "wsh" : t.toLowerCase()) + ".png";
-});
+// ✅ YOUR DATA (PASTE EXACTLY)
+const rawScheduleData = {
+  BUF:["Bye","vMIA","vNE","vNYJ","vKC","vLAC","vBAL","vCHI","vDET","aMIA","aNE","aNYJ","aDEN","aLV","aHOU","aGB","aMIN","aLAR"],
+  MIA:["Bye","vBUF","vNE","vNYJ","vKC","vLAC","vCIN","vCHI","vDET","aBUF","aNE","aNYJ","aDEN","aLV","aIND","aGB","aMIN","aSF"],
+  NE:["Bye","vBUF","vMIA","vNYJ","vDEN","vLV","vPIT","vGB","vMIN","aBUF","aMIA","aNYJ","aKC","aLAC","aJAX","aCHI","aDET","aSEA"],
+  NYJ:["Bye","vBUF","vMIA","vNE","vDEN","vLV","vCLE","vGB","vMIN","aBUF","aMIA","aNE","aKC","aLAC","aTEN","aCHI","aDET","aARI"],
+
+  BAL:["Bye","vCIN","vCLE","vPIT","vJAX","vTEN","vLAC","vNO","vTB","aCIN","aCLE","aPIT","aHOU","aIND","aBUF","aATL","aCAR","aDAL"],
+  CIN:["Bye","vBAL","vCLE","vPIT","vJAX","vTEN","vKC","vNO","vTB","aBAL","aCLE","aPIT","aHOU","aIND","aMIA","aATL","aCAR","aWAS"],
+  CLE:["Bye","vBAL","vCIN","vPIT","vHOU","vIND","vLV","vATL","vCAR","aBAL","aCIN","aPIT","aJAX","aTEN","aNYJ","aNO","aTB","aNYG"],
+  PIT:["Bye","vBAL","vCIN","vCLE","vHOU","vIND","vDEN","vATL","vCAR","aBAL","aCIN","aCLE","aJAX","aTEN","aNE","aNO","aTB","aPHI"],
+
+  HOU:["Bye","vIND","vJAX","vTEN","vBAL","vCIN","vBUF","vDAL","vNYG","aIND","aJAX","aTEN","aCLE","aPIT","aLAC","aPHI","aWAS","aGB"],
+  IND:["Bye","vHOU","vJAX","vTEN","vBAL","vCIN","vMIA","vDAL","vNYG","aHOU","aJAX","aTEN","aCLE","aPIT","aKC","aPHI","aWAS","aMIN"],
+  JAX:["Bye","vHOU","vIND","vTEN","vCLE","vPIT","vNE","vPHI","vWAS","aHOU","aIND","aTEN","aBAL","aCIN","aDEN","aDAL","aNYG","aCHI"],
+  TEN:["Bye","vHOU","vIND","vJAX","vCLE","vPIT","vNYJ","vPHI","vWAS","aHOU","aIND","aJAX","aBAL","aCIN","aLV","aDAL","aNYG","aDET"],
+
+  DEN:["Bye","vKC","vLAC","vLV","vBUF","vMIA","vJAX","vLAR","vSEA","aKC","aLAC","aLV","aNE","aNYJ","aPIT","aARI","aSF","aCAR"],
+  KC:["Bye","vDEN","vLAC","vLV","vNE","vNYJ","vIND","vARI","vSF","aDEN","aLAC","aLV","aBUF","aMIA","aCIN","aLAR","aSEA","aATL"],
+  LV:["Bye","vDEN","vKC","vLAC","vBUF","vMIA","vTEN","vLAR","vSEA","aDEN","aKC","aLAC","aNE","aNYJ","aCLE","aARI","aSF","aNO"],
+  LAC:["Bye","vDEN","vKC","vLV","vNE","vNYJ","vHOU","vARI","vSF","aDEN","aKC","aLV","aBUF","aMIA","aBAL","aLAR","aSEA","aTB"],
+
+  DAL:["Bye","vNYG","vPHI","vWAS","vARI","vSF","vTB","vJAX","vTEN","aNYG","aPHI","aWAS","aLAR","aSEA","aGB","aHOU","aIND","vBAL"],
+  NYG:["Bye","vDAL","vPHI","vWAS","vARI","vSF","vNO","vJAX","vTEN","aDAL","aPHI","aWAS","aLAR","aSEA","aDET","aHOU","aIND","vCLE"],
+  PHI:["Bye","vDAL","vNYG","vWAS","vLAR","vSEA","vCAR","vHOU","vIND","aDAL","aNYG","aWAS","aARI","aSF","aCHI","aJAX","aTEN","vPIT"],
+  WAS:["Bye","vDAL","vNYG","vPHI","vLAR","vSEA","vATL","vHOU","vIND","aDAL","aNYG","aPHI","aARI","aSF","aMIN","aJAX","aTEN","vCIN"],
+
+  CHI:["Bye","vDET","vGB","vMIN","vNO","vTB","vPHI","vNE","vNYJ","aDET","aGB","aMIN","aATL","aCAR","aSEA","aBUF","aMIA","vJAX"],
+  DET:["Bye","vCHI","vGB","vMIN","vNO","vTB","vNYG","vNE","vNYJ","aCHI","aGB","aMIN","aATL","aCAR","aARI","aBUF","aMIA","vTEN"],
+  GB:["Bye","vCHI","vDET","vMIN","vATL","vCAR","vDAL","vBUF","vMIA","aCHI","aDET","aMIN","aNO","aTB","aLAR","aNE","aNYJ","vHOU"],
+  MIN:["Bye","vCHI","vDET","vGB","vATL","vCAR","vWAS","vBUF","vMIA","aCHI","aDET","aGB","aNO","aTB","aSF","aNE","aNYJ","vIND"],
+
+  ATL:["Bye","vCAR","vNO","vTB","vCHI","vDET","vSF","vBAL","vCIN","aCAR","aNO","aTB","aGB","aMIN","aWAS","aCLE","aPIT","vKC"],
+  CAR:["Bye","vATL","vNO","vTB","vCHI","vDET","vSEA","vBAL","vCIN","aATL","aNO","aTB","aGB","aMIN","aPHI","aCLE","aPIT","vDEN"],
+  NO:["Bye","vATL","vCAR","vTB","vGB","vMIN","vARI","vCLE","vPIT","aATL","aCAR","aTB","aCHI","aDET","aNYG","aBAL","aCIN","vLV"],
+  TB:["Bye","vATL","vCAR","vNO","vGB","vMIN","vLAR","vCLE","vPIT","aATL","aCAR","aNO","aCHI","aDET","aDAL","aBAL","aCIN","vLAC"],
+
+  ARI:["Bye","vLAR","vSF","vSEA","vPHI","vWAS","vDET","vDEN","vLV","aLAR","aSF","aSEA","aDAL","aNYG","aNO","aKC","aLAC","vNYJ"],
+  LAR:["Bye","vARI","vSF","vSEA","vDAL","vNYG","vGB","vKC","vLAC","aARI","aSF","aSEA","aPHI","aWAS","aTB","aDEN","aLV","vBUF"],
+  SF:["Bye","vARI","vLAR","vSEA","vPHI","vWAS","vMIN","vDEN","vLV","aARI","aLAR","aSEA","aDAL","aNYG","aATL","aKC","aLAC","vMIA"],
+  SEA:["Bye","vARI","vLAR","vSF","vDAL","vNYG","vCHI","vKC","vLAC","aARI","aLAR","aSF","aPHI","aWAS","aCAR","aDEN","aLV","vNE"]
+};
 
 // ✅ WEEKS
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
+const tbody = document.querySelector("#grid tbody");
 
-// ✅ HEADER
+// HEADER
 const headerRow = document.querySelector("#grid thead tr");
 weeks.forEach(w=>{
-  const th = document.createElement("th");
-  th.textContent = w;
-  th.className = "border p-1";
+  const th=document.createElement("th");
+  th.textContent=w;
   headerRow.appendChild(th);
 });
 
-// ✅ DATA STORE
+// SCHEDULE STORE
 let schedule = {};
 teams.forEach(t=>{
-  schedule[t] = {};
-  weeks.forEach(w=>schedule[t][w] = "");
+  schedule[t]={};
+  weeks.forEach(w=>schedule[t][w]="");
 });
 
-const tbody = document.querySelector("#grid tbody");
-
-// ✅ CREATE CELL
+// CELL
 function createCell(team,week){
+  const td=document.createElement("td");
+  const val=schedule[team][week];
 
-  const td = document.createElement("td");
-  td.className="border p-1";
-
-  const val = schedule[team][week];
-
-  // DISPLAY
   if(val){
-    const d = document.createElement("div");
-
-    const opp = val.substring(2);
-    const isHome = val.startsWith("v");
-
-    const img = document.createElement("img");
-    img.src = logos[opp];
-    img.className="w-5 inline";
-
-    d.appendChild(img);
-    d.appendChild(document.createTextNode(" " + (isHome?"vs ":"@ ") + opp));
-
-    d.className = isHome ? "home cursor-pointer" : "away cursor-pointer";
-
-    d.onclick = ()=>{
-      schedule[team][week] = "";
-      render();
-    };
-
-    td.appendChild(d);
+    td.textContent = val;
+    td.onclick=()=>{ schedule[team][week]=""; render(); };
     return td;
   }
 
-  // EDIT
-  const btn = document.createElement("button");
+  const btn=document.createElement("button");
   btn.textContent="Pick";
-  btn.className="text-xs border px-1";
 
-  const menu = document.createElement("div");
-  menu.className="absolute bg-white border hidden";
+  const menu=document.createElement("div");
+  menu.style.display="none";
 
-  (validOpponents[team] || []).forEach(t=>{
+  rawScheduleData[team].forEach(opt=>{
+    const item=document.createElement("div");
+    item.textContent=opt;
 
-    const item = document.createElement("div");
-    item.className="px-2 hover:bg-gray-200 cursor-pointer";
+    item.onclick=()=>{
+      if(opt==="Bye"){
+        schedule[team][week]="BYE";
+      } else {
+        const opp=opt.substring(1);
+        const isHome=opt.startsWith("v");
 
-    const img = document.createElement("img");
-    img.src = logos[t];
-    img.className="w-4 inline";
-
-    item.appendChild(img);
-    item.appendChild(document.createTextNode(" "+t));
-
-    item.onclick = ()=>{
-      schedule[team][week] = "v " + t;
-      schedule[t][week] = "@ " + team;
+        schedule[team][week]=opt;
+        schedule[opp][week]=(isHome?"a":"v")+team;
+      }
       render();
     };
 
     menu.appendChild(item);
   });
 
-  btn.onclick = ()=>menu.classList.toggle("hidden");
+  btn.onclick=()=>menu.style.display = menu.style.display==="none"?"block":"none";
 
   td.appendChild(btn);
   td.appendChild(menu);
-
   return td;
 }
 
-// ✅ RENDER
+// RENDER
 function render(){
   tbody.innerHTML="";
-
   teams.forEach(team=>{
     const tr=document.createElement("tr");
 
-    // TEAM COLUMN
     const td=document.createElement("td");
-    td.className="sticky-col font-bold border";
-
-    const img = document.createElement("img");
-    img.src = logos[team];
-    img.className="w-6 inline";
-
-    td.appendChild(img);
-    td.appendChild(document.createTextNode(" "+team));
-
+    td.textContent=team;
     tr.appendChild(td);
 
-    // WEEKS
-    weeks.forEach(w=>{
-      tr.appendChild(createCell(team,w));
-    });
-
+    weeks.forEach(w=>tr.appendChild(createCell(team,w)));
     tbody.appendChild(tr);
   });
 }

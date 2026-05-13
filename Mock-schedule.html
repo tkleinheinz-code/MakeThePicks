@@ -167,75 +167,80 @@ function createCell(team,week){
   // ✅ DISPLAY MODE
   if(val){
 
-    const box=document.createElement("div");
-    const tag = gameTags[team][week];
+  const box = document.createElement("div");
 
-if(tag){
-  box.classList.add(tag);
-}
-
-    if(val==="BYE"){
-      box.textContent="BYE";
-      box.className="bye cursor-pointer";
-    } else {
-
-      const opp=val.substring(1);
-      const isHome=val.startsWith("v");
-
-      const img=document.createElement("img");
-      img.src=logos[opp];
-      img.style.width="18px";
-
-      box.appendChild(img);
-      box.appendChild(document.createTextNode(
-        " " + (isHome ? "vs " : "@ ") + opp
-      ));
-
-      box.classList.add(isHome ? "home" : "away");
-box.classList.add("cursor-pointer");
-    }
-
-box.onclick=()=>{
-  if(val !== "BYE"){
-    const opp = val.substring(1);
-
-    // clear opponent game + tag
-    schedule[opp][week] = "";
-    gameTags[opp][week] = "";
+  const tag = gameTags[team][week];
+  if(tag){
+    box.classList.add(tag);
   }
 
-  // clear this team
-  schedule[team][week] = "";
-  gameTags[team][week] = "";
+  if(val==="BYE"){
+    box.textContent="BYE ";
+    box.classList.add("bye","cursor-pointer");
+  } else {
 
-  render();
-};
+    const opp = val.substring(1);
+    const isHome = val.startsWith("v");
 
-    ["tnf","snf","mnf","intl"].forEach(t=>{
-  const btn=document.createElement("span");
-  btn.textContent=t.toUpperCase();
-  btn.className="tag-btn";
+    const img = document.createElement("img");
+    img.src = logos[opp];
+    img.style.width = "16px";
+    img.style.marginRight = "4px";
 
-  btn.onclick=(e)=>{
-    e.stopPropagation();
+    box.appendChild(img);
+    box.appendChild(document.createTextNode(
+      (isHome ? "vs " : "@ ") + opp + " "
+    ));
 
-    gameTags[team][week] = gameTags[team][week] === t ? "" : t;
+    box.classList.add(isHome ? "home" : "away","cursor-pointer");
+  }
 
-    // ✅ sync opponent
+  // ✅ ADD SPACE BEFORE BUTTONS (important)
+  box.appendChild(document.createTextNode(" "));
+
+  // ✅ ADD TAG BUTTONS
+  ["tnf","snf","mnf","intl"].forEach(t=>{
+    const btn = document.createElement("span");
+    btn.textContent = t.toUpperCase();
+    btn.className = "tag-btn";
+
+    // ✅ force visibility
+    btn.style.display = "inline-block";
+
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+
+      gameTags[team][week] =
+        gameTags[team][week] === t ? "" : t;
+
+      if(val !== "BYE"){
+        const opp = val.substring(1);
+        gameTags[opp][week] = gameTags[team][week];
+      }
+
+      render();
+    };
+
+    box.appendChild(btn);
+  });
+
+  // ✅ FIXED CLEAR LOGIC
+  box.onclick = ()=>{
     if(val !== "BYE"){
       const opp = val.substring(1);
-      gameTags[opp][week] = gameTags[team][week];
+      schedule[opp][week] = "";
+      gameTags[opp][week] = "";
     }
+
+    schedule[team][week] = "";
+    gameTags[team][week] = "";
 
     render();
   };
 
-  box.appendChild(btn);
-});
-
-        td.appendChild(box);
-    return td;
-  }
+  td.appendChild(box);
+  return td;
+}
 
   // ✅ EDIT MODE
   const btn=document.createElement("button");

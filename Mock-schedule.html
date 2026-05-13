@@ -195,10 +195,21 @@ if(tag){
 box.classList.add("cursor-pointer");
     }
 
-    box.onclick=()=>{
-      schedule[team][week]="";
-      render();
-    };
+box.onclick=()=>{
+  if(val !== "BYE"){
+    const opp = val.substring(1);
+
+    // clear opponent game + tag
+    schedule[opp][week] = "";
+    gameTags[opp][week] = "";
+  }
+
+  // clear this team
+  schedule[team][week] = "";
+  gameTags[team][week] = "";
+
+  render();
+};
 
     ["tnf","snf","mnf","intl"].forEach(t=>{
   const btn=document.createElement("span");

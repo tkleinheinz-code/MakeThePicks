@@ -128,7 +128,6 @@ teams.forEach(t=>{
 
 // ✅ WEEKS
 const weeks = Array.from({length:18}, (_,i)=>"W"+(i+1));
-const tbody = document.querySelector("#grid tbody");
 
 // ✅ HEADER
 const headerRow = document.querySelector("#grid thead tr");
@@ -192,7 +191,8 @@ if(tag){
         " " + (isHome ? "vs " : "@ ") + opp
       ));
 
-      box.className = (isHome ? "home " : "away ") + "cursor-pointer";
+      box.classList.add(isHome ? "home" : "away");
+box.classList.add("cursor-pointer");
     }
 
     box.onclick=()=>{

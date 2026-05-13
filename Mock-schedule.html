@@ -63,8 +63,16 @@
 
 <h1 class="text-xl font-bold mb-4">2026 Mock Schedule Grid</h1>
 
-  <button onclick="savePDF()" class="mb-4 px-3 py-1 bg-blue-600 text-white rounded">
+<button onclick="savePDF()" class="mb-2 px-3 py-1 bg-blue-600 text-white rounded">
   Save as PDF
+</button>
+
+<button onclick="saveData()" class="mb-4 px-3 py-1 bg-green-600 text-white rounded">
+  Save Schedule
+</button>
+
+  <button onclick="loadData(); render();" class="mb-4 px-3 py-1 bg-gray-600 text-white rounded">
+  Load Schedule
 </button>
 
   <div style="margin-bottom:10px; display:flex; flex-wrap:wrap; gap:12px;">
@@ -278,7 +286,9 @@ btnRow.style.flexWrap = "wrap";
       gameTags[opp][week] = gameTags[team][week];
     }
 
-    render();
+    saveData();
+render();
+
   };
 
   btnRow.appendChild(btn);
@@ -297,7 +307,9 @@ box.appendChild(btnRow);
     schedule[team][week] = "";
     gameTags[team][week] = "";
 
-    render();
+    saveData();
+render();
+
   };
 
   td.appendChild(box);
@@ -383,7 +395,9 @@ rawScheduleData[team].forEach(opt=>{
       schedule[opp][week] = (isHome ? "a" : "v") + team;
     }
 
-    render();
+    saveData();
+render();
+
   };
 
   menu.appendChild(item);
@@ -429,10 +443,29 @@ function render(){
 }
 
 // ✅ START
+loadData();
 render();
 
   function savePDF() {
   window.print();
+}
+
+  function saveData() {
+  localStorage.setItem("schedule", JSON.stringify(schedule));
+  localStorage.setItem("gameTags", JSON.stringify(gameTags));
+}
+
+function loadData() {
+  const savedSchedule = localStorage.getItem("schedule");
+  const savedTags = localStorage.getItem("gameTags");
+
+  if(savedSchedule){
+    schedule = JSON.parse(savedSchedule);
+  }
+
+  if(savedTags){
+    gameTags = JSON.parse(savedTags);
+  }
 }
   
 </script>

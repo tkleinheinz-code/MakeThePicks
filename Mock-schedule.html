@@ -146,13 +146,6 @@ teams.forEach(t=>{
   weeks.forEach(w=>schedule[t][w]="");
 });
 
-  // SCHEDULE STORE
-let schedule = {};
-teams.forEach(t=>{
-  schedule[t]={};
-  weeks.forEach(w=>schedule[t][w]="");
-});
-
 // ✅ ✅ ADD STEP 2 HERE (RIGHT UNDER SCHEDULE)
 
 let gameTags = {};
@@ -207,8 +200,6 @@ if(tag){
       render();
     };
 
-    td.appendChild(box);
-    return td;
     ["tnf","snf","mnf","intl"].forEach(t=>{
   const btn=document.createElement("span");
   btn.textContent=t.toUpperCase();
@@ -230,6 +221,9 @@ if(tag){
 
   box.appendChild(btn);
 });
+
+        td.appendChild(box);
+    return td;
   }
 
   // ✅ EDIT MODE

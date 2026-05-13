@@ -7,9 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    .home { background:#447ef2; }
-    .away { background:#bd2448; }
-    .bye  { background:#adaaaa; }
+
+.home { background:#447ef2; color:white; }
+.away { background:#bd2448; color:white; }
+.bye  { background:#adaaaa; }
 
     .sticky-col {
       position: sticky;
@@ -35,10 +36,10 @@
   }
 }
 
-    .tnf { background:#498bf5; }   /* blue */
-.snf { background:#e0c136; }   /* gold */
-.mnf { background:#f04f4f; }   /* red */
-.intl { background:#8ab835; }  /* green */
+.tnf { background:#498bf5; }
+.snf { background:#e0c136; }
+.mnf { background:#f04f4f; }
+.intl { background:#8ab835; }
 
 .tag-btn {
   font-size:10px;
@@ -48,7 +49,13 @@
   cursor:pointer;
   background:white;
 }
-    
+
+    .legend-box {
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
   </style>
 </head>
 
@@ -60,6 +67,45 @@
   Save as PDF
 </button>
 
+  <div style="margin-bottom:10px; display:flex; flex-wrap:wrap; gap:12px;">
+
+  <div style="display:flex; align-items:center; gap:4px;">
+    <div style="width:14px; height:14px; background:#447ef2;"></div>
+    <span>Home</span>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:4px;">
+    <div style="width:14px; height:14px; background:#bd2448;"></div>
+    <span>Away</span>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:4px;">
+    <div style="width:14px; height:14px; background:#adaaaa;"></div>
+    <span>Bye</span>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:4px;">
+    <div style="width:14px; height:14px; background:#498bf5;"></div>
+    <span>TNF</span>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:4px;">
+    <div style="width:14px; height:14px; background:#e0c136;"></div>
+    <span>SNF</span>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:4px;">
+    <div style="width:14px; height:14px; background:#f04f4f;"></div>
+    <span>MNF</span>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:4px;">
+    <div style="width:14px; height:14px; background:#8ab835;"></div>
+    <span>INTL</span>
+  </div>
+
+</div>
+  
 <div class="overflow-auto">
 <table id="grid" class="border">
 <thead>

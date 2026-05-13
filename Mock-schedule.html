@@ -283,10 +283,9 @@ rawScheduleData[team].forEach(opt=>{
 
     // ✅ ✅ 2. Already played this opponent in ANY week
     const alreadyPlayed = weeks.some(w=>{
-      return schedule[team][w] &&
-        const val = schedule[team][w];
-return val && val.substring(1) === opp;
-    });
+  const game = schedule[team][w];
+  return game && game !== "BYE" && game.substring(1) === opp;
+});
 
     if(alreadyPlayed){
       return;

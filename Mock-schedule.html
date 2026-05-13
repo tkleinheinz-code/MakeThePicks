@@ -266,49 +266,58 @@ box.appendChild(btnRow);
   menu.style.zIndex="1000";
   menu.style.width="130px";
 
-  rawScheduleData[team].forEach(opt=>{
+rawScheduleData[team].forEach(opt=>{
 
-const item = document.createElement("div");
-item.style.display = "flex";
-item.style.alignItems = "center";
-item.style.gap = "6px";
-item.style.padding = "4px 6px";
-item.style.cursor = "pointer";
-item.style.fontSize = "12px";   // smaller text
-item.style.whiteSpace = "nowrap";
+  // ✅ REMOVE teams already used this week
+  if(opt !== "Bye"){
+    const opp = opt.substring(1);
 
-if (opt === "Bye") {
-  item.textContent = "BYE";
-} else {
-  const opp = opt.substring(1);
+    // if opponent already has a game this week → skip
+    if(schedule[opp][week]){
+      return;
+    }
+  }
 
-  const img = document.createElement("img");
-  img.src = logos[opp];
-  img.style.width = "14px";
-  img.style.height = "14px";
-  img.style.flexShrink = "0";
+  const item = document.createElement("div");
+  item.style.display = "flex";
+  item.style.alignItems = "center";
+  item.style.gap = "6px";
+  item.style.padding = "4px 6px";
+  item.style.cursor = "pointer";
+  item.style.fontSize = "12px";
 
-  const label = document.createElement("span");
-  label.textContent = opt; // keeps vXXX / aXXX
-
-  item.appendChild(img);
-  item.appendChild(label);
-}
-
-item.onclick = () => {
   if (opt === "Bye") {
-    schedule[team][week] = "BYE";
+    item.textContent = "BYE";
   } else {
     const opp = opt.substring(1);
-    const isHome = opt.startsWith("v");
-    schedule[team][week] = opt;
-    schedule[opp][week] = (isHome ? "a" : "v") + team;
-  }
-  render();
-};
 
-    menu.appendChild(item);
-  });
+    const img = document.createElement("img");
+    img.src = logos[opp];
+    img.style.width = "14px";
+
+    const label = document.createElement("span");
+    label.textContent = opt;
+
+    item.appendChild(img);
+    item.appendChild(label);
+  }
+
+  item.onclick = () => {
+    if (opt === "Bye") {
+      schedule[team][week] = "BYE";
+    } else {
+      const opp = opt.substring(1);
+      const isHome = opt.startsWith("v");
+
+      schedule[team][week] = opt;
+      schedule[opp][week] = (isHome ? "a" : "v") + team;
+    }
+
+    render();
+  };
+
+  menu.appendChild(item);
+});
 
   btn.onclick=()=>{
     menu.style.display =

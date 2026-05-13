@@ -168,6 +168,9 @@ function createCell(team,week){
   if(val){
 
   const box = document.createElement("div");
+    box.style.display = "flex";
+box.style.flexDirection = "column";
+box.style.gap = "3px";
 
   const tag = gameTags[team][week];
   if(tag){
@@ -199,30 +202,34 @@ function createCell(team,week){
   box.appendChild(document.createTextNode(" "));
 
   // ✅ ADD TAG BUTTONS
-  ["tnf","snf","mnf","intl"].forEach(t=>{
-    const btn = document.createElement("span");
-    btn.textContent = t.toUpperCase();
-    btn.className = "tag-btn";
+  const btnRow = document.createElement("div");
+btnRow.style.display = "flex";
+btnRow.style.gap = "4px";
+btnRow.style.flexWrap = "wrap";
 
-    // ✅ force visibility
-    btn.style.display = "inline-block";
+["tnf","snf","mnf","intl"].forEach(t=>{
+  const btn = document.createElement("span");
+  btn.textContent = t.toUpperCase();
+  btn.className = "tag-btn";
 
-    btn.onclick = (e)=>{
-      e.stopPropagation();
+  btn.onclick = (e)=>{
+    e.stopPropagation();
 
-      gameTags[team][week] =
-        gameTags[team][week] === t ? "" : t;
+    gameTags[team][week] =
+      gameTags[team][week] === t ? "" : t;
 
-      if(val !== "BYE"){
-        const opp = val.substring(1);
-        gameTags[opp][week] = gameTags[team][week];
-      }
+    if(val !== "BYE"){
+      const opp = val.substring(1);
+      gameTags[opp][week] = gameTags[team][week];
+    }
 
-      render();
-    };
+    render();
+  };
 
-    box.appendChild(btn);
-  });
+  btnRow.appendChild(btn);
+});
+
+box.appendChild(btnRow);
 
   // ✅ FIXED CLEAR LOGIC
   box.onclick = ()=>{

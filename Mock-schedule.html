@@ -75,6 +75,10 @@
   Load Schedule
 </button>
 
+  <button onclick="resetSchedule()" class="mb-4 px-3 py-1 bg-red-600 text-white rounded">
+  Reset Schedule
+</button>
+
   <div style="margin-bottom:10px; display:flex; flex-wrap:wrap; gap:12px;">
 
   <div style="display:flex; align-items:center; gap:4px;">
@@ -467,7 +471,34 @@ function loadData() {
     gameTags = JSON.parse(savedTags);
   }
 }
-  
+  function resetSchedule() {
+
+    
+  if(!confirm("Are you sure you want to reset the entire schedule?")){
+    return;
+  }
+
+  // ✅ Clear schedule data
+  teams.forEach(t=>{
+    weeks.forEach(w=>{
+      schedule[t][w] = "";
+    });
+  });
+
+  // ✅ Clear tag data
+  teams.forEach(t=>{
+    weeks.forEach(w=>{
+      gameTags[t][w] = "";
+    });
+  });
+
+  // ✅ Clear saved storage
+  localStorage.removeItem("schedule");
+  localStorage.removeItem("gameTags");
+
+  // ✅ Re-render grid
+  render();
+}
 </script>
 
 </body>

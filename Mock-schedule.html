@@ -258,6 +258,15 @@ btnRow.style.flexWrap = "wrap";
   btn.textContent = t.toUpperCase();
   btn.className = "tag-btn";
 
+  // ✅ ADD THIS PART RIGHT HERE
+  btn.style.background =
+    t === "tnf" ? "#498bf5" :
+    t === "snf" ? "#e0c136" :
+    t === "mnf" ? "#f04f4f" :
+    "#8ab835";
+
+  btn.style.color = "white";
+
   btn.onclick = (e)=>{
     e.stopPropagation();
 

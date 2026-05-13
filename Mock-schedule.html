@@ -268,16 +268,32 @@ box.appendChild(btnRow);
 
 rawScheduleData[team].forEach(opt=>{
 
-  // ✅ REMOVE teams already used this week
+  // ✅ SKIP if team already has game this week
+  if(schedule[team][week]){
+    return;
+  }
+
   if(opt !== "Bye"){
     const opp = opt.substring(1);
 
-    // if opponent already has a game this week → skip
+    // ✅ 1. Already playing this week
     if(schedule[opp][week]){
+      return;
+    }
+
+    // ✅ ✅ 2. Already played this opponent in ANY week
+    const alreadyPlayed = weeks.some(w=>{
+      return schedule[team][w] &&
+        const val = schedule[team][w];
+return val && val.substring(1) === opp;
+    });
+
+    if(alreadyPlayed){
       return;
     }
   }
 
+  // ✅ build dropdown item (your existing code stays)
   const item = document.createElement("div");
   item.style.display = "flex";
   item.style.alignItems = "center";

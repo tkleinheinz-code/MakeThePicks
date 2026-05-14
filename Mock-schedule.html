@@ -352,15 +352,15 @@ rawScheduleData[team].forEach(opt=>{
       return;
     }
 
-    // ✅ ✅ 2. Already played this opponent in ANY week
-    const alreadyPlayed = weeks.some(w=>{
+// ✅ Allow up to 2 games vs same opponent
+const gamesVsOpp = weeks.filter(w=>{
   const game = schedule[team][w];
   return game && game !== "BYE" && game.substring(1) === opp;
-});
+}).length;
 
-    if(alreadyPlayed){
-      return;
-    }
+if(gamesVsOpp >= 2){
+  return;
+}
   }
 
   // ✅ build dropdown item (your existing code stays)

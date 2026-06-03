@@ -9,24 +9,29 @@
 
 <style>
 :root {
-  --gold: #c9a84c;
-  --gold-bright: #f0c040;
-  --gold-dim: #7a6228;
-  --red: #aa0000;
-  --red-bright: #e00000;
-  --red-dim: #5a0000;
-  --bg: #0b0b0c;
-  --bg2: #111214;
-  --bg3: #18191c;
-  --bg4: #222428;
-  --border: #2a2b30;
-  --text: #e8e8e8;
-  --text-dim: #777;
-  --text-muted: #444;
+  --gold: #e8b830;
+  --gold-bright: #ffd44a;
+  --gold-dim: #a07c18;
+  --red: #cc1a1a;
+  --red-bright: #ff3030;
+  --red-dim: #7a1010;
+  --bg: #1a1b1f;
+  --bg2: #22242a;
+  --bg3: #2c2f38;
+  --bg4: #363a46;
+  --border: #3a3d4a;
+  --box-bg: #e8eaef;
+  --box-bg2: #f2f4f8;
+  --box-border: #c8ccd8;
+  --box-text: #1a1c24;
+  --box-text-dim: #555870;
+  --text: #f0f0f2;
+  --text-dim: #8890a8;
+  --text-muted: #50546a;
   --offense: #7a1a1a;
-  --offense-bright: #a82020;
-  --defense: #6b5600;
-  --defense-bright: #9a7d00;
+  --offense-bright: #c02020;
+  --defense: #7a6400;
+  --defense-bright: #c09400;
   --font-display: 'Bebas Neue', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -450,8 +455,8 @@ body.light .header { background: rgba(240,237,232,0.92); }
 
 /* ─── DROP BOX ─── */
 .drop-box {
-  background: var(--bg2);
-  border: 1.5px dashed var(--border);
+  background: var(--box-bg);
+  border: 1.5px dashed var(--box-border);
   border-radius: var(--radius);
   padding: 10px;
   min-height: 80px;
@@ -468,14 +473,14 @@ body.light .header { background: rgba(240,237,232,0.92); }
   justify-content: space-between;
   margin-bottom: 6px;
   padding-bottom: 6px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--box-border);
 }
 
 .drop-box-title {
   font-family: var(--font-display);
   font-size: 18px;
   letter-spacing: 2px;
-  color: var(--gold);
+  color: var(--red);
 }
 
 .drop-box-meta {
@@ -487,10 +492,10 @@ body.light .header { background: rgba(240,237,232,0.92); }
 .slot-count {
   font-family: var(--font-mono);
   font-size: 9px;
-  color: var(--text-muted);
+  color: var(--box-text-dim);
   letter-spacing: 0.5px;
 }
-.slot-count.warn { color: var(--gold); }
+.slot-count.warn { color: var(--gold-dim); }
 .slot-count.over { color: var(--red-bright); }
 
 .clear-box-btn {
@@ -500,7 +505,7 @@ body.light .header { background: rgba(240,237,232,0.92); }
   border: 1px solid transparent;
   border-radius: 2px;
   cursor: pointer;
-  color: var(--text-muted);
+  color: var(--box-text-dim);
   font-size: 10px;
   opacity: 0;
   transition: opacity 0.15s, border-color 0.15s, color 0.15s;
@@ -510,8 +515,8 @@ body.light .header { background: rgba(240,237,232,0.92); }
 
 .drop-box.drag-over {
   border-color: var(--gold);
-  background: rgba(201, 168, 76, 0.06);
-  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
+  background: rgba(232, 184, 48, 0.08);
+  box-shadow: 0 0 0 2px rgba(232, 184, 48, 0.2);
   border-style: solid;
 }
 
@@ -526,7 +531,7 @@ body.light .header { background: rgba(240,237,232,0.92); }
 .empty-hint {
   font-family: var(--font-mono);
   font-size: 9px;
-  color: var(--text-muted);
+  color: var(--box-text-dim);
   text-align: center;
   padding: 8px 0;
   letter-spacing: 1px;
@@ -588,7 +593,28 @@ body.light .header { background: rgba(240,237,232,0.92); }
   .clear-box-btn { display: none !important; }
 }
 
-/* ─── LIGHT MODE OVERRIDES ─── */
+/* Players inside drop boxes get slightly adjusted styles */
+.drop-box .player.red-group {
+  background: linear-gradient(135deg, #fce8e8 0%, #f8d8d8 100%);
+  border-color: #e0aaaa;
+  color: #5a1010;
+}
+.drop-box .player.gold-group {
+  background: linear-gradient(135deg, #fdf5dc 0%, #faedc0 100%);
+  border-color: #d4aa44;
+  color: #5a4400;
+}
+.drop-box .player.special-group {
+  background: linear-gradient(135deg, #eef0f8 0%, #e8eaf4 100%);
+  border-color: #c0c8e0;
+  color: #2a3050;
+}
+.drop-box .player .player-num { color: #888; }
+.drop-box .player .player-pos { color: #aaa; }
+.drop-box .player.red-group .player-num { color: #a06060; }
+.drop-box .player.red-group .player-pos { color: #c08080; }
+.drop-box .player.gold-group .player-num { color: #9a8040; }
+.drop-box .player.gold-group .player-pos { color: #b09050; }
 body.light .player.red-group {
   background: linear-gradient(135deg, #fce8e8 0%, #f8d8d8 100%);
   border-color: #e0aaaa;

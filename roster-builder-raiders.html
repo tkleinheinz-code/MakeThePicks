@@ -6,15 +6,11 @@
 <title>Raiders Roster Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
 :root {
   --silver: #c0c0c0;
   --silver-bright: #e8e8e8;
   --silver-dim: #888;
-  --black: #0a0a0a;
-  --charcoal: #1a1a1a;
-  --accent: #b8b8b8;
   --bg: #141414;
   --bg2: #1c1c1c;
   --bg3: #242424;
@@ -25,576 +21,107 @@
   --box-border: #bbbbc0;
   --box-text: #111;
   --box-text-dim: #555;
-  --offense: #303030;
-  --defense: #222;
   --font-display: 'Bebas Neue', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 4px;
-  --shadow: 0 4px 20px rgba(0,0,0,0.8);
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--bg);
-  color: var(--silver-bright);
-  font-family: var(--font-body);
-  font-size: 13px;
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
-}
-
-body.light {
-  --bg: #f0f0f2;
-  --bg2: #e4e4e8;
-  --bg3: #d8d8dc;
-  --bg4: #ccccd0;
-  --border: #b8b8bc;
-  --silver: #444;
-  --silver-bright: #111;
-  --silver-dim: #666;
-}
-
-/* ─── NOISE TEXTURE ─── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.6;
-}
-
-/* ─── HEADER ─── */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28px;
-  height: 52px;
-  background: rgba(10,10,10,0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #2a2a2a;
-}
-body.light .header { background: rgba(240,240,242,0.95); border-bottom-color: var(--border); }
-
-.logo {
-  font-family: var(--font-display);
-  font-size: 22px;
-  letter-spacing: 4px;
-  color: var(--silver-bright);
-  text-decoration: none;
-}
-body.light .logo { color: var(--black); }
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.icon-btn {
-  width: 34px; height: 34px;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 15px;
-  color: var(--silver-bright);
-  transition: border-color 0.15s, background 0.15s;
-}
-.icon-btn:hover { border-color: var(--silver); background: var(--bg4); }
-
-/* ─── HERO ─── */
-.hero {
-  text-align: center;
-  padding: 36px 20px 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(42px, 6vw, 80px);
-  letter-spacing: 6px;
-  line-height: 1;
-  background: linear-gradient(135deg, #555 0%, #e8e8e8 45%, #aaa 70%, #fff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero-sub {
-  margin-top: 10px;
-  color: var(--silver-dim);
-  font-size: 13px;
-  letter-spacing: 1px;
-  max-width: 480px;
-  margin-inline: auto;
-  line-height: 1.6;
-}
-
-/* ─── COUNTER BAR ─── */
-.counter-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  padding: 14px 28px;
-  margin: 10px auto 0;
-  max-width: 680px;
-  position: relative;
-  z-index: 1;
-}
-
-.count-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-
-.count-num {
-  font-family: var(--font-display);
-  font-size: 48px;
-  line-height: 1;
-  color: var(--silver-bright);
-  transition: color 0.2s;
-  min-width: 90px;
-  text-align: center;
-}
-.count-num.over { color: #ff4444; }
-.count-num.full { color: #60ff60; }
-
-.count-label {
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--silver-dim);
-  font-family: var(--font-mono);
-}
-
-.progress-wrap {
-  flex: 1;
-  max-width: 340px;
-}
-
-.progress-track {
-  height: 6px;
-  background: var(--bg4);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 4px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #555, #e8e8e8);
-  border-radius: 3px;
-  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
-  width: 0%;
-}
-.progress-fill.over { background: #ff4444; }
-.progress-fill.full { background: #60ff60; }
-
-.progress-labels {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: #444;
-}
-
-/* ─── ACTION ROW ─── */
-.action-row {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 20px 16px;
-  position: relative;
-  z-index: 1;
-  flex-wrap: wrap;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  border-radius: var(--radius);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: all 0.15s;
-  font-weight: 600;
-}
-
-.btn-primary {
-  background: var(--silver);
-  color: #000;
-  border-color: var(--silver);
-}
-.btn-primary:hover { background: var(--silver-bright); border-color: var(--silver-bright); }
-
-.btn-secondary {
-  background: transparent;
-  color: var(--silver-dim);
-  border-color: var(--border);
-}
-.btn-secondary:hover { border-color: var(--silver-dim); color: var(--silver-bright); }
-
-/* ─── MAIN LAYOUT ─── */
-.drag-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 16px;
-  padding: 0 20px 40px;
-  position: relative;
-  z-index: 1;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* ─── LEFT PANEL ─── */
-.left-panel {
-  position: sticky;
-  top: 68px;
-  height: calc(100vh - 80px);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.search-wrap { position: relative; }
-.search-input {
-  width: 100%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 8px 10px 8px 32px;
-  color: var(--silver-bright);
-  font-family: var(--font-body);
-  font-size: 12px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.search-input::placeholder { color: #444; }
-.search-input:focus { border-color: var(--silver); }
-.search-icon {
-  position: absolute;
-  left: 10px; top: 50%;
-  transform: translateY(-50%);
-  color: #444;
-  font-size: 12px;
-  pointer-events: none;
-}
-
-/* ─── FILTER TABS ─── */
-.filter-tabs {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.filter-tab {
-  padding: 4px 9px;
-  border-radius: var(--radius);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--silver-dim);
-  transition: all 0.12s;
-}
-.filter-tab:hover { border-color: var(--silver-dim); color: var(--silver-bright); }
-.filter-tab.active { background: var(--silver); border-color: var(--silver); color: #000; font-weight: 700; }
-
-/* ─── PLAYER LIST ─── */
-.player-list {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 6px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  scrollbar-width: thin;
-  scrollbar-color: var(--bg4) transparent;
-}
-.player-list::-webkit-scrollbar { width: 4px; }
-.player-list::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
-
-.list-section-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--silver-dim);
-  padding: 6px 4px 2px;
-  border-top: 1px solid var(--border);
-}
-.list-section-label:first-child { border-top: none; padding-top: 2px; }
-
-/* ─── PLAYER CARD ─── */
-.player {
-  padding: 7px 10px;
-  cursor: grab;
-  border-radius: var(--radius);
-  border: 1px solid transparent;
-  font-size: 11.5px;
-  font-weight: 500;
-  line-height: 1.3;
-  user-select: none;
-  transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s, border-color 0.15s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.player-num {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  min-width: 26px;
-  color: #555;
-}
-.player-name { flex: 1; }
-.player-pos {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: #444;
-}
-
-.rookie-badge {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  padding: 1px 4px;
-  border-radius: 2px;
-  background: rgba(200,200,200,0.15);
-  color: var(--silver);
-  border: 1px solid #444;
-  letter-spacing: 0.5px;
-}
-
-/* offense = dark silver/charcoal card */
-.player.off-group {
-  background: linear-gradient(135deg, #1e1e1e 0%, #282828 100%);
-  border-color: #333;
-  color: #d8d8d8;
-}
-.player.off-group:hover { border-color: #aaa; box-shadow: 0 2px 12px rgba(180,180,180,0.2); }
-
-/* defense = darker card */
-.player.def-group {
-  background: linear-gradient(135deg, #161616 0%, #202020 100%);
-  border-color: #2a2a2a;
-  color: #c0c0c0;
-}
-.player.def-group:hover { border-color: #888; box-shadow: 0 2px 12px rgba(140,140,140,0.2); }
-
-/* special teams = slightly blue-tinted */
-.player.spc-group {
-  background: linear-gradient(135deg, #14161a 0%, #1c1e24 100%);
-  border-color: #2a2c34;
-  color: #b8bcc8;
-}
-.player.spc-group:hover { border-color: #6677aa; box-shadow: 0 2px 12px rgba(80,100,180,0.2); }
-
-.player:hover { transform: translateY(-1px) scale(1.01); }
-.player:active { transform: scale(1.04); opacity: 0.8; cursor: grabbing; }
-.player.dragging { opacity: 0.4; transform: scale(0.97); }
-.player.hidden { display: none !important; }
-
-.player.dropped {
-  animation: dropBounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes dropBounce {
-  0%   { transform: scale(1.15); }
-  60%  { transform: scale(0.96); }
-  100% { transform: scale(1); }
-}
-
-/* ─── BOARD ─── */
-.board {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  align-content: start;
-}
-
-/* ─── DROP BOX ─── */
-.drop-box {
-  background: var(--box-bg);
-  border: 1.5px dashed var(--box-border);
-  border-radius: var(--radius);
-  padding: 10px;
-  min-height: 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
-  position: relative;
-}
-
-.drop-box-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--box-border);
-}
-
-.drop-box-title {
-  font-family: var(--font-display);
-  font-size: 18px;
-  letter-spacing: 2px;
-  color: #111;
-}
-
-.drop-box-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.slot-count {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--box-text-dim);
-  letter-spacing: 0.5px;
-}
-.slot-count.warn { color: #777; }
-.slot-count.over { color: #cc2222; }
-
-.clear-box-btn {
-  width: 16px; height: 16px;
-  display: flex; align-items: center; justify-content: center;
-  background: none;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  cursor: pointer;
-  color: var(--box-text-dim);
-  font-size: 10px;
-  opacity: 0;
-  transition: opacity 0.15s, border-color 0.15s, color 0.15s;
-}
-.drop-box:hover .clear-box-btn { opacity: 1; }
-.clear-box-btn:hover { border-color: #aa3333; color: #cc4444; }
-
-.drop-box.drag-over {
-  border-color: var(--silver);
-  background: rgba(180,180,180,0.1);
-  box-shadow: 0 0 0 2px rgba(180,180,180,0.15);
-  border-style: solid;
-}
-
-.drop-box .player {
-  cursor: default;
-  font-size: 11px;
-}
-.drop-box .player:hover { cursor: grab; }
-
-/* Player cards in light-bg drop boxes */
-.drop-box .player.off-group {
-  background: linear-gradient(135deg, #e8e8e8 0%, #dcdcdc 100%);
-  border-color: #bbb;
-  color: #1a1a1a;
-}
-.drop-box .player.def-group {
-  background: linear-gradient(135deg, #e0e0e4 0%, #d4d4d8 100%);
-  border-color: #b0b0b8;
-  color: #1a1a1a;
-}
-.drop-box .player.spc-group {
-  background: linear-gradient(135deg, #e4e6ee 0%, #d8dae8 100%);
-  border-color: #b8bcd0;
-  color: #1a1a24;
-}
-.drop-box .player .player-num { color: #888; }
-.drop-box .player .player-pos { color: #999; }
-
-.empty-hint {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--box-text-dim);
-  text-align: center;
-  padding: 8px 0;
-  letter-spacing: 1px;
-  pointer-events: none;
-}
-
-/* ─── TOAST ─── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--bg3);
-  border: 1px solid var(--silver-dim);
-  border-radius: var(--radius);
-  padding: 10px 20px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 1px;
-  color: var(--silver-bright);
-  z-index: 1000;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s;
-  opacity: 0;
-  pointer-events: none;
-}
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-/* ─── CONFETTI ─── */
-.confetti-wrap {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 999;
-  overflow: hidden;
-}
-.confetti-piece {
-  position: absolute;
-  width: 8px;
-  height: 10px;
-  top: -20px;
-  opacity: 0;
-  animation: confettiFall linear forwards;
-}
-@keyframes confettiFall {
-  0%   { opacity: 1; transform: translateY(0) rotate(0deg) scaleX(1); }
-  80%  { opacity: 1; }
-  100% { opacity: 0; transform: translateY(100vh) rotate(720deg) scaleX(-1); }
-}
-
-@media print {
-  body * { visibility: hidden; }
-  .board, .board * { visibility: visible; }
-  .board { position: absolute; top: 0; left: 0; width: 100%; grid-template-columns: repeat(4, 1fr); }
-  .do-not-print, .clear-box-btn { display: none !important; }
-}
+body { background: var(--bg); color: var(--silver-bright); font-family: var(--font-body); font-size: 13px; min-height: 100vh; transition: background 0.3s, color 0.3s; }
+body.light { --bg: #f0f0f2; --bg2: #e4e4e8; --bg3: #d8d8dc; --bg4: #ccccd0; --border: #b8b8bc; --silver: #444; --silver-bright: #111; --silver-dim: #666; }
+body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:0.6; }
+.header { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 28px; height:52px; background:rgba(10,10,10,0.95); backdrop-filter:blur(12px); border-bottom:1px solid #2a2a2a; }
+body.light .header { background:rgba(240,240,242,0.95); border-bottom-color:var(--border); }
+.logo { font-family:var(--font-display); font-size:22px; letter-spacing:4px; color:var(--silver-bright); }
+body.light .logo { color:#111; }
+.header-right { display:flex; align-items:center; gap:10px; }
+.icon-btn { width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); cursor:pointer; font-size:15px; color:var(--silver-bright); transition:border-color 0.15s, background 0.15s; }
+.icon-btn:hover { border-color:var(--silver); background:var(--bg4); }
+.hero { text-align:center; padding:36px 20px 20px; position:relative; z-index:1; }
+.hero-title { font-family:var(--font-display); font-size:clamp(42px,6vw,80px); letter-spacing:6px; line-height:1; background:linear-gradient(135deg,#555 0%,#e8e8e8 45%,#aaa 70%,#fff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero-sub { margin-top:10px; color:var(--silver-dim); font-size:13px; letter-spacing:1px; max-width:480px; margin-inline:auto; line-height:1.6; }
+.counter-bar { display:flex; align-items:center; justify-content:center; gap:20px; padding:14px 28px; margin:10px auto 0; max-width:680px; position:relative; z-index:1; }
+.count-display { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.count-num { font-family:var(--font-display); font-size:48px; line-height:1; color:var(--silver-bright); transition:color 0.2s; min-width:90px; text-align:center; }
+.count-num.over { color:#ff4444; }
+.count-num.full { color:#60ff60; }
+.count-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--silver-dim); font-family:var(--font-mono); }
+.progress-wrap { flex:1; max-width:340px; }
+.progress-track { height:6px; background:var(--bg4); border-radius:3px; overflow:hidden; margin-bottom:4px; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#555,#e8e8e8); border-radius:3px; transition:width 0.4s cubic-bezier(0.34,1.56,0.64,1),background 0.3s; width:0%; }
+.progress-fill.over { background:#ff4444; }
+.progress-fill.full { background:#60ff60; }
+.progress-labels { display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:9px; color:#444; }
+.action-row { display:flex; gap:8px; justify-content:center; align-items:center; padding:10px 20px 16px; position:relative; z-index:1; flex-wrap:wrap; }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:7px 16px; border-radius:var(--radius); font-family:var(--font-mono); font-size:10px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; border:1px solid transparent; transition:all 0.15s; font-weight:600; }
+.btn-primary { background:var(--silver); color:#000; border-color:var(--silver); }
+.btn-primary:hover { background:var(--silver-bright); border-color:var(--silver-bright); }
+.btn-secondary { background:transparent; color:var(--silver-dim); border-color:var(--border); }
+.btn-secondary:hover { border-color:var(--silver-dim); color:var(--silver-bright); }
+.drag-layout { display:grid; grid-template-columns:260px 1fr; gap:16px; padding:0 20px 40px; position:relative; z-index:1; max-width:1400px; margin:0 auto; }
+.left-panel { position:sticky; top:68px; height:calc(100vh - 80px); display:flex; flex-direction:column; gap:8px; }
+.search-wrap { position:relative; }
+.search-input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:8px 10px 8px 32px; color:var(--silver-bright); font-family:var(--font-body); font-size:12px; outline:none; transition:border-color 0.15s; }
+.search-input::placeholder { color:#444; }
+.search-input:focus { border-color:var(--silver); }
+.search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#444; font-size:12px; pointer-events:none; }
+.filter-tabs { display:flex; gap:4px; flex-wrap:wrap; }
+.filter-tab { padding:4px 9px; border-radius:var(--radius); font-family:var(--font-mono); font-size:9px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--silver-dim); transition:all 0.12s; }
+.filter-tab:hover { border-color:var(--silver-dim); color:var(--silver-bright); }
+.filter-tab.active { background:var(--silver); border-color:var(--silver); color:#000; font-weight:700; }
+.player-list { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:4px; padding:6px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); scrollbar-width:thin; scrollbar-color:var(--bg4) transparent; }
+.player-list::-webkit-scrollbar { width:4px; }
+.player-list::-webkit-scrollbar-thumb { background:var(--bg4); border-radius:2px; }
+.list-section-label { font-family:var(--font-mono); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--silver-dim); padding:6px 4px 2px; border-top:1px solid var(--border); }
+.list-section-label:first-child { border-top:none; padding-top:2px; }
+.player { padding:7px 10px; cursor:grab; border-radius:var(--radius); border:1px solid transparent; font-size:11.5px; font-weight:500; line-height:1.3; user-select:none; transition:transform 0.15s, box-shadow 0.15s, opacity 0.15s, border-color 0.15s; display:flex; align-items:center; gap:6px; }
+.player-num { font-family:var(--font-mono); font-size:10px; min-width:26px; color:#555; }
+.player-name { flex:1; }
+.player-pos { font-family:var(--font-mono); font-size:9px; color:#444; }
+.rookie-badge { font-family:var(--font-mono); font-size:8px; padding:1px 4px; border-radius:2px; background:rgba(200,200,200,0.15); color:var(--silver); border:1px solid #444; letter-spacing:0.5px; }
+.player.off-group { background:linear-gradient(135deg,#1e1e1e 0%,#282828 100%); border-color:#333; color:#d8d8d8; }
+.player.off-group:hover { border-color:#aaa; box-shadow:0 2px 12px rgba(180,180,180,0.2); }
+.player.def-group { background:linear-gradient(135deg,#161616 0%,#202020 100%); border-color:#2a2a2a; color:#c0c0c0; }
+.player.def-group:hover { border-color:#888; box-shadow:0 2px 12px rgba(140,140,140,0.2); }
+.player.spc-group { background:linear-gradient(135deg,#14161a 0%,#1c1e24 100%); border-color:#2a2c34; color:#b8bcc8; }
+.player.spc-group:hover { border-color:#6677aa; box-shadow:0 2px 12px rgba(80,100,180,0.2); }
+.player:hover { transform:translateY(-1px) scale(1.01); }
+.player:active { transform:scale(1.04); opacity:0.8; cursor:grabbing; }
+.player.dragging { opacity:0.4; transform:scale(0.97); }
+.player.hidden { display:none !important; }
+.player.dropped { animation:dropBounce 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes dropBounce { 0%{transform:scale(1.15);} 60%{transform:scale(0.96);} 100%{transform:scale(1);} }
+.board { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; align-content:start; }
+.drop-box { background:var(--box-bg); border:1.5px dashed var(--box-border); border-radius:var(--radius); padding:10px; min-height:80px; display:flex; flex-direction:column; gap:4px; transition:border-color 0.15s, background 0.15s, box-shadow 0.15s; position:relative; }
+.drop-box-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid var(--box-border); }
+.drop-box-title { font-family:var(--font-display); font-size:18px; letter-spacing:2px; color:#111; }
+.drop-box-meta { display:flex; align-items:center; gap:6px; }
+.slot-count { font-family:var(--font-mono); font-size:9px; color:var(--box-text-dim); letter-spacing:0.5px; }
+.slot-count.warn { color:#777; }
+.slot-count.over { color:#cc2222; }
+.clear-box-btn { width:16px; height:16px; display:flex; align-items:center; justify-content:center; background:none; border:1px solid transparent; border-radius:2px; cursor:pointer; color:var(--box-text-dim); font-size:10px; opacity:0; transition:opacity 0.15s, border-color 0.15s, color 0.15s; }
+.drop-box:hover .clear-box-btn { opacity:1; }
+.clear-box-btn:hover { border-color:#aa3333; color:#cc4444; }
+.drop-box.drag-over { border-color:var(--silver); background:rgba(180,180,180,0.1); box-shadow:0 0 0 2px rgba(180,180,180,0.15); border-style:solid; }
+.drop-box .player { cursor:default; font-size:11px; }
+.drop-box .player:hover { cursor:grab; }
+.drop-box .player.off-group { background:linear-gradient(135deg,#e8e8e8 0%,#dcdcdc 100%); border-color:#bbb; color:#1a1a1a; }
+.drop-box .player.def-group { background:linear-gradient(135deg,#e0e0e4 0%,#d4d4d8 100%); border-color:#b0b0b8; color:#1a1a1a; }
+.drop-box .player.spc-group { background:linear-gradient(135deg,#e4e6ee 0%,#d8dae8 100%); border-color:#b8bcd0; color:#1a1a24; }
+.drop-box .player .player-num { color:#888; }
+.drop-box .player .player-pos { color:#999; }
+.empty-hint { font-family:var(--font-mono); font-size:9px; color:var(--box-text-dim); text-align:center; padding:8px 0; letter-spacing:1px; pointer-events:none; }
+.toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--bg3); border:1px solid var(--silver-dim); border-radius:var(--radius); padding:10px 20px; font-family:var(--font-mono); font-size:11px; letter-spacing:1px; color:var(--silver-bright); z-index:1000; transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s; opacity:0; pointer-events:none; }
+.toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+.confetti-wrap { position:fixed; inset:0; pointer-events:none; z-index:999; overflow:hidden; }
+.confetti-piece { position:absolute; width:8px; height:10px; top:-20px; opacity:0; animation:confettiFall linear forwards; }
+@keyframes confettiFall { 0%{opacity:1;transform:translateY(0) rotate(0deg) scaleX(1);} 80%{opacity:1;} 100%{opacity:0;transform:translateY(100vh) rotate(720deg) scaleX(-1);} }
+@media print { body * { visibility:hidden; } .board, .board * { visibility:visible; } .board { position:absolute; top:0; left:0; width:100%; grid-template-columns:repeat(4,1fr); } .do-not-print, .clear-box-btn { display:none !important; } }
 </style>
 </head>
-
 <body>
-
 <div class="toast" id="toast"></div>
 <div class="confetti-wrap" id="confettiWrap"></div>
-
-<!-- HEADER -->
 <header class="header do-not-print">
   <div class="logo">MAKE THE PICKS</div>
   <div class="header-right">
@@ -602,36 +129,25 @@ body.light .logo { color: var(--black); }
     <button class="icon-btn" id="themeToggle" title="Toggle theme">☀️</button>
   </div>
 </header>
-
-<!-- HERO -->
 <div class="hero do-not-print">
   <h1 class="hero-title">ROSTER BUILDER</h1>
-  <p class="hero-sub">Set the Raiders 53-man roster. Drag players into position groups.<br><span style="font-family:var(--font-mono);font-size:11px;letter-spacing:1px;color:var(--silver);">R = 2026 ROOKIE</span></p>
+  <p class="hero-sub">Set the Raiders 53-man roster. Drag players into position groups.<br><span style="font-family:var(--font-mono);font-size:11px;letter-spacing:1px;color:var(--silver);">R = ROOKIE</span></p>
 </div>
-
-<!-- COUNTER -->
 <div class="counter-bar do-not-print">
   <div class="count-display">
     <div class="count-num" id="playerCount">0</div>
     <div class="count-label">/ 53 SPOTS</div>
   </div>
   <div class="progress-wrap">
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     <div class="progress-labels"><span>0</span><span>53</span></div>
   </div>
 </div>
-
-<!-- ACTIONS -->
 <div class="action-row do-not-print">
   <button class="btn btn-primary" onclick="window.print()">⎙ PRINT ROSTER</button>
   <button class="btn btn-secondary" id="resetBtn">↺ RESET ALL</button>
 </div>
-
-<!-- LAYOUT -->
 <div class="drag-layout">
-
   <div class="left-panel do-not-print">
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
@@ -646,228 +162,119 @@ body.light .logo { color: var(--black); }
     </div>
     <div class="player-list" id="playerList"></div>
   </div>
-
   <div class="board" id="board">
-
-    <div class="drop-box" data-pos="QB">
-      <div class="drop-box-header">
-        <div class="drop-box-title">QB</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-QB">0 players</span>
-          <button class="clear-box-btn" data-clear="QB">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="RB">
-      <div class="drop-box-header">
-        <div class="drop-box-title">RB / FB</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-RB">0 players</span>
-          <button class="clear-box-btn" data-clear="RB">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="WR">
-      <div class="drop-box-header">
-        <div class="drop-box-title">WR</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-WR">0 players</span>
-          <button class="clear-box-btn" data-clear="WR">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="TE">
-      <div class="drop-box-header">
-        <div class="drop-box-title">TE</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-TE">0 players</span>
-          <button class="clear-box-btn" data-clear="TE">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="OL">
-      <div class="drop-box-header">
-        <div class="drop-box-title">OL</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-OL">0 players</span>
-          <button class="clear-box-btn" data-clear="OL">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="K_P_LS">
-      <div class="drop-box-header">
-        <div class="drop-box-title">SPEC</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-K_P_LS">0 players</span>
-          <button class="clear-box-btn" data-clear="K_P_LS">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="DE">
-      <div class="drop-box-header">
-        <div class="drop-box-title">DE / EDGE</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-DE">0 players</span>
-          <button class="clear-box-btn" data-clear="DE">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="DT">
-      <div class="drop-box-header">
-        <div class="drop-box-title">DT / NT</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-DT">0 players</span>
-          <button class="clear-box-btn" data-clear="DT">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="LB">
-      <div class="drop-box-header">
-        <div class="drop-box-title">LB</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-LB">0 players</span>
-          <button class="clear-box-btn" data-clear="LB">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="CB">
-      <div class="drop-box-header">
-        <div class="drop-box-title">CB</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-CB">0 players</span>
-          <button class="clear-box-btn" data-clear="CB">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
-    <div class="drop-box" data-pos="S">
-      <div class="drop-box-header">
-        <div class="drop-box-title">S</div>
-        <div class="drop-box-meta">
-          <span class="slot-count" id="slots-S">0 players</span>
-          <button class="clear-box-btn" data-clear="S">✕</button>
-        </div>
-      </div>
-      <span class="empty-hint">Drop here</span>
-    </div>
-
+    <div class="drop-box" data-pos="QB"><div class="drop-box-header"><div class="drop-box-title">QB</div><div class="drop-box-meta"><span class="slot-count" id="slots-QB">0 players</span><button class="clear-box-btn" data-clear="QB">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="RB"><div class="drop-box-header"><div class="drop-box-title">RB / FB</div><div class="drop-box-meta"><span class="slot-count" id="slots-RB">0 players</span><button class="clear-box-btn" data-clear="RB">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="WR"><div class="drop-box-header"><div class="drop-box-title">WR</div><div class="drop-box-meta"><span class="slot-count" id="slots-WR">0 players</span><button class="clear-box-btn" data-clear="WR">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="TE"><div class="drop-box-header"><div class="drop-box-title">TE</div><div class="drop-box-meta"><span class="slot-count" id="slots-TE">0 players</span><button class="clear-box-btn" data-clear="TE">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="OL"><div class="drop-box-header"><div class="drop-box-title">OL</div><div class="drop-box-meta"><span class="slot-count" id="slots-OL">0 players</span><button class="clear-box-btn" data-clear="OL">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="K_P_LS"><div class="drop-box-header"><div class="drop-box-title">SPEC</div><div class="drop-box-meta"><span class="slot-count" id="slots-K_P_LS">0 players</span><button class="clear-box-btn" data-clear="K_P_LS">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="DE"><div class="drop-box-header"><div class="drop-box-title">DE / EDGE</div><div class="drop-box-meta"><span class="slot-count" id="slots-DE">0 players</span><button class="clear-box-btn" data-clear="DE">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="DT"><div class="drop-box-header"><div class="drop-box-title">DT / NT</div><div class="drop-box-meta"><span class="slot-count" id="slots-DT">0 players</span><button class="clear-box-btn" data-clear="DT">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="LB"><div class="drop-box-header"><div class="drop-box-title">LB</div><div class="drop-box-meta"><span class="slot-count" id="slots-LB">0 players</span><button class="clear-box-btn" data-clear="LB">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="CB"><div class="drop-box-header"><div class="drop-box-title">CB</div><div class="drop-box-meta"><span class="slot-count" id="slots-CB">0 players</span><button class="clear-box-btn" data-clear="CB">✕</button></div></div><span class="empty-hint">Drop here</span></div>
+    <div class="drop-box" data-pos="S"><div class="drop-box-header"><div class="drop-box-title">S</div><div class="drop-box-meta"><span class="slot-count" id="slots-S">0 players</span><button class="clear-box-btn" data-clear="S">✕</button></div></div><span class="empty-hint">Drop here</span></div>
   </div>
 </div>
-
 <script>
-// ─── RAIDERS ROSTER DATA (2026) ───
+// ─── ROSTER — exact from raiders.com/team/players-roster/ (Active, June 2026) ───
 const PLAYERS = [
   // QB
-  { num:'8',  name:'Kirk Cousins',       pos:'QB', group:'offense' },
-  { num:'4',  name:"Aidan O'Connell",    pos:'QB', group:'offense' },
-  { num:'16', name:'Jacob Clark',        pos:'QB', group:'offense', rookie:true },
-  // RB
-  { num:'2',  name:'Ashton Jeanty',      pos:'RB', group:'offense' },
-  { num:'37', name:'Roman Hemby',        pos:'RB', group:'offense', rookie:true },
-  { num:'33', name:'Chris Collier',      pos:'RB', group:'offense' },
-  { num:'38', name:'Dylan Laube',        pos:'RB', group:'offense' },
-  { num:'43', name:'Connor Heyward',     pos:'FB', group:'offense' },
+  { num:'8',  name:'Kirk Cousins',           pos:'QB', group:'offense' },
+  { num:'12', name:"Aidan O'Connell",        pos:'QB', group:'offense' },
+  { num:'16', name:'Jacob Clark',            pos:'QB', group:'offense', rookie:true },
+  { num:'15', name:'Fernando Mendoza',       pos:'QB', group:'offense', rookie:true },
+  // RB / FB
+  { num:'2',  name:'Ashton Jeanty',          pos:'RB', group:'offense' },
+  { num:'33', name:'Chris Collier',          pos:'RB', group:'offense' },
+  { num:'23', name:'Dylan Laube',            pos:'RB', group:'offense' },
+  { num:'37', name:'Roman Hemby',            pos:'RB', group:'offense', rookie:true },
+  { num:'34', name:'Connor Heyward',         pos:'FB', group:'offense' },
   // WR
-  { num:'18', name:'Jack Bech',          pos:'WR', group:'offense' },
-  { num:'5',  name:'Tre Tucker',         pos:'WR', group:'offense' },
-  { num:'13', name:'Phillip Dorsett II', pos:'WR', group:'offense' },
-  { num:'19', name:'Malik Benson',       pos:'WR', group:'offense', rookie:true },
-  { num:'83', name:'Jonathan Brady',     pos:'WR', group:'offense', rookie:true },
-  { num:'15', name:'Shedrick Jackson',   pos:'WR', group:'offense' },
-  { num:'12', name:'DJ Thornton Jr.',    pos:'WR', group:'offense' },
+  { num:'1',  name:'Tre Tucker',             pos:'WR', group:'offense' },
+  { num:'18', name:'Jack Bech',              pos:'WR', group:'offense' },
+  { num:'9',  name:'Jalen Nailor',           pos:'WR', group:'offense' },
+  { num:'4',  name:'Shedrick Jackson',       pos:'WR', group:'offense' },
+  { num:'10', name:"Dont'e Thornton Jr.",    pos:'WR', group:'offense' },
+  { num:'13', name:'Phillip Dorsett II',     pos:'WR', group:'offense' },
+  { num:'19', name:'Malik Benson',           pos:'WR', group:'offense', rookie:true },
+  { num:'83', name:'Jonathan Brady',         pos:'WR', group:'offense', rookie:true },
+  { num:'86', name:'Chase Roberts',          pos:'WR', group:'offense', rookie:true },
+  { num:'82', name:'Corey Rucker',           pos:'WR', group:'offense', rookie:true },
   // TE
-  { num:'89', name:'Brock Bowers',       pos:'TE', group:'offense' },
-  { num:'85', name:'Michael Mayer',      pos:'TE', group:'offense' },
-  { num:'86', name:'Ian Thomas',         pos:'TE', group:'offense' },
-  { num:'45', name:'Patrick Gurd',       pos:'TE', group:'offense', rookie:true },
-  { num:'84', name:'Carter Runyon',      pos:'TE', group:'offense' },
+  { num:'89', name:'Brock Bowers',           pos:'TE', group:'offense' },
+  { num:'87', name:'Michael Mayer',          pos:'TE', group:'offense' },
+  { num:'85', name:'Albert Okwuegbunam Jr.', pos:'TE', group:'offense' },
+  { num:'45', name:'Patrick Gurd',           pos:'TE', group:'offense', rookie:true },
   // OL
-  { num:'71', name:'DJ Glaze',           pos:'OT', group:'offense' },
-  { num:'70', name:'Spencer Burford',    pos:'OG', group:'offense' },
-  { num:'60', name:'Charles Grant',      pos:'OT', group:'offense' },
-  { num:'73', name:'Niklas Henning',     pos:'OT', group:'offense', rookie:true },
-  { num:'77', name:'Jackson Powers-Johnson', pos:'OG', group:'offense' },
-  { num:'65', name:'Cody Whitehair',     pos:'C',  group:'offense' },
-  { num:'62', name:'Sina Yasa',          pos:'OL', group:'offense' },
-  { num:'75', name:'Thayer Munford Jr.', pos:'OT', group:'offense' },
-  { num:'68', name:'Andre James',        pos:'OL', group:'offense' },
-  { num:'64', name:'Will Putnam',        pos:'OG', group:'offense' },
+  { num:'74', name:'Kolton Miller',          pos:'T',  group:'offense' },
+  { num:'71', name:'DJ Glaze',               pos:'T',  group:'offense' },
+  { num:'60', name:'Charles Grant',          pos:'T',  group:'offense' },
+  { num:'72', name:'Isaiah Jatta',           pos:'T',  group:'offense', rookie:true },
+  { num:'73', name:'Niklas Henning',         pos:'T',  group:'offense', rookie:true },
+  { num:'62', name:'Kamar Missouri',         pos:'T',  group:'offense', rookie:true },
+  { num:'58', name:'Jackson Powers-Johnson', pos:'G/C',group:'offense' },
+  { num:'65', name:'Tyler Linderbaum',       pos:'C',  group:'offense' },
+  { num:'70', name:'Spencer Burford',        pos:'G',  group:'offense' },
+  { num:'56', name:'Atonio Mafi',            pos:'G',  group:'offense' },
+  { num:'76', name:'Caleb Rogers',           pos:'G',  group:'offense' },
+  { num:'77', name:'Justin Pickett',         pos:'G',  group:'offense', rookie:true },
+  { num:'67', name:'Will Putnam',            pos:'C',  group:'offense' },
+  { num:'61', name:'Jordan Meredith',        pos:'C/G',group:'offense' },
   // DE / EDGE
-  { num:'98', name:'Maxx Crosby',        pos:'DE', group:'defense' },
-  { num:'91', name:'Jahfari Harvey',     pos:'DE', group:'defense' },
-  { num:'42', name:'Keyron Crawford',    pos:'DE', group:'defense', rookie:true },
-  { num:'94', name:'Malcolm Koonce',     pos:'DE', group:'defense' },
-  { num:'55', name:'Ovie Oghoufo',       pos:'DE', group:'defense' },
-  { num:'96', name:'Charles Snowden',    pos:'DE', group:'defense' },
+  { num:'98', name:'Maxx Crosby',            pos:'DE', group:'defense' },
+  { num:'95', name:'Kwity Paye',             pos:'DE', group:'defense' },
+  { num:'91', name:'Jahfari Harvey',         pos:'DE', group:'defense' },
+  { num:'51', name:'Malcolm Koonce',         pos:'DE', group:'defense' },
+  { num:'42', name:'Keyron Crawford',        pos:'DE', group:'defense', rookie:true },
   // DT
-  { num:'99', name:'Thomas Booker IV',   pos:'DT', group:'defense' },
-  { num:'69', name:'Adam Butler',        pos:'DT', group:'defense' },
-  { num:'97', name:'Tonka Hemingway',    pos:'DT', group:'defense' },
-  { num:'90', name:'Brandon Cleveland',  pos:'DT', group:'defense', rookie:true },
-  { num:'92', name:'Nesta Silvera',      pos:'DT', group:'defense' },
-  { num:'95', name:'Jerry Tillery',      pos:'DT', group:'defense' },
+  { num:'99', name:'Thomas Booker IV',       pos:'DT', group:'defense' },
+  { num:'69', name:'Adam Butler',            pos:'DT', group:'defense' },
+  { num:'97', name:'Tonka Hemingway',        pos:'DT', group:'defense' },
+  { num:'94', name:'Benito Jones',           pos:'DT', group:'defense' },
+  { num:'92', name:'JJ Pegues',              pos:'DT', group:'defense' },
+  { num:'96', name:'Jonah Laulu',            pos:'DT', group:'defense' },
+  { num:'68', name:"Treven Ma'ae",           pos:'DT', group:'defense' },
+  { num:'90', name:'Brandon Cleveland',      pos:'DT', group:'defense', rookie:true },
   // LB
-  { num:'17', name:'Nakobe Dean',        pos:'LB', group:'defense' },
-  { num:'44', name:'Tommy Eichenberg',   pos:'LB', group:'defense' },
-  { num:'52', name:'Luke Masterson',     pos:'LB', group:'defense' },
-  { num:'47', name:'Amari Burney',       pos:'LB', group:'defense' },
-  { num:'53', name:'Darien Butler',      pos:'LB', group:'defense' },
-  { num:'51', name:'Brandon Smith',      pos:'LB', group:'defense' },
+  { num:'17', name:'Nakobe Dean',            pos:'LB', group:'defense' },
+  { num:'44', name:'Tommy Eichenberg',       pos:'LB', group:'defense' },
+  { num:'54', name:'Brennan Jackson',        pos:'LB', group:'defense' },
+  { num:'55', name:'Cody Lindenberg',        pos:'LB', group:'defense' },
+  { num:'57', name:'Cameron McGrone',        pos:'LB', group:'defense' },
+  { num:'50', name:'Segun Olubi',            pos:'LB', group:'defense' },
   // CB
-  { num:'29', name:'Chigozie Anusiem',   pos:'CB', group:'defense' },
-  { num:'24', name:'Nate Hobbs',         pos:'CB', group:'defense' },
-  { num:'35', name:'Kyu Blu Kelly',      pos:'CB', group:'defense' },
-  { num:'27', name:'Decamerion Richardson',pos:'CB',group:'defense', rookie:true },
-  { num:'23', name:'Marcus Peters',      pos:'CB', group:'defense' },
-  { num:'26', name:'Jakorian Bennett',   pos:'CB', group:'defense' },
-  { num:'39', name:'Chris Braswell',     pos:'CB', group:'defense' },
+  { num:'29', name:'Chigozie Anusiem',       pos:'CB', group:'defense' },
+  { num:'3',  name:'Taron Johnson',          pos:'CB', group:'defense' },
+  { num:'26', name:'Darien Porter',          pos:'CB', group:'defense' },
+  { num:'25', name:'Decamerion Richardson',  pos:'CB', group:'defense' },
+  { num:'35', name:'Hezekiah Masses',        pos:'CB', group:'defense', rookie:true },
+  { num:'28', name:'Jermod McCoy',           pos:'CB', group:'defense', rookie:true },
+  { num:'39', name:'Caleb Offord',           pos:'CB', group:'defense', rookie:true },
   // S
-  { num:'11', name:'Jeremy Chinn',       pos:'S',  group:'defense' },
-  { num:'36', name:'Isaiah Pola-Mao',    pos:'S',  group:'defense' },
-  { num:'34', name:'Marcus Epps',        pos:'S',  group:'defense' },
-  { num:'41', name:'Trey Taylor',        pos:'S',  group:'defense' },
-  { num:'25', name:'Jalen Catalon',      pos:'S',  group:'defense' },
+  { num:'11', name:'Jeremy Chinn',           pos:'S',  group:'defense' },
+  { num:'20', name:'Isaiah Pola-Mao',        pos:'S',  group:'defense' },
+  { num:'27', name:'Tristin McCollum',       pos:'S',  group:'defense' },
+  { num:'43', name:'Dalton Johnson',         pos:'S',  group:'defense', rookie:true },
+  { num:'40', name:'Devin Lafayette',        pos:'S',  group:'defense', rookie:true },
+  { num:'49', name:'Devyn Perkins',          pos:'S',  group:'defense', rookie:true },
   // Specialists
-  { num:'14', name:'Matt Gay',           pos:'K',  group:'special' },
-  { num:'6',  name:'AJ Cole',            pos:'P',  group:'special' },
-  { num:'46', name:'Tyler Duzansky',     pos:'LS', group:'special', rookie:true },
+  { num:'14', name:'Matt Gay',               pos:'K',  group:'special' },
+  { num:'38', name:'Kansei Matsuzawa',       pos:'K',  group:'special', rookie:true },
+  { num:'6',  name:'AJ Cole',               pos:'P',  group:'special' },
+  { num:'46', name:'Tyler Duzansky',         pos:'LS', group:'special', rookie:true },
 ];
 
-// ─── STATE ───
 const playerList  = document.getElementById('playerList');
-const board       = document.getElementById('board');
 const boxes       = document.querySelectorAll('.drop-box');
 const countEl     = document.getElementById('playerCount');
 const progressEl  = document.getElementById('progressFill');
 const searchInput = document.getElementById('searchInput');
-
-let dragged = null;
-let draggedFrom = null;
-let activeFilter = 'all';
-let celebrated = false;
+let dragged = null, activeFilter = 'all', celebrated = false;
 
 function createPlayerEl(p, idx) {
-  const el = document.createElement('div');
   const grp = p.group === 'offense' ? 'off-group' : p.group === 'defense' ? 'def-group' : 'spc-group';
+  const el = document.createElement('div');
   el.className = `player ${grp}`;
   el.draggable = true;
   el.dataset.idx = idx;
@@ -875,40 +282,33 @@ function createPlayerEl(p, idx) {
   el.dataset.pos = p.pos;
   el.dataset.name = p.name.toLowerCase();
   el.dataset.rookie = p.rookie ? '1' : '0';
-  el.innerHTML = `
-    <span class="player-num">${p.num ? '#'+p.num : ''}</span>
-    <span class="player-name">${p.name}</span>
-    <span class="player-pos">${p.pos}</span>
-    ${p.rookie ? '<span class="rookie-badge">R</span>' : ''}
-  `;
-  el.addEventListener('dragstart', onDragStart);
-  el.addEventListener('dragend', onDragEnd);
+  el.innerHTML = `<span class="player-num">${p.num ? '#'+p.num : ''}</span><span class="player-name">${p.name}</span><span class="player-pos">${p.pos}</span>${p.rookie ? '<span class="rookie-badge">R</span>' : ''}`;
+  el.addEventListener('dragstart', e => { dragged = el; setTimeout(() => el.classList.add('dragging'), 0); e.dataTransfer.effectAllowed = 'move'; });
+  el.addEventListener('dragend', () => { el.classList.remove('dragging'); dragged = null; boxes.forEach(b => b.classList.remove('drag-over')); });
   return el;
 }
 
 function buildPlayerList() {
   playerList.innerHTML = '';
   const sections = [
-    { label: 'OFFENSE — QB',      filter: p => p.pos === 'QB' },
-    { label: 'OFFENSE — RB / FB', filter: p => ['RB','FB'].includes(p.pos) },
-    { label: 'OFFENSE — WR',      filter: p => p.pos === 'WR' },
-    { label: 'OFFENSE — TE',      filter: p => p.pos === 'TE' },
-    { label: 'OFFENSE — OL',      filter: p => ['OT','OG','C','OL'].includes(p.pos) },
-    { label: 'DEFENSE — DE / EDGE', filter: p => p.pos === 'DE' },
-    { label: 'DEFENSE — DT',      filter: p => p.pos === 'DT' },
-    { label: 'DEFENSE — LB',      filter: p => p.pos === 'LB' },
-    { label: 'DEFENSE — CB',      filter: p => p.pos === 'CB' },
-    { label: 'DEFENSE — S',       filter: p => p.pos === 'S' },
-    { label: 'SPECIALISTS',       filter: p => p.group === 'special' },
+    { label:'OFFENSE — QB',       filter: p => p.pos === 'QB' },
+    { label:'OFFENSE — RB / FB',  filter: p => ['RB','FB'].includes(p.pos) },
+    { label:'OFFENSE — WR',       filter: p => p.pos === 'WR' },
+    { label:'OFFENSE — TE',       filter: p => p.pos === 'TE' },
+    { label:'OFFENSE — OL',       filter: p => ['T','G','C','G/C','C/G'].includes(p.pos) },
+    { label:'DEFENSE — DE / EDGE',filter: p => p.pos === 'DE' },
+    { label:'DEFENSE — DT',       filter: p => p.pos === 'DT' },
+    { label:'DEFENSE — LB',       filter: p => p.pos === 'LB' },
+    { label:'DEFENSE — CB',       filter: p => p.pos === 'CB' },
+    { label:'DEFENSE — S',        filter: p => p.pos === 'S' },
+    { label:'SPECIALISTS',        filter: p => p.group === 'special' },
   ];
   sections.forEach(s => {
-    const label = document.createElement('div');
-    label.className = 'list-section-label';
-    label.textContent = s.label;
-    playerList.appendChild(label);
-    PLAYERS.forEach((p, idx) => {
-      if (s.filter(p)) playerList.appendChild(createPlayerEl(p, idx));
-    });
+    const lbl = document.createElement('div');
+    lbl.className = 'list-section-label';
+    lbl.textContent = s.label;
+    playerList.appendChild(lbl);
+    PLAYERS.forEach((p, idx) => { if (s.filter(p)) playerList.appendChild(createPlayerEl(p, idx)); });
   });
   applyFilter();
 }
@@ -916,151 +316,101 @@ buildPlayerList();
 
 function applyFilter() {
   const q = searchInput.value.toLowerCase().trim();
-  document.querySelectorAll('#playerList .player').forEach(el => {
-    const mf = activeFilter === 'all' ||
-      (activeFilter === 'offense' && el.dataset.group === 'offense') ||
-      (activeFilter === 'defense' && el.dataset.group === 'defense') ||
-      (activeFilter === 'special' && el.dataset.group === 'special') ||
-      (activeFilter === 'rookie'  && el.dataset.rookie === '1');
+  playerList.querySelectorAll('.player').forEach(el => {
+    const mf = activeFilter==='all' || el.dataset.group===activeFilter || (activeFilter==='rookie' && el.dataset.rookie==='1');
     const ms = !q || el.dataset.name.includes(q) || el.dataset.pos.toLowerCase().includes(q);
     el.classList.toggle('hidden', !(mf && ms));
   });
-  document.querySelectorAll('#playerList .list-section-label').forEach(label => {
-    let next = label.nextElementSibling;
-    let has = false;
-    while (next && !next.classList.contains('list-section-label')) {
-      if (!next.classList.contains('hidden')) has = true;
-      next = next.nextElementSibling;
-    }
-    label.style.display = has ? '' : 'none';
+  playerList.querySelectorAll('.list-section-label').forEach(lbl => {
+    let n = lbl.nextElementSibling, has = false;
+    while (n && !n.classList.contains('list-section-label')) { if (!n.classList.contains('hidden')) has = true; n = n.nextElementSibling; }
+    lbl.style.display = has ? '' : 'none';
   });
 }
 
 document.getElementById('filterTabs').addEventListener('click', e => {
-  const tab = e.target.closest('.filter-tab');
-  if (!tab) return;
-  activeFilter = tab.dataset.filter;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  applyFilter();
+  const t = e.target.closest('.filter-tab'); if (!t) return;
+  activeFilter = t.dataset.filter;
+  document.querySelectorAll('.filter-tab').forEach(x => x.classList.remove('active'));
+  t.classList.add('active'); applyFilter();
 });
 searchInput.addEventListener('input', applyFilter);
-
-function onDragStart(e) {
-  dragged = e.currentTarget;
-  draggedFrom = dragged.closest('.drop-box') || playerList;
-  setTimeout(() => dragged.classList.add('dragging'), 0);
-  e.dataTransfer.effectAllowed = 'move';
-}
-function onDragEnd() {
-  if (dragged) dragged.classList.remove('dragging');
-  dragged = null; draggedFrom = null;
-  boxes.forEach(b => b.classList.remove('drag-over'));
-}
 
 boxes.forEach(box => {
   box.addEventListener('dragover', e => { e.preventDefault(); box.classList.add('drag-over'); });
   box.addEventListener('dragleave', e => { if (!box.contains(e.relatedTarget)) box.classList.remove('drag-over'); });
   box.addEventListener('drop', e => {
-    e.preventDefault();
-    box.classList.remove('drag-over');
+    e.preventDefault(); box.classList.remove('drag-over');
     if (!dragged) return;
     box.appendChild(dragged);
     dragged.classList.add('dropped');
     setTimeout(() => dragged && dragged.classList.remove('dropped'), 350);
-    updateHints(box);
-    updateCount();
+    updateHints(box); updateCount();
   });
 });
 
 playerList.addEventListener('dragover', e => e.preventDefault());
 playerList.addEventListener('drop', e => {
-  e.preventDefault();
-  if (!dragged) return;
+  e.preventDefault(); if (!dragged) return;
   const idx = Number(dragged.dataset.idx);
-  const current = Array.from(playerList.querySelectorAll('.player'));
-  let inserted = false;
-  for (const el of current) {
-    if (Number(el.dataset.idx) > idx) { playerList.insertBefore(dragged, el); inserted = true; break; }
-  }
-  if (!inserted) playerList.appendChild(dragged);
+  const cur = Array.from(playerList.querySelectorAll('.player'));
+  let ins = false;
+  for (const el of cur) { if (Number(el.dataset.idx) > idx) { playerList.insertBefore(dragged, el); ins = true; break; } }
+  if (!ins) playerList.appendChild(dragged);
   applyFilter(); updateCount();
 });
 
 document.querySelectorAll('.clear-box-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    const box = document.querySelector(`.drop-box[data-pos="${btn.dataset.clear}"]`);
-    if (!box) return;
+    const box = document.querySelector(`.drop-box[data-pos="${btn.dataset.clear}"]`); if (!box) return;
     box.querySelectorAll('.player').forEach(p => {
       const idx = Number(p.dataset.idx);
-      const current = Array.from(playerList.querySelectorAll('.player'));
+      const cur = Array.from(playerList.querySelectorAll('.player'));
       let ins = false;
-      for (const el of current) { if (Number(el.dataset.idx) > idx) { playerList.insertBefore(p, el); ins = true; break; } }
+      for (const el of cur) { if (Number(el.dataset.idx) > idx) { playerList.insertBefore(p, el); ins = true; break; } }
       if (!ins) playerList.appendChild(p);
     });
-    applyFilter(); updateHints(box); updateCount();
-    showToast(`${btn.dataset.clear} cleared`);
+    applyFilter(); updateHints(box); updateCount(); showToast(`${btn.dataset.clear} cleared`);
   });
 });
 
 document.getElementById('resetBtn').addEventListener('click', () => {
   boxes.forEach(box => box.querySelectorAll('.player').forEach(p => playerList.appendChild(p)));
-  buildPlayerList(); updateCount(); celebrated = false;
-  showToast('Roster reset');
+  buildPlayerList(); updateCount(); celebrated = false; showToast('Roster reset');
 });
 
 function updateCount() {
   let count = 0;
   boxes.forEach(box => {
-    const n = box.querySelectorAll('.player').length;
-    count += n;
-    const slotEl = document.getElementById('slots-' + box.dataset.pos);
-    if (slotEl) {
-      slotEl.textContent = n + (n === 1 ? ' player' : ' players');
-      slotEl.className = 'slot-count' + (n > 6 ? ' over' : n >= 3 ? ' warn' : '');
-    }
+    const n = box.querySelectorAll('.player').length; count += n;
+    const el = document.getElementById('slots-' + box.dataset.pos);
+    if (el) { el.textContent = n + (n===1?' player':' players'); el.className = 'slot-count' + (n>6?' over':n>=3?' warn':''); }
   });
   countEl.textContent = count;
-  countEl.className = 'count-num' + (count > 53 ? ' over' : count === 53 ? ' full' : '');
-  const pct = Math.min((count / 53) * 100, 100);
-  progressEl.style.width = pct + '%';
-  progressEl.className = 'progress-fill' + (count > 53 ? ' over' : count === 53 ? ' full' : '');
-  if (count === 53 && !celebrated) {
-    celebrated = true;
-    showToast('🏈 53-man roster set!');
-    fireConfetti();
-  } else if (count !== 53) { celebrated = false; }
+  countEl.className = 'count-num' + (count>53?' over':count===53?' full':'');
+  progressEl.style.width = Math.min((count/53)*100,100) + '%';
+  progressEl.className = 'progress-fill' + (count>53?' over':count===53?' full':'');
+  if (count===53 && !celebrated) { celebrated=true; showToast('🏈 53-man roster set!'); fireConfetti(); }
+  else if (count!==53) celebrated=false;
 }
-
-function updateHints(box) {
-  const hint = box.querySelector('.empty-hint');
-  if (hint) hint.style.display = box.querySelectorAll('.player').length === 0 ? '' : 'none';
-}
+function updateHints(box) { const h=box.querySelector('.empty-hint'); if(h) h.style.display=box.querySelectorAll('.player').length===0?'':'none'; }
 boxes.forEach(updateHints);
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove('show'), 2400);
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.remove('show'), 2400);
 }
-
 function fireConfetti() {
-  const wrap = document.getElementById('confettiWrap');
-  wrap.innerHTML = '';
+  const wrap = document.getElementById('confettiWrap'); wrap.innerHTML = '';
+  ['#c0c0c0','#e8e8e8','#888','#fff','#333','#aaa'].forEach(() => {});
   const colors = ['#c0c0c0','#e8e8e8','#888','#fff','#333','#aaa'];
-  for (let i = 0; i < 80; i++) {
-    const p = document.createElement('div');
-    p.className = 'confetti-piece';
-    p.style.left = Math.random() * 100 + 'vw';
-    p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    p.style.width = (6 + Math.random() * 6) + 'px';
-    p.style.height = (8 + Math.random() * 8) + 'px';
-    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-    const dur = 1.8 + Math.random() * 2;
-    const delay = Math.random() * 1.2;
-    p.style.animation = `confettiFall ${dur}s ${delay}s ease-in forwards`;
+  for (let i=0; i<80; i++) {
+    const p = document.createElement('div'); p.className='confetti-piece';
+    p.style.left = Math.random()*100+'vw';
+    p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+    p.style.width = (6+Math.random()*6)+'px'; p.style.height = (8+Math.random()*8)+'px';
+    p.style.borderRadius = Math.random()>0.5?'50%':'0';
+    p.style.animation = `confettiFall ${1.8+Math.random()*2}s ${Math.random()*1.2}s ease-in forwards`;
     wrap.appendChild(p);
   }
   setTimeout(() => wrap.innerHTML = '', 5000);
@@ -1068,37 +418,22 @@ function fireConfetti() {
 
 document.getElementById('saveBtn').addEventListener('click', () => {
   const state = {};
-  boxes.forEach(box => {
-    state[box.dataset.pos] = Array.from(box.querySelectorAll('.player')).map(p => p.dataset.idx);
-  });
-  localStorage.setItem('rosterRaiders', JSON.stringify(state));
-  showToast('Roster saved ✓');
+  boxes.forEach(box => { state[box.dataset.pos] = Array.from(box.querySelectorAll('.player')).map(p => p.dataset.idx); });
+  localStorage.setItem('rosterRaiders', JSON.stringify(state)); showToast('Roster saved ✓');
 });
-
-function loadSaved() {
-  const raw = localStorage.getItem('rosterRaiders');
-  if (!raw) return;
+(function loadSaved() {
+  const raw = localStorage.getItem('rosterRaiders'); if (!raw) return;
   try {
     const state = JSON.parse(raw);
     Object.entries(state).forEach(([pos, idxs]) => {
-      const box = document.querySelector(`.drop-box[data-pos="${pos}"]`);
-      if (!box) return;
-      idxs.forEach(idx => {
-        const el = playerList.querySelector(`[data-idx="${idx}"]`);
-        if (el) { box.appendChild(el); updateHints(box); }
-      });
-    });
-    applyFilter(); updateCount();
+      const box = document.querySelector(`.drop-box[data-pos="${pos}"]`); if (!box) return;
+      idxs.forEach(idx => { const el = playerList.querySelector(`[data-idx="${idx}"]`); if (el) { box.appendChild(el); updateHints(box); } });
+    }); applyFilter(); updateCount();
   } catch(e) {}
-}
-loadSaved();
+})();
 
-// Default = dark (Raiders are a dark-themed team)
 const themeBtn = document.getElementById('themeToggle');
-if (localStorage.getItem('themeRaiders') === 'light') {
-  document.body.classList.add('light');
-  themeBtn.textContent = '☀️';
-}
+if (localStorage.getItem('themeRaiders') === 'light') { document.body.classList.add('light'); themeBtn.textContent = '☀️'; }
 themeBtn.addEventListener('click', () => {
   document.body.classList.toggle('light');
   const isLight = document.body.classList.contains('light');
